@@ -1,7 +1,13 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "author": {
+    "name": "IlinerTeknoloji",
+    "email": "info@ilinerteknoloji.com",
+    "url": "https://ilinerteknoloji.com/"
+  },
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
