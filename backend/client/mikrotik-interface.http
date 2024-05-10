@@ -1,0 +1,35 @@
+### Get all interfaces
+# @name listAllInterfaces
+GET http://{{router}}/rest/interface HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+
+### To make new interface/bridge
+# @name bridgeInterfaces
+PUT http://{{router}}/rest/interface/bridge HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+Content-Type: application/json
+
+{
+  "name": "newInterface"
+}
+
+### To make new interface/bridge
+# @name bridgeInterfaces
+PATCH http://{{router}}/rest/interface/bridge/*4 HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+Content-Type: application/json
+
+{
+  "name": "updatedInterface"
+}
+
+### Delete a bridge interface
+# @name deleteInterface
+DELETE http://{{router}}/rest/interface/bridge/*3 HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+Content-Type: application/json
+
+{
+  "name": "newInterface"
+}
+
