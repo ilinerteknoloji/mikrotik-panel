@@ -2,8 +2,8 @@ import { Provider } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { drizzle } from "drizzle-orm/mysql2";
 import { createPool } from "mysql2";
-import * as schema from "src/drizzle/schemas";
-import { DRIZZLE_PROVIDER } from "../constants";
+import { DRIZZLE_PROVIDER } from "src/lib/constants";
+import * as schema from "src/modules/drizzle/schemas";
 
 export const drizzleProvider: Provider = {
   provide: DRIZZLE_PROVIDER,
