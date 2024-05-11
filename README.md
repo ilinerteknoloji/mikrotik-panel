@@ -37,6 +37,8 @@ MikroTik is a dashboard for managing MikroTik devices. It is a dashboard that al
 - [ ] Notifications
 - [ ] Dark Mode
 - [ ] Responsive Design
+- [ ] Multi-Language Support
+- [ ] Two-Factor Authentication
 
 ## Screenshots
 
