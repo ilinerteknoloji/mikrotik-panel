@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { DRIZZLE_PROVIDER } from "src/shared/constants";
-import { drizzleProvider } from "src/shared/providers";
+import { DRIZZLE_PROVIDER } from "src/lib/constants";
+import { drizzleProvider } from "src/lib/providers";
 
 @Module({
   providers: [drizzleProvider],
