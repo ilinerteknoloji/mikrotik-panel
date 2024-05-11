@@ -32,5 +32,5 @@ export const usersRelations = relations(usersSchema, ({ one }) => ({
   }),
 }));
 
-export type TUsersSchema = InferSelectModel<typeof usersSchema>;
-export type TUsersSchemaInsert = InferInsertModel<typeof usersSchema>;
+export type UsersSchemaType = InferSelectModel<typeof usersSchema>;
+export type UsersSchemaInsertType = InferInsertModel<typeof usersSchema>;

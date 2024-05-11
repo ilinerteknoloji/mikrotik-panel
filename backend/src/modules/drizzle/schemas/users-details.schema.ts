@@ -26,7 +26,9 @@ export const usersDetailsRelations = relations(
   }),
 );
 
-export type TUsersDetailsSchema = InferSelectModel<typeof usersDetailsSchema>;
-export type TUsersDetailsSchemaInsert = InferInsertModel<
+export type UsersDetailsSchemaType = InferSelectModel<
+  typeof usersDetailsSchema
+>;
+export type UsersDetailsSchemaInsertType = InferInsertModel<
   typeof usersDetailsSchema
 >;
