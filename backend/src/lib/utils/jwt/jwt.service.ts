@@ -15,6 +15,12 @@ export class JwtService {
     "JWT_ALGORITHM",
   ) as jwt.Algorithm;
 
+  public generateTokens(payload: PayloadType) {
+    const access_token = this.generateToken(payload, "access");
+    const refresh_token = this.generateToken(payload, "refresh");
+    return { access_token, refresh_token };
+  }
+
   public generateToken(payload: PayloadType, tokenType: TokenType): string {
     const token = tokenType === "access" ? "JWT_ACCESS" : "JWT_REFRESH";
     const tokenPrivateKey = this.key.readKey(`private_${tokenType}`);
@@ -23,6 +29,12 @@ export class JwtService {
       algorithm: this.algorithm,
       expiresIn,
     });
+  }
+
+  public verifyTokens(accessToken: string, refreshToken: string) {
+    const accessPayload = this.verifyToken(accessToken, "access");
+    const refreshPayload = this.verifyToken(refreshToken, "refresh");
+    return { accessPayload, refreshPayload };
   }
 
   public verifyToken(jwtToken: string, tokenType: TokenType) {

@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { AuthModule } from "./auth/auth.module";
 import { EncryptionModule } from "./lib/utils/encryption/encryption.module";
 import { EnvModule } from "./lib/utils/env/env.module";
 import { envSchema } from "./lib/utils/env/env.schema";
@@ -19,7 +18,6 @@ import { DrizzleModule } from "./modules/drizzle/drizzle.module";
     }),
     EnvModule,
     DrizzleModule,
-    AuthModule,
     JwtModule,
     EncryptionModule,
   ],
