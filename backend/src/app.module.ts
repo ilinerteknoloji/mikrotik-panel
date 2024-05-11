@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { DrizzleModule } from "./drizzle/drizzle.module";
-import { envConfig } from "./shared/config";
+import { envConfig } from "./lib/config";
 
 @Module({
   imports: [
