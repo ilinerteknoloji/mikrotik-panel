@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
 import { int, mysqlTable, timestamp, varchar } from "drizzle-orm/mysql-core";
 import { usersSchema } from ".";
 
@@ -25,3 +25,8 @@ export const usersDetailsRelations = relations(
     }),
   }),
 );
+
+export type TUsersDetailsSchema = InferSelectModel<typeof usersDetailsSchema>;
+export type TUsersDetailsSchemaInsert = InferInsertModel<
+  typeof usersDetailsSchema
+>;
