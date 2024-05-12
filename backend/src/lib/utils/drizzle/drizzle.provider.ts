@@ -3,7 +3,7 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { createPool } from "mysql2";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
 import { EnvService } from "src/lib/utils/env/env.service";
-import * as schema from "src/modules/drizzle/schemas";
+import * as schema from "src/lib/utils/drizzle/schemas";
 
 export const drizzleProvider: Provider = {
   provide: DRIZZLE_PROVIDER,

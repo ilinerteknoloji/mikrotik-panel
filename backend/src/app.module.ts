@@ -6,7 +6,7 @@ import { envSchema } from "./lib/utils/env/env.schema";
 import { JwtModule } from "./lib/utils/jwt/jwt.module";
 import { GenerateKeysModule } from "./lib/utils/keys/generate-keys.module";
 import { LifecycleModule } from "./lib/utils/lifecycle/lifecycle.module";
-import { DrizzleModule } from "./modules/drizzle/drizzle.module";
+import { DrizzleModule } from "./lib/utils/drizzle/drizzle.module";
 
 @Module({
   imports: [
