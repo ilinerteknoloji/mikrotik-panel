@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
-import { JwtService } from "./jwt.service";
 import { EnvModule } from "../env/env.module";
 import { GenerateKeysModule } from "../keys/generate-keys.module";
+import { JwtService } from "./jwt.service";
 
 @Module({
   imports: [EnvModule, GenerateKeysModule],
