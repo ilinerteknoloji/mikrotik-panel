@@ -1,12 +1,13 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { EncryptionModule } from "./lib/utils/encryption/encryption.module";
-import { EnvModule } from "./lib/utils/env/env.module";
-import { envSchema } from "./lib/utils/env/env.schema";
-import { JwtModule } from "./lib/utils/jwt/jwt.module";
-import { GenerateKeysModule } from "./lib/utils/keys/generate-keys.module";
-import { LifecycleModule } from "./lib/utils/lifecycle/lifecycle.module";
-import { DrizzleModule } from "./lib/utils/drizzle/drizzle.module";
+import { EncryptionModule } from "./shared/encryption/encryption.module";
+import { EnvModule } from "./shared/env/env.module";
+import { envSchema } from "./shared/env/env.schema";
+import { JwtModule } from "./shared/jwt/jwt.module";
+import { GenerateKeysModule } from "./shared/keys/generate-keys.module";
+import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
+import { DrizzleModule } from "./shared/drizzle/drizzle.module";
+import { AuthModule } from "./modules/auth/auth.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DrizzleModule } from "./lib/utils/drizzle/drizzle.module";
     DrizzleModule,
     JwtModule,
     EncryptionModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

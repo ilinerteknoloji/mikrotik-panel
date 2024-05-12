@@ -1,11 +1,14 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { EnvService } from "./lib/utils/env/env.service";
+import { EnvService } from "./shared/env/env.service";
+import { ValidationPipe } from "@nestjs/common";
+import { validationPipeOptions } from "./lib/options/validation-pipe.options";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(EnvService);
   app.enableShutdownHooks();
+  app.useGlobalPipes(new ValidationPipe(validationPipeOptions));
   await app.listen(config.get("PORT"));
 }
 bootstrap();

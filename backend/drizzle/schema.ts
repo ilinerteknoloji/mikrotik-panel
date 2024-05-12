@@ -17,15 +17,17 @@ export const users = mysqlTable("users", {
 (table) => {
 	return {
 		users_id: primaryKey({ columns: [table.id], name: "users_id"}),
+		users_username_unique: unique("users_username_unique").on(table.username),
 		users_email_unique: unique("users_email_unique").on(table.email),
 		users_phoneNumber_unique: unique("users_phoneNumber_unique").on(table.phoneNumber),
-		users_username_unique: unique("users_username_unique").on(table.username),
 	}
 });
 
 export const users_details = mysqlTable("users_details", {
 	id: int("id").autoincrement().notNull(),
 	user_id: int("user_id").notNull(),
+	is_email_verified: tinyint("is_email_verified").default(0),
+	is_phone_number_verified: tinyint("is_phone_number_verified").default(0),
 	address: varchar("address", { length: 255 }),
 	city: varchar("city", { length: 255 }),
 	state: varchar("state", { length: 255 }),

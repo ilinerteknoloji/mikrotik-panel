@@ -100,6 +100,12 @@
       "indexes": {},
       "foreignKeys": {},
       "uniqueConstraints": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "columns": [
+            "username"
+          ]
+        },
         "users_email_unique": {
           "name": "users_email_unique",
           "columns": [
@@ -110,12 +116,6 @@
           "name": "users_phoneNumber_unique",
           "columns": [
             "phoneNumber"
-          ]
-        },
-        "users_username_unique": {
-          "name": "users_username_unique",
-          "columns": [
-            "username"
           ]
         }
       }
@@ -136,6 +136,22 @@
           "type": "int",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_email_verified": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "is_email_verified",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_phone_number_verified": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "is_phone_number_verified",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false
         },
         "address": {
           "autoincrement": false,
