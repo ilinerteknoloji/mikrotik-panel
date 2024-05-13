@@ -10,7 +10,10 @@ import { usersSchema } from ".";
 
 export const usersDetailsSchema = mysqlTable("users_details", {
   id: int("id").primaryKey().autoincrement(),
-  userId: int("user_id").notNull().unique(),
+  userId: int("user_id")
+    .notNull()
+    .unique()
+    .references(() => usersSchema.id),
   isEmailVerified: boolean("is_email_verified").default(false),
   isPhoneNumberVerified: boolean("is_phone_number_verified").default(false),
   address: varchar("address", { length: 255 }),

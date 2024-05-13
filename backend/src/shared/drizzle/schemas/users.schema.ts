@@ -7,7 +7,13 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
-import { usersDetailsSchema } from ".";
+import {
+  accessTokenSchema,
+  feedbacksSchema,
+  refreshTokenSchema,
+  userDevicesSchema,
+  usersDetailsSchema,
+} from ".";
 
 export const usersSchema = mysqlTable("users", {
   id: int("id").primaryKey().autoincrement(),
@@ -25,11 +31,16 @@ export const usersSchema = mysqlTable("users", {
     .$onUpdateFn(() => new Date()),
 });
 
-export const usersRelations = relations(usersSchema, ({ one }) => ({
+export const usersRelations = relations(usersSchema, ({ one, many }) => ({
   details: one(usersDetailsSchema, {
     fields: [usersSchema.id],
     references: [usersDetailsSchema.userId],
   }),
+  refreshToken: many(refreshTokenSchema),
+  accessToken: many(accessTokenSchema),
+  userDevice: many(userDevicesSchema),
+  feedback: many(feedbacksSchema),
+  complain: many(feedbacksSchema),
 }));
 
 export type UsersSchemaType = InferSelectModel<typeof usersSchema>;
