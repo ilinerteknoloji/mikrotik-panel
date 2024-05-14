@@ -28,7 +28,7 @@ export class ResponseInterceptor implements NestInterceptor {
       status: true,
       statusCode: response.statusCode,
       path: request.url,
-      data,
+      response: data,
     };
   }
 
@@ -51,7 +51,7 @@ export class ResponseInterceptor implements NestInterceptor {
         statusCode: myError.getStatus(),
         path: request.url,
         error: myError.message,
-        data: myError.getResponse(),
+        response: myError.getResponse(),
       },
       myError.getStatus(),
     );
