@@ -12,7 +12,7 @@ import {
   feedbacksSchema,
   refreshTokenSchema,
   userDevicesSchema,
-  usersDetailsSchema,
+  userDetailsSchema,
 } from ".";
 
 export const usersSchema = mysqlTable("users", {
@@ -26,15 +26,13 @@ export const usersSchema = mysqlTable("users", {
   status: boolean("status").default(true),
   role: mysqlEnum("role", ["admin", "user"]).default("user"),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdateFn(() => new Date()),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
 
 export const usersRelations = relations(usersSchema, ({ one, many }) => ({
-  details: one(usersDetailsSchema, {
+  details: one(userDetailsSchema, {
     fields: [usersSchema.id],
-    references: [usersDetailsSchema.userId],
+    references: [userDetailsSchema.userId],
   }),
   refreshToken: many(refreshTokenSchema),
   accessToken: many(accessTokenSchema),

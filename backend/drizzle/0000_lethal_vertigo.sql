@@ -8,7 +8,7 @@ CREATE TABLE `access_token` (
 	`status` tinyint DEFAULT 1,
 	`expires_at` timestamp NOT NULL,
 	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `access_token_id` PRIMARY KEY(`id`),
 	CONSTRAINT `access_token_token_unique` UNIQUE(`token`)
 );
@@ -19,7 +19,7 @@ CREATE TABLE `complains` (
 	`message` text NOT NULL,
 	`status` tinyint DEFAULT 0,
 	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `complains_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -35,7 +35,7 @@ CREATE TABLE `error_logs` (
 	`message` text NOT NULL,
 	`status` tinyint DEFAULT 0,
 	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `error_logs_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -45,7 +45,7 @@ CREATE TABLE `feedbacks` (
 	`message` text NOT NULL,
 	`status` tinyint DEFAULT 0,
 	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `feedbacks_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -73,9 +73,25 @@ CREATE TABLE `refresh_token` (
 	`status` tinyint DEFAULT 1,
 	`expires_at` timestamp NOT NULL,
 	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `refresh_token_id` PRIMARY KEY(`id`),
 	CONSTRAINT `refresh_token_token_unique` UNIQUE(`token`)
+);
+--> statement-breakpoint
+CREATE TABLE `user_details` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`user_id` int NOT NULL,
+	`is_email_verified` tinyint DEFAULT 0,
+	`is_phone_number_verified` tinyint DEFAULT 0,
+	`address` varchar(255),
+	`city` varchar(255),
+	`state` varchar(255),
+	`country` varchar(255),
+	`zip_code` varchar(10),
+	`created_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `user_details_id` PRIMARY KEY(`id`),
+	CONSTRAINT `user_details_user_id_unique` UNIQUE(`user_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `user_device` (
@@ -89,9 +105,9 @@ CREATE TABLE `user_device` (
 --> statement-breakpoint
 CREATE TABLE `user_devices_refresh_tokens` (
 	`id` int AUTO_INCREMENT NOT NULL,
+	`user_devices_id` int NOT NULL,
 	`refresh_token_id` int NOT NULL,
 	`created_at` timestamp DEFAULT (now()),
-	`user_devices_id` int NOT NULL,
 	CONSTRAINT `user_devices_refresh_tokens_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -106,27 +122,11 @@ CREATE TABLE `users` (
 	`status` tinyint DEFAULT 1,
 	`role` enum('admin','user') DEFAULT 'user',
 	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `users_id` PRIMARY KEY(`id`),
 	CONSTRAINT `users_username_unique` UNIQUE(`username`),
 	CONSTRAINT `users_email_unique` UNIQUE(`email`),
 	CONSTRAINT `users_phoneNumber_unique` UNIQUE(`phoneNumber`)
-);
---> statement-breakpoint
-CREATE TABLE `users_details` (
-	`id` int AUTO_INCREMENT NOT NULL,
-	`user_id` int NOT NULL,
-	`is_email_verified` tinyint DEFAULT 0,
-	`is_phone_number_verified` tinyint DEFAULT 0,
-	`address` varchar(255),
-	`city` varchar(255),
-	`state` varchar(255),
-	`country` varchar(255),
-	`zip_code` varchar(10),
-	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()),
-	CONSTRAINT `users_details_id` PRIMARY KEY(`id`),
-	CONSTRAINT `users_details_user_id_unique` UNIQUE(`user_id`)
 );
 --> statement-breakpoint
 ALTER TABLE `access_token` ADD CONSTRAINT `access_token_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -135,10 +135,10 @@ ALTER TABLE `feedbacks` ADD CONSTRAINT `feedbacks_user_id_users_id_fk` FOREIGN K
 ALTER TABLE `logs` ADD CONSTRAINT `logs_ip_id_ips_id_fk` FOREIGN KEY (`ip_id`) REFERENCES `ips`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `logs` ADD CONSTRAINT `logs_user_device_id_user_device_id_fk` FOREIGN KEY (`user_device_id`) REFERENCES `user_device`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `refresh_token` ADD CONSTRAINT `refresh_token_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `user_details` ADD CONSTRAINT `user_details_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `user_device` ADD CONSTRAINT `user_device_device_id_devices_id_fk` FOREIGN KEY (`device_id`) REFERENCES `devices`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `user_device` ADD CONSTRAINT `user_device_ip_id_ips_id_fk` FOREIGN KEY (`ip_id`) REFERENCES `ips`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `user_device` ADD CONSTRAINT `user_device_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `user_devices_refresh_tokens` ADD CONSTRAINT `user_devices_refresh_tokens_refresh_token_id_refresh_token_id_fk` FOREIGN KEY (`refresh_token_id`) REFERENCES `refresh_token`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `user_devices_refresh_tokens` ADD CONSTRAINT `user_devices_refresh_tokens_user_devices_id_user_device_id_fk` FOREIGN KEY (`user_devices_id`) REFERENCES `user_device`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `users_details` ADD CONSTRAINT `users_details_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;
+ALTER TABLE `user_devices_refresh_tokens` ADD CONSTRAINT `user_devices_refresh_tokens_user_devices_id_user_device_id_fk` FOREIGN KEY (`user_devices_id`) REFERENCES `user_device`(`id`) ON DELETE no action ON UPDATE no action;
 */

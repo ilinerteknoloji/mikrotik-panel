@@ -57,7 +57,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "onUpdate": true
         }
       },
       "compositePrimaryKeys": {
@@ -139,7 +140,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "onUpdate": true
         }
       },
       "compositePrimaryKeys": {
@@ -245,7 +247,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "onUpdate": true
         }
       },
       "compositePrimaryKeys": {
@@ -306,7 +309,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "onUpdate": true
         }
       },
       "compositePrimaryKeys": {
@@ -512,7 +516,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "onUpdate": true
         }
       },
       "compositePrimaryKeys": {
@@ -544,6 +549,125 @@
           "name": "refresh_token_token_unique",
           "columns": [
             "token"
+          ]
+        }
+      }
+    },
+    "user_details": {
+      "name": "user_details",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_email_verified": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "is_email_verified",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_phone_number_verified": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "is_phone_number_verified",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "autoincrement": false,
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city": {
+          "autoincrement": false,
+          "name": "city",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state": {
+          "autoincrement": false,
+          "name": "state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "country": {
+          "autoincrement": false,
+          "name": "country",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zip_code": {
+          "autoincrement": false,
+          "name": "zip_code",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "onUpdate": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_details_id": {
+          "name": "user_details_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_details_user_id_users_id_fk": {
+          "name": "user_details_user_id_users_id_fk",
+          "tableFrom": "user_details",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "user_details_user_id_unique": {
+          "name": "user_details_user_id_unique",
+          "columns": [
+            "user_id"
           ]
         }
       }
@@ -650,6 +774,13 @@
           "primaryKey": false,
           "notNull": true
         },
+        "user_devices_id": {
+          "autoincrement": false,
+          "name": "user_devices_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
         "refresh_token_id": {
           "autoincrement": false,
           "name": "refresh_token_id",
@@ -664,13 +795,6 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
-        },
-        "user_devices_id": {
-          "autoincrement": false,
-          "name": "user_devices_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "compositePrimaryKeys": {
@@ -794,7 +918,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "onUpdate": true
         }
       },
       "compositePrimaryKeys": {
@@ -824,124 +949,6 @@
           "name": "users_phoneNumber_unique",
           "columns": [
             "phoneNumber"
-          ]
-        }
-      }
-    },
-    "users_details": {
-      "name": "users_details",
-      "columns": {
-        "id": {
-          "autoincrement": true,
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "autoincrement": false,
-          "name": "user_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "is_email_verified": {
-          "default": 0,
-          "autoincrement": false,
-          "name": "is_email_verified",
-          "type": "tinyint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "is_phone_number_verified": {
-          "default": 0,
-          "autoincrement": false,
-          "name": "is_phone_number_verified",
-          "type": "tinyint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "address": {
-          "autoincrement": false,
-          "name": "address",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "city": {
-          "autoincrement": false,
-          "name": "city",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "state": {
-          "autoincrement": false,
-          "name": "state",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "country": {
-          "autoincrement": false,
-          "name": "country",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "zip_code": {
-          "autoincrement": false,
-          "name": "zip_code",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "default": "(now())",
-          "autoincrement": false,
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updated_at": {
-          "default": "(now())",
-          "autoincrement": false,
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {
-        "users_details_id": {
-          "name": "users_details_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "users_details_user_id_users_id_fk": {
-          "name": "users_details_user_id_users_id_fk",
-          "tableFrom": "users_details",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {
-        "users_details_user_id_unique": {
-          "name": "users_details_user_id_unique",
-          "columns": [
-            "user_id"
           ]
         }
       }
@@ -1025,6 +1032,16 @@
           }
         }
       },
+      "user_details": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
       "user_device": {
         "columns": {
           "created_at": {
@@ -1040,16 +1057,6 @@
         }
       },
       "users": {
-        "columns": {
-          "created_at": {
-            "isDefaultAnExpression": true
-          },
-          "updated_at": {
-            "isDefaultAnExpression": true
-          }
-        }
-      },
-      "users_details": {
         "columns": {
           "created_at": {
             "isDefaultAnExpression": true

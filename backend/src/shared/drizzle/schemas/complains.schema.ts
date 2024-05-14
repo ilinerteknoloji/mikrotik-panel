@@ -16,9 +16,7 @@ export const complainsSchema = mysqlTable("complains", {
   message: text("message").notNull(),
   status: boolean("status").default(false),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdateFn(() => new Date()),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
 
 export const complainsRelations = relations(complainsSchema, ({ one }) => ({

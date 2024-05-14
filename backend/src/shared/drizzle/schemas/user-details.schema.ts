@@ -8,7 +8,7 @@ import {
 } from "drizzle-orm/mysql-core";
 import { usersSchema } from ".";
 
-export const usersDetailsSchema = mysqlTable("users_details", {
+export const userDetailsSchema = mysqlTable("user_details", {
   id: int("id").primaryKey().autoincrement(),
   userId: int("user_id")
     .notNull()
@@ -22,24 +22,20 @@ export const usersDetailsSchema = mysqlTable("users_details", {
   country: varchar("country", { length: 255 }),
   zipCode: varchar("zip_code", { length: 10 }),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdateFn(() => new Date()),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
 
 export const usersDetailsRelations = relations(
-  usersDetailsSchema,
+  userDetailsSchema,
   ({ one }) => ({
     user: one(usersSchema, {
-      fields: [usersDetailsSchema.userId],
+      fields: [userDetailsSchema.userId],
       references: [usersSchema.id],
     }),
   }),
 );
 
-export type UsersDetailsSchemaType = InferSelectModel<
-  typeof usersDetailsSchema
->;
-export type UsersDetailsSchemaInsertType = InferInsertModel<
-  typeof usersDetailsSchema
+export type UserDetailsSchemaType = InferSelectModel<typeof userDetailsSchema>;
+export type UserDetailsSchemaInsertType = InferInsertModel<
+  typeof userDetailsSchema
 >;

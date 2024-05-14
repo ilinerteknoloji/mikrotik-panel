@@ -12,9 +12,7 @@ export const errorLogsSchema = mysqlTable("error_logs", {
   message: text("message").notNull(),
   status: boolean("status").default(false),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdateFn(() => new Date()),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
 
 export type ErrorLogsSchemaType = InferSelectModel<typeof errorLogsSchema>;

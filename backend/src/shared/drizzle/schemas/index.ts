@@ -8,5 +8,5 @@ export * from "./logs.schema";
 export * from "./refresh-token.schema";
 export * from "./user-devices-refresh-tokens.schema";
 export * from "./user-devices.schema";
-export * from "./users-details.schema";
+export * from "./user-details.schema";
 export * from "./users.schema";

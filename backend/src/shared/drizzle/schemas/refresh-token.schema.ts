@@ -17,9 +17,7 @@ export const refreshTokenSchema = mysqlTable("refresh_token", {
   status: boolean("status").default(true),
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdateFn(() => new Date()),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
 
 export const refreshTokenRelations = relations(
