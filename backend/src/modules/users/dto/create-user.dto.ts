@@ -7,7 +7,7 @@ import {
   Length,
 } from "class-validator";
 
-export class SignUpAuthDto {
+export class CreateUserDto {
   @IsAlpha("tr-TR")
   @Length(2, 50, { message: "First name must be between 2 and 50 character" })
   firstName: string;

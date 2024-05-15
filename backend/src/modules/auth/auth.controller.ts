@@ -1,13 +1,18 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { User } from "src/lib/decorators/user.decorator";
+import { RequestUserType } from "src/types/request-user.types";
+import { CreateUserDto } from "../users/dto/create-user.dto";
 import { AuthService } from "./auth.service";
-import { SignInAuthDto, SignUpAuthDto } from "./dto";
+import { SignInAuthDto } from "./dto/sign-in-auth.dto";
+import { AuthGuard } from "./guards/auth.guard";
+import { RefreshTokenGuard } from "./guards/refresh-token.guard";
 
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("sign-up")
-  public signUp(@Body() signUpAuthDto: SignUpAuthDto) {
+  public signUp(@Body() signUpAuthDto: CreateUserDto) {
     return this.authService.signUp(signUpAuthDto);
   }
 
@@ -16,13 +21,15 @@ export class AuthController {
     return this.authService.signIn(signInDto);
   }
 
+  @UseGuards(AuthGuard)
   @Post("sign-out")
-  public signOut() {
-    return this.authService.signOut();
+  public signOut(@User() user: RequestUserType) {
+    return this.authService.signOut(user);
   }
 
+  @UseGuards(RefreshTokenGuard)
   @Post("refresh-token")
-  public refreshToken() {
-    return this.authService.refreshToken();
+  public refreshToken(@User() user: RequestUserType) {
+    return this.authService.refreshToken(user);
   }
 }

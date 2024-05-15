@@ -3,17 +3,20 @@ import {
   boolean,
   int,
   mysqlTable,
+  text,
   timestamp,
-  varchar,
 } from "drizzle-orm/mysql-core";
-import { usersSchema } from ".";
+import { refreshTokenSchema, usersSchema } from ".";
 
 export const accessTokenSchema = mysqlTable("access_token", {
   id: int("id").primaryKey().autoincrement(),
   userId: int("user_id")
     .notNull()
     .references(() => usersSchema.id),
-  token: varchar("token", { length: 255 }).notNull().unique(),
+  refreshTokenId: int("refresh_token_id")
+    .notNull()
+    .references(() => refreshTokenSchema.id),
+  token: text("token").notNull(),
   status: boolean("status").default(true),
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
@@ -24,6 +27,10 @@ export const accessTokenRelations = relations(accessTokenSchema, ({ one }) => ({
   user: one(usersSchema, {
     fields: [accessTokenSchema.userId],
     references: [usersSchema.id],
+  }),
+  refreshToken: one(refreshTokenSchema, {
+    fields: [accessTokenSchema.refreshTokenId],
+    references: [refreshTokenSchema.id],
   }),
 }));
 

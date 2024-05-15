@@ -1,17 +1,10 @@
 import { PickType } from "@nestjs/mapped-types";
-import { ValidateIf } from "class-validator";
-import { SignUpAuthDto } from "./sign-up-auth.dto";
+import { IsString } from "class-validator";
+import { CreateUserDto } from "src/modules/users/dto/create-user.dto";
 
-export class SignInAuthDto extends PickType(SignUpAuthDto, [
-  "username",
-  "email",
-  "phoneNumber",
+export class SignInAuthDto extends PickType(CreateUserDto, [
   "password",
 ] as const) {
-  @ValidateIf((o) => !o.email && !o.phoneNumber)
+  @IsString()
   username: string;
-  @ValidateIf((o) => !o.username && !o.phoneNumber)
-  email: string;
-  @ValidateIf((o) => !o.username && !o.email)
-  phoneNumber: string;
 }

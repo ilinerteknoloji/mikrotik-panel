@@ -21,7 +21,7 @@ export const usersSchema = mysqlTable("users", {
   lastName: varchar("last_name", { length: 50 }).notNull(),
   username: varchar("username", { length: 50 }).notNull().unique(),
   email: varchar("email", { length: 100 }).notNull().unique(),
-  phoneNumber: varchar("phoneNumber", { length: 20 }).notNull().unique(),
+  phoneNumber: varchar("phone_number", { length: 20 }).notNull().unique(),
   password: varchar("password", { length: 100 }).notNull(),
   status: boolean("status").default(true),
   role: mysqlEnum("role", ["admin", "user"]).default("user"),

@@ -1,9 +1,9 @@
+import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { EnvService } from "./shared/env/env.service";
-import { ValidationPipe } from "@nestjs/common";
-import { validationPipeOptions } from "./lib/options/validation-pipe.options";
 import { ResponseInterceptor } from "./lib/interceptors/response.interceptor";
+import { validationPipeOptions } from "./lib/options/validation-pipe.options";
+import { EnvService } from "./shared/env/env.service";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -62,22 +62,18 @@ export class GenerateKeysService {
   }
 
   public async deleteKeys(): Promise<void> {
-    if (fs.existsSync(this.publicAccessKeyPath)) {
-      fs.unlinkSync(this.publicAccessKeyPath);
-      this.logger.warn("public access Keys deleted successfully.");
-    }
-    if (fs.existsSync(this.privateAccessKeyPath)) {
-      fs.unlinkSync(this.privateAccessKeyPath);
-      this.logger.warn("private access Keys deleted successfully.");
-    }
-    if (fs.existsSync(this.publicRefreshKeyPath)) {
-      fs.unlinkSync(this.publicRefreshKeyPath);
-      this.logger.warn("public refresh Keys deleted successfully.");
-    }
-    if (fs.existsSync(this.privateRefreshKeyPath)) {
-      fs.unlinkSync(this.privateRefreshKeyPath);
-      this.logger.warn("private refresh Keys deleted successfully.");
-    }
+    const unlinkFileList = {
+      publicAccess: this.publicAccessKeyPath,
+      privateAccess: this.privateAccessKeyPath,
+      publicRefresh: this.publicRefreshKeyPath,
+      privateRefresh: this.privateRefreshKeyPath,
+    };
+    Object.keys(unlinkFileList).forEach((key) => {
+      if (fs.existsSync(unlinkFileList[key])) {
+        fs.unlinkSync(unlinkFileList[key]);
+        this.logger.warn(`${key} Key deleted successfully.`);
+      }
+    });
   }
 
   private generateKeyPair(publicPath: string, privatePath: string): void {

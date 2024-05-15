@@ -9,3 +9,14 @@ export type PayloadType = {
   username: string;
   role: "admin" | "user";
 };
+
+export type GenerateTokenType = {
+  token: string;
+  expiresAt: number;
+};
+
+export type SaveTokenParams = {
+  userId: number;
+  refreshToken: GenerateTokenType;
+  accessToken: GenerateTokenType;
+};
