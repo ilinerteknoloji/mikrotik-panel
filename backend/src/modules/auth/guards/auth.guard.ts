@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { Request } from "express";
+import { UsersRepository } from "src/modules/users/users.repository";
 import { JwtRepository } from "src/shared/jwt/jwt.repository";
 import { JwtService } from "src/shared/jwt/jwt.service";
 
@@ -13,6 +14,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwt: JwtService,
     private readonly jwtRepository: JwtRepository,
+    private readonly userRepository: UsersRepository,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,6 +27,14 @@ export class AuthGuard implements CanActivate {
     const payload = this.jwt.verifyToken(token, "access");
     const tokenInfo = await this.jwtRepository.findAccessTokenByToken(token);
     if (!tokenInfo.length || !tokenInfo[0].status) {
+      throw new UnauthorizedException("Token is invalid");
+    }
+    const [user] = await this.userRepository.findUserByKey("id", payload.id);
+    if (
+      user.id !== payload.id ||
+      user.username !== payload.username ||
+      user.role !== payload.role
+    ) {
       throw new UnauthorizedException("Token is invalid");
     }
     req.user = {

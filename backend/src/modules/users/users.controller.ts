@@ -1,34 +1,67 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Query,
+  UnauthorizedException,
+  UseGuards,
 } from "@nestjs/common";
-import { UsersService } from "./users.service";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { Roles } from "src/lib/decorators/roles.decorator";
+import { UserRole } from "src/lib/enums/user-role.enum";
+import { AuthGuard } from "../auth/guards/auth.guard";
+import { RolesGuard } from "../auth/guards/roles.guard";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UsersService } from "./users.service";
+import { PagePipe } from "src/lib/pipes/page.pipe";
+import { LimitPipe } from "src/lib/pipes/limit.pipe";
+import { RolePipe } from "src/lib/pipes/role.pipe";
+import { StatusPipe } from "src/lib/pipes/status.pipe";
+import { User } from "src/lib/decorators/user.decorator";
+import { RequestUserType } from "src/types";
 
+@UseGuards(AuthGuard)
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  findAll(
+    @Query("page", PagePipe) page: number,
+    @Query("limit", LimitPipe) limit: number,
+    @Query("search") search: string = "",
+    @Query("role", RolePipe) role: UserRole | undefined,
+    @Query("status", StatusPipe) status: boolean | undefined,
+  ) {
+    return this.usersService.findAll(page, limit, search, role, status);
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.usersService.findOne(+id);
+  @Get(":identifier")
+  findById(
+    @Param("identifier") identifier: string,
+    @User() user: RequestUserType,
+  ) {
+    if (
+      !isNaN(+identifier) &&
+      (user.id === +identifier || user.role === UserRole.ADMIN)
+    ) {
+      return this.usersService.findById(+identifier);
+    } else if (user.username === identifier || user.role === UserRole.ADMIN) {
+      return this.usersService.findByUsername(identifier);
+    }
+    throw new UnauthorizedException(
+      "You don't have permission to access this resource",
+    );
   }
+
+  // @Get(":username")
+  // findByUsername(@Param("username") username: string) {
+  //   return this.usersService.findByUsername(username);
+  // }
 
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {

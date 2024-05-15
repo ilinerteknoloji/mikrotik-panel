@@ -2,7 +2,9 @@
     "cSpell.words": [
         "datetime",
         "Iliner",
+        "ilike",
         "libphonenumber",
-        "nestjs"
+        "nestjs",
+        "Paramtype"
     ]
 }
