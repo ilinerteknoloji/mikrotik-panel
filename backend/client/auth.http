@@ -39,7 +39,6 @@ Content-Type: application/json
 ### Sign Out
 # @name signOut
 POST {{url}}/sign-out HTTP/1.1
-Content-Type: application/json
 Authorization: Bearer {{signInLastRegisteredUser.response.body.response.tokens.accessToken.token}}
 
 ### Refresh Token

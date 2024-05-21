@@ -21,14 +21,14 @@ export class AuthController {
     return this.authService.signIn(signInDto);
   }
 
-  @UseGuards(AuthGuard)
   @Post("sign-out")
+  @UseGuards(AuthGuard)
   public signOut(@User() user: RequestUserType) {
     return this.authService.signOut(user);
   }
 
-  @UseGuards(RefreshTokenGuard)
   @Post("refresh-token")
+  @UseGuards(RefreshTokenGuard)
   public refreshToken(@User() user: RequestUserType) {
     return this.authService.refreshToken(user);
   }

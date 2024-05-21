@@ -66,8 +66,7 @@ export class AuthService {
 
   public async refreshToken(user: RequestUserType) {
     await this.makeTokenStatusFalse(user.refreshTokenId);
-    const tokens = this.generateTokens(user);
-    return tokens;
+    return await this.generateTokens(user);
   }
 
   private async isUserExists({

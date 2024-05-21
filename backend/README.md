@@ -1,73 +1,75 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# MikroTik Panel Back-End
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Routes
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+| Route                                     | Method | Description   |
+| ----------------------------------------- | ------ | ------------- |
+| [/auth](#auth)                            | ---    | ---           |
+| [/auth/sign-up](#authsign-up)             | POST   | Sign Up       |
+| [/auth/sign-in](#authsign-in)             | POST   | Sign In       |
+| [/auth/sign-out](#authsign-out)           | POST   | Sign Out      |
+| [/auth/refresh-token](#authrefresh-token) | POST   | Refresh Token |
 
-## Description
+### /auth
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+```http
+@url=http://localhost:4000
+@random={{$randomInt 1000 9999}}
 ```
 
-## Running the app
+#### /auth/sign-up
 
-```bash
-# development
-$ npm run start
+- firstName: First name must be between 2 and 50 character
+- lastName: Last name must be between 2 and 50 characters
+- username: Username must be between 3 and 50 characters
+- email:
+- phoneNumber:
+- password: Password must be between 8 and 50 characters. It must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
 
-# watch mode
-$ npm run start:dev
+```http
+POST {{url}}/auth/sign-up HTTP/1.1
+Content-Type: application/json
 
-# production mode
-$ npm run start:prod
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johndoe{{random}}",
+    "email": "johndoe{{random}}@mail.com",
+    "phoneNumber": "543956{{random}}",
+    "password": "Password{{random}}*!"
+}
 ```
 
-## Test
+#### /auth/sign-in
 
-```bash
-# unit tests
-$ npm run test
+- username:
+- password: Password must be between 8 and 50 characters. It must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
 
-# e2e tests
-$ npm run test:e2e
+```http
+POST {{url}}/auth/sign-in HTTP/1.1
+Content-Type: application/json
 
-# test coverage
-$ npm run test:cov
+{
+    "username": "{{signUp.request.body.email}}",
+    "password": "{{signUp.request.body.password}}"
+}
 ```
 
-## Support
+#### /auth/sign-out
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Authorization: Bearer [ACCESS_TOKEN]
 
-## Stay in touch
+```http
+POST {{url}}/auth/sign-out HTTP/1.1
+Authorization: Bearer {{signInLastRegisteredUser.response.body.response.tokens.accessToken.token}}
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### /auth/refresh-token
 
-## License
+- x-refresh-token: [REFRESH_TOKEN]
 
-Nest is [MIT licensed](LICENSE).
+```http
+POST {{url}}/auth/refresh-token HTTP/1.1
+x-refresh-token: {{signInLastRegisteredUser.response.body.response.tokens.refreshToken.token}}
+# x-refresh-token: {{refreshToken.response.body.response.refreshToken.token}}
+```
