@@ -22,8 +22,8 @@ import { StatusPipe } from "src/lib/pipes/status.pipe";
 import { User } from "src/lib/decorators/user.decorator";
 import { RequestUserType } from "src/types";
 
-@UseGuards(AuthGuard)
 @Controller("users")
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

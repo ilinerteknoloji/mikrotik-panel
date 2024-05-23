@@ -49,8 +49,6 @@ export class JwtService {
       },
       (error, decoded) => {
         if (error) {
-          console.log(error);
-
           throw new UnauthorizedException(error.message);
         }
         payload = decoded as PayloadType;
