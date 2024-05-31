@@ -4,13 +4,13 @@
 CREATE TABLE `access_token` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`user_id` int NOT NULL,
-	`token` varchar(255) NOT NULL,
+	`refresh_token_id` int NOT NULL,
+	`token` text NOT NULL,
 	`status` tinyint DEFAULT 1,
 	`expires_at` timestamp NOT NULL,
 	`created_at` timestamp DEFAULT (now()),
 	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
-	CONSTRAINT `access_token_id` PRIMARY KEY(`id`),
-	CONSTRAINT `access_token_token_unique` UNIQUE(`token`)
+	CONSTRAINT `access_token_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `complains` (
@@ -66,16 +66,25 @@ CREATE TABLE `logs` (
 	CONSTRAINT `logs_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
+CREATE TABLE `mikrotik_ips` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`user_id` int NOT NULL,
+	`ip` text NOT NULL,
+	`status` tinyint DEFAULT 1,
+	`created_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `mikrotik_ips_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `refresh_token` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`user_id` int NOT NULL,
-	`token` varchar(255) NOT NULL,
+	`token` text NOT NULL,
 	`status` tinyint DEFAULT 1,
 	`expires_at` timestamp NOT NULL,
 	`created_at` timestamp DEFAULT (now()),
 	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
-	CONSTRAINT `refresh_token_id` PRIMARY KEY(`id`),
-	CONSTRAINT `refresh_token_token_unique` UNIQUE(`token`)
+	CONSTRAINT `refresh_token_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `user_details` (
@@ -117,23 +126,25 @@ CREATE TABLE `users` (
 	`last_name` varchar(50) NOT NULL,
 	`username` varchar(50) NOT NULL,
 	`email` varchar(100) NOT NULL,
-	`phoneNumber` varchar(20) NOT NULL,
+	`phone_number` varchar(20) NOT NULL,
 	`password` varchar(100) NOT NULL,
-	`status` tinyint DEFAULT 1,
+	`status` tinyint DEFAULT 0,
 	`role` enum('admin','user') DEFAULT 'user',
 	`created_at` timestamp DEFAULT (now()),
 	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `users_id` PRIMARY KEY(`id`),
-	CONSTRAINT `users_username_unique` UNIQUE(`username`),
 	CONSTRAINT `users_email_unique` UNIQUE(`email`),
-	CONSTRAINT `users_phoneNumber_unique` UNIQUE(`phoneNumber`)
+	CONSTRAINT `users_phone_number_unique` UNIQUE(`phone_number`),
+	CONSTRAINT `users_username_unique` UNIQUE(`username`)
 );
 --> statement-breakpoint
+ALTER TABLE `access_token` ADD CONSTRAINT `access_token_refresh_token_id_refresh_token_id_fk` FOREIGN KEY (`refresh_token_id`) REFERENCES `refresh_token`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `access_token` ADD CONSTRAINT `access_token_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `complains` ADD CONSTRAINT `complains_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `feedbacks` ADD CONSTRAINT `feedbacks_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `logs` ADD CONSTRAINT `logs_ip_id_ips_id_fk` FOREIGN KEY (`ip_id`) REFERENCES `ips`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `logs` ADD CONSTRAINT `logs_user_device_id_user_device_id_fk` FOREIGN KEY (`user_device_id`) REFERENCES `user_device`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `mikrotik_ips` ADD CONSTRAINT `mikrotik_ips_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `refresh_token` ADD CONSTRAINT `refresh_token_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `user_details` ADD CONSTRAINT `user_details_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `user_device` ADD CONSTRAINT `user_device_device_id_devices_id_fk` FOREIGN KEY (`device_id`) REFERENCES `devices`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint

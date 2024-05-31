@@ -10,3 +10,4 @@ export * from "./user-devices-refresh-tokens.schema";
 export * from "./user-devices.schema";
 export * from "./user-details.schema";
 export * from "./users.schema";
+export * from "./mikrotik-user-ips.schema";

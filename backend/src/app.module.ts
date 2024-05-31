@@ -9,6 +9,8 @@ import { envSchema } from "./shared/env/env.schema";
 import { JwtModule } from "./shared/jwt/jwt.module";
 import { GenerateKeysModule } from "./shared/keys/generate-keys.module";
 import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
+import { IpsModule } from "./modules/ips/ips.module";
+import { UserIpsModule } from "./modules/user-ips/user-ips.module";
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
     EncryptionModule,
     AuthModule,
     UsersModule,
+    IpsModule,
+    UserIpsModule,
   ],
   controllers: [],
   providers: [],

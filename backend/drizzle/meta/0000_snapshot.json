@@ -21,10 +21,17 @@
           "primaryKey": false,
           "notNull": true
         },
+        "refresh_token_id": {
+          "autoincrement": false,
+          "name": "refresh_token_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
         "token": {
           "autoincrement": false,
           "name": "token",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -71,6 +78,19 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "access_token_refresh_token_id_refresh_token_id_fk": {
+          "name": "access_token_refresh_token_id_refresh_token_id_fk",
+          "tableFrom": "access_token",
+          "tableTo": "refresh_token",
+          "columnsFrom": [
+            "refresh_token_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "access_token_user_id_users_id_fk": {
           "name": "access_token_user_id_users_id_fk",
           "tableFrom": "access_token",
@@ -85,14 +105,7 @@
           "onUpdate": "no action"
         }
       },
-      "uniqueConstraints": {
-        "access_token_token_unique": {
-          "name": "access_token_token_unique",
-          "columns": [
-            "token"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "complains": {
       "name": "complains",
@@ -463,6 +476,82 @@
       },
       "uniqueConstraints": {}
     },
+    "mikrotik_ips": {
+      "name": "mikrotik_ips",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ip": {
+          "autoincrement": false,
+          "name": "ip",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "default": 1,
+          "autoincrement": false,
+          "name": "status",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "onUpdate": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "mikrotik_ips_id": {
+          "name": "mikrotik_ips_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mikrotik_ips_user_id_users_id_fk": {
+          "name": "mikrotik_ips_user_id_users_id_fk",
+          "tableFrom": "mikrotik_ips",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "refresh_token": {
       "name": "refresh_token",
       "columns": {
@@ -483,7 +572,7 @@
         "token": {
           "autoincrement": false,
           "name": "token",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -544,14 +633,7 @@
           "onUpdate": "no action"
         }
       },
-      "uniqueConstraints": {
-        "refresh_token_token_unique": {
-          "name": "refresh_token_token_unique",
-          "columns": [
-            "token"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "user_details": {
       "name": "user_details",
@@ -874,9 +956,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "phoneNumber": {
+        "phone_number": {
           "autoincrement": false,
-          "name": "phoneNumber",
+          "name": "phone_number",
           "type": "varchar(20)",
           "primaryKey": false,
           "notNull": true
@@ -889,7 +971,7 @@
           "notNull": true
         },
         "status": {
-          "default": 1,
+          "default": 0,
           "autoincrement": false,
           "name": "status",
           "type": "tinyint",
@@ -933,22 +1015,22 @@
       "indexes": {},
       "foreignKeys": {},
       "uniqueConstraints": {
-        "users_username_unique": {
-          "name": "users_username_unique",
-          "columns": [
-            "username"
-          ]
-        },
         "users_email_unique": {
           "name": "users_email_unique",
           "columns": [
             "email"
           ]
         },
-        "users_phoneNumber_unique": {
-          "name": "users_phoneNumber_unique",
+        "users_phone_number_unique": {
+          "name": "users_phone_number_unique",
           "columns": [
-            "phoneNumber"
+            "phone_number"
+          ]
+        },
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "columns": [
+            "username"
           ]
         }
       }
@@ -1018,6 +1100,16 @@
       "logs": {
         "columns": {
           "time": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "mikrotik_ips": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
             "isDefaultAnExpression": true
           }
         }
