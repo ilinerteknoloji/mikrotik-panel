@@ -1,5 +1,5 @@
 @auth=http://localhost:4000/auth
-@url=http://localhost:4000/user-ips
+@url=http://localhost:4000/ip-categories
 
 ### Sign Up
 # @name signUp
@@ -25,7 +25,6 @@ Content-Type: application/json
     "password": "Password1111*!"
 }
 
-
 ### Sign In as User
 # @name signInUser
 POST {{auth}}/sign-in HTTP/1.1
@@ -36,33 +35,34 @@ Content-Type: application/json
     "password": "Password1732*!"
 }
 
-### Create IP
-# @name createIP
+### Create IP Category
+# @name createIPCategory
 POST {{url}} HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
 {
-    "ips": ["192.168.1.4","192.168.1.1"],
-    "userId": 4
+    "title": "Category 11",
+    "description": "Category 1 Description"
 }
 
-### Get All IPs
-# @name getAllIPs
-GET {{url}}?page=1&limit=10&search=5 HTTP/1.1
+### Get IP Categories
+# @name getIPCategories
+GET {{url}} HTTP/1.1
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
-### Get IP by ID
-# @name getIPById
-GET {{url}}/1 HTTP/1.1
+### Get IP Category By ID
+# @name getIPCategoryByID
+GET {{url}}/4 HTTP/1.1
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
-### Update IP
-# @name updateIP
-PATCH {{url}}/3 HTTP/1.1
+### Update IP Category
+# @name updateIPCategory
+PATCH {{url}}/5 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
 {
-    "status": true
+    "title": "Category 4 Updated",
+    "description": "Category 4 Description Updated"
 }
