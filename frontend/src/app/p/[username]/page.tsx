@@ -19,8 +19,6 @@ export default async function ProfilePage({ params: { username } }: Props) {
     },
   });
   const profile = await response.json();
-  console.log(profile);
-
   return (
     <>
       Profile Page

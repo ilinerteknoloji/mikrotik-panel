@@ -26,10 +26,6 @@ export const refreshToken = async (token: JWT): Promise<JWT> => {
   });
   const result = tokenSchema.safeParse(user.response);
   if (!response.ok || !result.success) {
-    console.log(response.ok);
-    console.log(user);
-    console.log(result.success);
-
     throw new Error("Failed to refresh token");
   }
   return {
