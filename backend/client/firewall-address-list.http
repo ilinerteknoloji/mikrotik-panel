@@ -1,0 +1,36 @@
+### Get all address lists
+# @name getAllAddressLists
+GET http://{{router}}/rest/ip/firewall/address-list HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+
+### Get all address lists by id
+# @name getAllAddressListsById
+GET http://{{router}}/rest/ip/firewall/address-list/*6 HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+
+### Add ip to address list
+# @name addIpToAddressList
+POST http://{{router}}/rest/ip/firewall/address-list/add HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+Content-Type: application/json
+
+{
+  "list": "blacklist1",
+  "address": "192.0.34.117"
+}
+
+### Add ip to address list
+# @name addIpToAddressList
+GET http://{{router}}/rest/ip/firewall/address-list HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+
+### Add ip to address list
+# @name addIpToAddressList
+PATCH http://{{router}}/rest/ip/firewall/address-list/*12 HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+Content-Type: application/json
+
+{
+    "address": "192.0.34.210/8",
+    "list": "guncellenen-list"
+}
