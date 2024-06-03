@@ -8,12 +8,13 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { SignInFormSchema, signInFormSchema } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { SignInFormSchema, signInFormSchema } from "./form-schema";
 
 type Props = {};
 
@@ -53,6 +54,7 @@ export function SignInForm({}: Props) {
               <FormDescription>
                 Your username, email, or phone number.
               </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -71,7 +73,7 @@ export function SignInForm({}: Props) {
                   autoComplete="current-password"
                 />
               </FormControl>
-              <FormDescription></FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />

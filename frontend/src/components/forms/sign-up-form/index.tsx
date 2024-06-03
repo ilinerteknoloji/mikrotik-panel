@@ -11,13 +11,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { SignUpFormSchema, signUpFormSchema } from "@/types/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { SignUpFormSchema, signUpFormSchema } from "./form-schema";
+import { signUpFormSubmitAction } from "./actions";
 
 type Props = {};
 
 export function SignUpForm({}: Props) {
+  const router = useRouter();
   const form = useForm<SignUpFormSchema>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -31,13 +34,7 @@ export function SignUpForm({}: Props) {
   });
 
   const onSubmit = async (values: SignUpFormSchema) => {
-    const response = await fetch(`/api/sign-up`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
+    const response = await signUpFormSubmitAction(values);
     if (!response.ok) {
       const error = await response.json();
       return toast({
@@ -45,6 +42,7 @@ export function SignUpForm({}: Props) {
         description: error.message,
       });
     }
+    return router.push("/sign-in");
   };
 
   return (
@@ -64,6 +62,7 @@ export function SignUpForm({}: Props) {
                     autoComplete="given-name"
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -81,6 +80,7 @@ export function SignUpForm({}: Props) {
                     autoComplete="family-name"
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -99,6 +99,7 @@ export function SignUpForm({}: Props) {
                   autoComplete="username"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -117,6 +118,7 @@ export function SignUpForm({}: Props) {
                   autoComplete="email"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -134,6 +136,7 @@ export function SignUpForm({}: Props) {
                   autoComplete="tel"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
