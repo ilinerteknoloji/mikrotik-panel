@@ -1,10 +1,9 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { World } from "@/components/world";
+import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import React from "react";
 
 export default function RootLayout({
   children,
