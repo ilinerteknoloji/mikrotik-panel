@@ -1,4 +1,4 @@
-import { env } from "@/server";
+import { env } from "@/schema";
 import { responseSchema } from "@/types";
 import { AuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";

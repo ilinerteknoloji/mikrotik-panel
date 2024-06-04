@@ -1,6 +1,6 @@
 "use server";
 
-import { env } from "@/server";
+import { env } from "@/schema";
 
 export async function POST(req: Request) {
   const values = await req.json();

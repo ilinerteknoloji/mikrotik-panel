@@ -1,14 +1,16 @@
 "use client";
 
 import { globeConfig, sampleArcs } from "@/data/globe-config";
-import { FaSpinner } from "react-icons/fa6";
+import { LoaderCircle } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const Globe = dynamic(
   () => import("@/components/ui/globe").then((m) => m.World),
   {
     ssr: false,
-    loading: () => <FaSpinner className="size-8 animate-spin fill-primary" />,
+    loading: () => (
+      <LoaderCircle className="size-8 animate-spin fill-primary" />
+    ),
   },
 );
 

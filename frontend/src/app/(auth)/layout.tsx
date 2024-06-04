@@ -1,9 +1,10 @@
 "use client";
 
-import { World } from "@/components/world";
 import { Card, CardContent } from "@/components/ui/card";
+import { World } from "@/components/world";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Logo from "@/images/logo.svg";
 
 export default function RootLayout({
   children,
@@ -30,11 +31,12 @@ export default function RootLayout({
           <CardContent>
             <div className="flex items-center justify-center gap-4">
               <Image
-                src="/images/logo.svg"
+                src={Logo}
                 alt="MikroTik Logo"
                 width={100}
                 height={100}
                 className="drop-shadow"
+                priority
               />
               <div>
                 <h1 className="text-xl font-semibold leading-none tracking-tight">

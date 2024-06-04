@@ -1,8 +1,7 @@
+import { env } from "@/schema";
 import { getServerSession } from "next-auth";
-import { getToken } from "next-auth/jwt";
-import { authOptions } from "../../api/auth/[...nextauth]/options";
-import { env } from "@/server";
 import Link from "next/link";
+import { authOptions } from "../../api/auth/[...nextauth]/options";
 
 type Props = {
   params: {
