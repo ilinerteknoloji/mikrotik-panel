@@ -9,7 +9,7 @@ const Globe = dynamic(
   {
     ssr: false,
     loading: () => (
-      <LoaderCircle className="size-8 animate-spin fill-primary" />
+      <LoaderCircle className="size-8 animate-spin text-primary" />
     ),
   },
 );

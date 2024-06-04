@@ -1,32 +1,19 @@
-"use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { World } from "@/components/world";
-import { motion } from "framer-motion";
-import Image from "next/image";
 import Logo from "@/images/logo.svg";
+import { headers } from "next/headers";
+import Image from "next/image";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const header = headers();
+  const isMobile = header.get("user-agent")?.includes("Mobile");
   return (
     <main className="flex">
-      <motion.div
-        initial={{
-          opacity: 0,
-          y: 20,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 1,
-        }}
-        className="flex h-screen w-full flex-col items-center justify-center gap-4 shadow-lg lg:w-1/3"
-      >
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-4 shadow-lg lg:w-1/3">
         <Card className="w-96 border-none shadow-none">
           <CardContent>
             <div className="flex items-center justify-center gap-4">
@@ -50,13 +37,12 @@ export default function RootLayout({
           </CardContent>
         </Card>
         <div>{children}</div>
-      </motion.div>
-      <div
-        className="hidden w-full items-center justify-center lg:flex"
-        suppressHydrationWarning
-      >
-        <World />
       </div>
+      {isMobile ? null : (
+        <div className="hidden w-2/3 items-center justify-center lg:flex">
+          <World />
+        </div>
+      )}
     </main>
   );
 }
