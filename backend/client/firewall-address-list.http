@@ -34,3 +34,8 @@ Content-Type: application/json
     "address": "192.0.34.210/8",
     "list": "guncellenen-list"
 }
+
+### Get ip to address list
+# @name getIpToAddressList
+GET http://{{router}}/rest/ip/firewall/address-list/*12 HTTP/1.1
+Authorization: Basic {{username}}:{{password}}

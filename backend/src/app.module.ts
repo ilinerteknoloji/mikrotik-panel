@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from "./modules/auth/auth.module";
+import { IpCategoriesModule } from "./modules/ip-categories/ip-categories.module";
 import { UserIpsModule } from "./modules/user-ips/user-ips.module";
 import { UsersModule } from "./modules/users/users.module";
 import { DrizzleModule } from "./shared/drizzle/drizzle.module";
@@ -10,7 +11,7 @@ import { envSchema } from "./shared/env/env.schema";
 import { JwtModule } from "./shared/jwt/jwt.module";
 import { GenerateKeysModule } from "./shared/keys/generate-keys.module";
 import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
-import { IpCategoriesModule } from "./modules/ip-categories/ip-categories.module";
+import { AddressListsModule } from "./modules/mikrotik/ip/firewall/address-lists/address-lists.module";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { IpCategoriesModule } from "./modules/ip-categories/ip-categories.module
     UsersModule,
     UserIpsModule,
     IpCategoriesModule,
+    AddressListsModule,
   ],
   controllers: [],
   providers: [],

@@ -43,8 +43,8 @@ Content-Type: application/json
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
 {
-    "ips": ["192.168.1.4","192.168.1.1"],
-    "userId": 4
+    "ips": ["192.0.34.112","192.0.34.117"],
+    "userId": 3
 }
 
 ### Get All IPs

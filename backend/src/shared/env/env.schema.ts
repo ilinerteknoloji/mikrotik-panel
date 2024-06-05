@@ -18,6 +18,9 @@ export const envSchema = z.object({
     .default("RS256"),
   JWT_ACCESS_TOKEN_EXPIRATION: z.string().optional().default("15m"),
   JWT_REFRESH_TOKEN_EXPIRATION: z.string().optional().default("7 days"),
+  MIKROTIK_HOST: z.string(),
+  MIKROTIK_USERNAME: z.string(),
+  MIKROTIK_PASSWORD: z.string(),
 });
 
 export type EnvSchemaType = z.infer<typeof envSchema>;

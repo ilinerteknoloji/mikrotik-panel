@@ -1,0 +1,51 @@
+@auth=http://localhost:4000/auth
+@url=http://localhost:4000/address-lists
+
+### Sign Up
+# @name signUp
+POST {{auth}}/sign-up HTTP/1.1
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johndoe1732",
+    "email": "johndoe1732@mail.com",
+    "phoneNumber": "5439561732",
+    "password": "Password1732*!"
+}
+
+### Sign In as Admin
+# @name signInAdmin
+POST {{auth}}/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johndoe1111",
+    "password": "Password1111*!"
+}
+
+### Sign In as User
+# @name signInUser
+POST {{auth}}/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johndoe1732",
+    "password": "Password1732*!"
+}
+
+### Get address lists by Id
+# @name getAddressListsById
+GET {{url}}/11 HTTP/1.1
+Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}
+
+### Get all address lists by Id
+# @name getAllAddressListsById
+PATCH {{url}}/11 HTTP/1.1
+Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}
+Content-Type: application/json
+
+{
+    "list": "Category 4 Updated"
+}

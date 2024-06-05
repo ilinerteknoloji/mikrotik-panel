@@ -10,5 +10,6 @@ import { JwtModule } from "src/shared/jwt/jwt.module";
   imports: [JwtModule, UsersModule, DrizzleModule],
   controllers: [IpCategoriesController],
   providers: [IpCategoriesService, IpCategoriesRepository],
+  exports: [IpCategoriesRepository],
 })
 export class IpCategoriesModule {}
