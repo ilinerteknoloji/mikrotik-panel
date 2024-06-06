@@ -7,6 +7,7 @@ import {
   User,
   Users,
 } from "lucide-react";
+import React from "react";
 
 export const navigationItems = [
   {
@@ -35,11 +36,6 @@ export const navigationItems = [
     icon: <Settings />,
   },
   {
-    title: "Profile",
-    href: "/profile",
-    icon: <User />,
-  },
-  {
     title: "Billing",
     href: "/billing",
     icon: <Receipt />,
@@ -49,4 +45,17 @@ export const navigationItems = [
     href: "/team",
     icon: <Users />,
   },
+] as const;
+
+export const allPages: {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+}[] = [
+  {
+    title: "Profile",
+    href: "/p/",
+    icon: <User />,
+  },
+  ...navigationItems,
 ] as const;

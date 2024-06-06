@@ -1,9 +1,9 @@
-import { navigationItems } from "@/lib/constant";
+import { allPages } from "@/lib/constant";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type PageName = (typeof navigationItems)[number]["title"];
-type Href = (typeof navigationItems)[number]["href"];
+type PageName = (typeof allPages)[number]["title"];
+type Href = (typeof allPages)[number]["href"];
 
 type State = {
   pageName: PageName;

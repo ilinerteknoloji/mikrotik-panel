@@ -12,6 +12,7 @@ import {
 import { LoaderCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { SignOutButton } from "./sign-out-button";
+import Link from "next/link";
 
 type Props = {};
 
@@ -35,7 +36,9 @@ export function ProfileButton({}: Props) {
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <Link href="/p/[username]" as={`/p/${session?.user.username}`}>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+        </Link>
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>Subscription</DropdownMenuItem>

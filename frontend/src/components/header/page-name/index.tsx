@@ -1,9 +1,9 @@
 "use client";
 
-import { navigationItems } from "@/lib/constant";
+import { allPages } from "@/lib/constant";
 import { usePageStore } from "@/stores";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 type Props = {};
 
@@ -13,7 +13,7 @@ export function PageName({}: Props) {
 
   useEffect(() => {
     if (path !== href) {
-      const page = navigationItems.find((item) =>
+      const page = allPages.find((item) =>
         item.href === "/" ? path === "/" : path.startsWith(item.href),
       );
       if (page) {
