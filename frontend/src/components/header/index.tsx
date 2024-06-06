@@ -7,6 +7,7 @@ import { MobileMenu } from "./mobile-menu";
 import { PageName } from "./page-name";
 import { ProfileButton } from "./profile-button";
 import { SearchInput } from "./search-input";
+import { ThemeButton } from "./theme-button";
 
 type Props = {};
 
@@ -57,6 +58,8 @@ export function Header({}: Props) {
               <Bell className="size-6" />
               {/* <BellDot className="size-6" /> */}
             </Button>
+
+            <ThemeButton />
 
             <ProfileButton />
           </nav>
