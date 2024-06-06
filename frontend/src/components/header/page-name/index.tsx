@@ -2,8 +2,9 @@
 
 import { allPages } from "@/lib/constant";
 import { usePageStore } from "@/stores";
+import { LoaderCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 type Props = {};
 
@@ -22,5 +23,12 @@ export function PageName({}: Props) {
     }
   }, [path, href, setPage, pageName]);
 
-  return <h2 className="text-xl">{pageName}</h2>;
+  return (
+    <Suspense fallback={<LoaderCircle className="animate-spin" />}>
+      <div className="flex items-center justify-center gap-2">
+        {allPages.find((item) => item.href === href)?.icon}
+        <h2 className="text-xl">{pageName}</h2>
+      </div>
+    </Suspense>
+  );
 }
