@@ -1,11 +1,10 @@
 import {
+  FileSlidersIcon,
   HomeIcon,
-  LayoutDashboard,
   MonitorSmartphone,
   Receipt,
   Settings,
   User,
-  Users,
 } from "lucide-react";
 import React from "react";
 
@@ -16,34 +15,9 @@ export const navigationItems = [
     icon: <HomeIcon />,
   },
   {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: <LayoutDashboard />,
-  },
-  {
-    title: "Devices",
-    href: "/devices",
-    icon: <MonitorSmartphone />,
-  },
-  {
-    title: "Users",
-    href: "/users",
-    icon: <User />,
-  },
-  {
-    title: "Settings",
-    href: "/settings",
-    icon: <Settings />,
-  },
-  {
-    title: "Billing",
-    href: "/billing",
-    icon: <Receipt />,
-  },
-  {
-    title: "Team",
-    href: "/team",
-    icon: <Users />,
+    title: "Firewall",
+    href: "/firewall",
+    icon: <FileSlidersIcon />,
   },
 ] as const;
 
@@ -56,6 +30,21 @@ export const allPages: {
     title: "Profile",
     href: "/p/",
     icon: <User />,
+  },
+  {
+    title: "Devices",
+    href: "/devices",
+    icon: <MonitorSmartphone />,
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: <Settings />,
+  },
+  {
+    title: "Billing",
+    href: "/billing",
+    icon: <Receipt />,
   },
   ...navigationItems,
 ] as const;

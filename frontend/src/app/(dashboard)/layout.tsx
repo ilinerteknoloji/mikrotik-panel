@@ -9,9 +9,9 @@ export default function DashboardLayout({
   return (
     <>
       <Header />
-      <main className="flex h-dvh w-full bg-secondary">
+      <main className="flex h-[calc(100dvh-80px)] w-full bg-secondary">
         <Sidebar />
-        <div className="p-4">{children}</div>
+        <div className="w-full p-4">{children}</div>
       </main>
     </>
   );

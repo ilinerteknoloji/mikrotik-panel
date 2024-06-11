@@ -1,12 +1,11 @@
 import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
+import { filterUsersPublicInformations } from "src/lib/utils";
+import { IpCategoriesRepository } from "src/modules/ip-categories/ip-categories.repository";
 import { UserIpsRepository } from "src/modules/user-ips/user-ips.repository";
 import { EnvService } from "src/shared/env/env.service";
 import { RequestUserType } from "src/types";
 import { AddressListsRepository } from "./address-lists.repository";
-import { CreateAddressListDto } from "./dto/create-address-list.dto";
 import { UpdateAddressListDto } from "./dto/update-address-list.dto";
-import { filterUsersPublicInformations } from "src/lib/utils";
-import { IpCategoriesRepository } from "src/modules/ip-categories/ip-categories.repository";
 
 @Injectable()
 export class AddressListsService {
@@ -25,12 +24,6 @@ export class AddressListsService {
     this.username = this.env.get("MIKROTIK_USERNAME");
     this.password = this.env.get("MIKROTIK_PASSWORD");
     this.auth = btoa(`${this.username}:${this.password}`);
-  }
-
-  create(createAddressListDto: CreateAddressListDto) {
-    console.log(createAddressListDto);
-
-    return "This action adds a new addressList";
   }
 
   findAll() {
@@ -79,19 +72,16 @@ export class AddressListsService {
   }
 
   async update(
-    id: string,
     updateAddressListDto: UpdateAddressListDto,
     user: RequestUserType,
   ) {
-    const response = await fetch(
-      `${this.host}/rest/ip/firewall/address-list/*${id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Basic ${this.auth}`,
-        },
+    const { ip, list } = updateAddressListDto;
+    const response = await fetch(`${this.host}/rest/ip/firewall/address-list`, {
+      method: "GET",
+      headers: {
+        Authorization: `Basic ${this.auth}`,
       },
-    );
+    });
     const addressList = await response.json();
     if (!response.ok) {
       throw new HttpException(
@@ -99,9 +89,11 @@ export class AddressListsService {
         response.status,
       );
     }
+    // const addressListId = addressList.find((address) => address[".id"] === id);
+    console.log({ addressList });
     const userIps = await this.userIpsRepository.findByKeyOnlyActiveWithUser(
       "ip",
-      addressList.address,
+      ip,
     );
     if (!userIps && user.role !== "admin") {
       throw new NotFoundException("User IP not found");
@@ -114,16 +106,16 @@ export class AddressListsService {
       throw new NotFoundException("Category not found");
     }
     const updatedResponse = await fetch(
-      `${this.host}/rest/ip/firewall/address-list/*${id}`,
+      `${this.host}/rest/ip/firewall/address-list`,
       {
-        method: "PATCH",
+        method: "PUT",
         headers: {
           Authorization: `Basic ${this.auth}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           address: userIps.ip,
-          list: updateAddressListDto.list,
+          list: list,
         }),
       },
     );

@@ -5,28 +5,21 @@ import {
   Get,
   Param,
   Patch,
-  Post,
   UseGuards,
 } from "@nestjs/common";
 import { Roles } from "src/lib/decorators/roles.decorator";
+import { User } from "src/lib/decorators/user.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import { AuthGuard } from "src/modules/auth/guards/auth.guard";
-import { AddressListsService } from "./address-lists.service";
-import { CreateAddressListDto } from "./dto/create-address-list.dto";
-import { UpdateAddressListDto } from "./dto/update-address-list.dto";
-import { User } from "src/lib/decorators/user.decorator";
 import { RequestUserType } from "src/types";
+import { AddressListsService } from "./address-lists.service";
+import { UpdateAddressListDto } from "./dto/update-address-list.dto";
 
 @Controller("address-lists")
 @UseGuards(AuthGuard)
 @Roles(UserRole.ADMIN)
 export class AddressListsController {
   constructor(private readonly addressListsService: AddressListsService) {}
-
-  @Post()
-  create(@Body() createAddressListDto: CreateAddressListDto) {
-    return this.addressListsService.create(createAddressListDto);
-  }
 
   @Get()
   findAll() {
@@ -39,14 +32,13 @@ export class AddressListsController {
     return this.addressListsService.findOne(id, user);
   }
 
-  @Patch(":id")
+  @Patch()
   @Roles(UserRole.ADMIN, UserRole.USER)
   update(
-    @Param("id") id: string,
     @Body() updateAddressListDto: UpdateAddressListDto,
     @User() user: RequestUserType,
   ) {
-    return this.addressListsService.update(id, updateAddressListDto, user);
+    return this.addressListsService.update(updateAddressListDto, user);
   }
 
   @Delete(":id")

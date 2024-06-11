@@ -7,6 +7,7 @@ import { UsersRepository } from "../users/users.repository";
 import { UserIpsRepository } from "./user-ips.repository";
 import { CreateUserIpDto } from "./dto/create-user-ip.dto";
 import { UpdateUserIpDto } from "./dto/update-user-ip.dto";
+import { RequestUserType } from "src/types";
 
 @Injectable()
 export class UserIpsService {
@@ -45,8 +46,8 @@ export class UserIpsService {
     };
   }
 
-  findAll(page: number, limit: number, search: string) {
-    return this.userIpsRepository.findAll(page, limit, search);
+  findAll(page: number, limit: number, search: string, user: RequestUserType) {
+    return this.userIpsRepository.findAllByUserId(page, limit, search, user.id);
   }
 
   findOne(id: number) {

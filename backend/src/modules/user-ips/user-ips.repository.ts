@@ -33,11 +33,20 @@ export class UserIpsRepository {
     });
   }
 
-  public async findAll(page: number, limit: number, search: string) {
+  public async findAllByUserId(
+    page: number,
+    limit: number,
+    search: string,
+    userId: number,
+  ) {
     const offset = (page - 1) * limit;
     return await this.drizzle.query.mikrotikUserIpsSchema.findMany({
       where(fields, { like, and, eq }) {
-        return and(like(fields.ip, `%${search}%`), eq(fields.status, true));
+        return and(
+          like(fields.ip, `%${search}%`),
+          // eq(fields.status, true),
+          eq(fields.userId, userId),
+        );
       },
       limit,
       offset,

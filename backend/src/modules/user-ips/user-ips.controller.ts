@@ -17,15 +17,16 @@ import { RolesGuard } from "../auth/guards/roles.guard";
 import { CreateUserIpDto } from "./dto/create-user-ip.dto";
 import { UpdateUserIpDto } from "./dto/update-user-ip.dto";
 import { UserIpsService } from "./user-ips.service";
+import { User } from "src/lib/decorators/user.decorator";
+import { RequestUserType } from "src/types";
 
 @Controller("user-ips")
 @UseGuards(AuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN)
+@Roles(UserRole.ADMIN, UserRole.USER)
 export class UserIpsController {
   constructor(private readonly userIpsService: UserIpsService) {}
 
   @Post()
-  @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
   create(@Body() createIpDto: CreateUserIpDto) {
     return this.userIpsService.create(createIpDto);
@@ -36,8 +37,9 @@ export class UserIpsController {
     @Query("page", PagePipe) page: number,
     @Query("limit", LimitPipe) limit: number,
     @Query("search") search: string = "",
+    @User() user: RequestUserType,
   ) {
-    return this.userIpsService.findAll(page, limit, search);
+    return this.userIpsService.findAll(page, limit, search, user);
   }
 
   @Get(":id")

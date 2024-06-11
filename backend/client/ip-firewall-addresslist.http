@@ -42,7 +42,7 @@ Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.tok
 
 ### Get all address lists by Id
 # @name getAllAddressListsById
-PATCH {{url}}/11 HTTP/1.1
+PATCH {{url}} HTTP/1.1
 Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}
 Content-Type: application/json
 

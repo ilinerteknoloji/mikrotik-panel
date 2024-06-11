@@ -10,6 +10,7 @@
         "NEXTAUTH",
         "Shadcn",
         "tailwindcss",
+        "tanstack",
         "Zustand"
     ],
     "css.customData": [

@@ -1,4 +1,4 @@
-import { InferSelectModel } from "drizzle-orm";
+import { InferSelectModel, relations } from "drizzle-orm";
 import {
   boolean,
   int,
@@ -6,6 +6,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
+import { firewallAddressListSchema } from "./firewall-address-list.schema";
 
 export const ipCategoriesSchema = mysqlTable("ip_categories", {
   id: int("id").primaryKey().autoincrement(),
@@ -21,6 +22,13 @@ export const ipCategoriesSchema = mysqlTable("ip_categories", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
+
+export const ipCategoriesRelations = relations(
+  ipCategoriesSchema,
+  ({ many }) => ({
+    addressList: many(firewallAddressListSchema),
+  }),
+);
 
 export type IpCategoriesSchemaType = InferSelectModel<
   typeof ipCategoriesSchema
