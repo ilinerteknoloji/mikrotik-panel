@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, HttpException, Injectable } from "@nestjs/common";
 import { invalidCredentials } from "src/lib/throws";
 import {
   filterSignInValueType,
@@ -25,20 +25,25 @@ export class AuthService {
   ) {}
 
   public async signUp(signUpAuthDto: CreateUserDto) {
-    signUpAuthDto.phoneNumber = formatPhoneNumber(signUpAuthDto.phoneNumber);
-    await this.isUserExists(signUpAuthDto);
-    signUpAuthDto.password = await this.encryption.encrypt(
-      signUpAuthDto.password,
-    );
-    const userId =
-      await this.usersRepository.createUserWithDetails(signUpAuthDto);
-    const [{ users, user_details }] =
-      await this.usersRepository.findUserByKeyWithDetail("id", userId);
-    const publicData = filterUsersPublicInformations(users);
-    return {
-      message: "User created successfully",
-      data: { ...publicData, details: user_details },
-    };
+    try {
+      signUpAuthDto.phoneNumber = formatPhoneNumber(signUpAuthDto.phoneNumber);
+      await this.isUserExists(signUpAuthDto);
+      signUpAuthDto.password = await this.encryption.encrypt(
+        signUpAuthDto.password,
+      );
+      const userId =
+        await this.usersRepository.createUserWithDetails(signUpAuthDto);
+      const [{ users, user_details }] =
+        await this.usersRepository.findUserByKeyWithDetail("id", userId);
+      const publicData = filterUsersPublicInformations(users);
+      return {
+        message: "User created successfully",
+        user: { ...publicData, details: user_details },
+      };
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+      throw new HttpException(error.message, 500);
+    }
   }
 
   public async signIn(signInDto: SignInAuthDto) {
@@ -80,10 +85,9 @@ export class AuthService {
         this.usersRepository.findUserByKey("email", email),
         this.usersRepository.findUserByKey("phoneNumber", phoneNumber),
       ]);
-
     if (
-      isUsernameTaken.status === "rejected" ||
-      isEmailTaken.status === "rejected" ||
+      isUsernameTaken.status === "rejected" &&
+      isEmailTaken.status === "rejected" &&
       isPhoneNumberTaken.status === "rejected"
     )
       return;

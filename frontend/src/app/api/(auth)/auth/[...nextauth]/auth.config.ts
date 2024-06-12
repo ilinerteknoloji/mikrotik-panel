@@ -6,6 +6,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
 
 export const refreshToken = async (token: JWT): Promise<JWT> => {
+  console.log("refresh token");
   const response = await fetch(`${env.BACKEND_URL}/auth/refresh-token`, {
     method: "POST",
     headers: {
@@ -43,7 +44,7 @@ export const refreshToken = async (token: JWT): Promise<JWT> => {
   };
 };
 
-export const authOptions: AuthOptions = {
+export const authConfig: AuthOptions = {
   pages: {
     signIn: "/sign-in",
     signOut: "/sign-out",
@@ -68,7 +69,8 @@ export const authOptions: AuthOptions = {
         if (response.ok && result.success && result.data.status) {
           return user.response;
         }
-        return null;
+
+        throw Error(user?.error ?? "Failed to sign in");
       },
     }),
   ],

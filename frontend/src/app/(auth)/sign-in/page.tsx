@@ -27,7 +27,7 @@ export default async function SignInPage({}: Props) {
         <CardContent>
           <SignInForm />
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex flex-col items-start gap-4">
           <CardDescription>
             <Link href="/forgot-password" className="link">
               Forgot your password?

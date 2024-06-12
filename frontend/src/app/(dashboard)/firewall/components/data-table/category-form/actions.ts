@@ -1,6 +1,6 @@
 "use server";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
 import { env } from "@/schema";
 import { FormAction } from "@/types";
 import { getServerSession } from "next-auth";
@@ -16,7 +16,7 @@ type Categories = {
 
 export async function getCategories(): Promise<FormAction<Categories>> {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authConfig);
     const response = await fetch(`${env.BACKEND_URL}/ip-categories`, {
       headers: {
         Authorization: `Bearer ${session?.tokens.accessToken.token}`,
@@ -43,7 +43,7 @@ export async function updateCategory(
   category: string,
 ): Promise<string> {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authConfig);
     const response = await fetch(`${env.BACKEND_URL}/address-lists`, {
       method: "PATCH",
       headers: {

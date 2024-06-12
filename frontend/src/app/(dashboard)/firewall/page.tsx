@@ -1,9 +1,9 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
 import { env } from "@/schema";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { columns } from "./components/data-table/columns";
 import { DataTable } from "./components/data-table";
+import { columns } from "./components/data-table/columns";
 
 type Props = {};
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function FirewallPage({}: Props) {
-  const token = await getServerSession(authOptions);
+  const token = await getServerSession(authConfig);
   const userIpsResponse = await fetch(`${env.BACKEND_URL}/user-ips?limit=100`, {
     headers: {
       Authorization: `Bearer ${token?.tokens.accessToken.token}`,

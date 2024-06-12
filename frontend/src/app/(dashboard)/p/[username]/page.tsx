@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
 import { env } from "@/schema";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default async function ProfilePage({ params: { username } }: Props) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authConfig);
   const response = await fetch(`${env.BACKEND_URL}/users/${username}`, {
     headers: {
       "Content-Type": "application/json",

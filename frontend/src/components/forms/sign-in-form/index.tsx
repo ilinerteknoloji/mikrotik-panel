@@ -15,10 +15,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { SignInFormSchema, signInFormSchema } from "./form-schema";
+import { useToast } from "@/components/ui/use-toast";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type Props = {};
 
 export function SignInForm({}: Props) {
+  const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const [error, setError] = useState<string | null>(null);
   const form = useForm<SignInFormSchema>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -34,6 +40,21 @@ export function SignInForm({}: Props) {
       callbackUrl: "/",
     });
   };
+
+  useEffect(() => {
+    if (searchParams.get("error")) {
+      setError(searchParams.get("error"));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error",
+        description: error,
+      });
+    }
+  }, [error]);
 
   return (
     <Form {...form}>

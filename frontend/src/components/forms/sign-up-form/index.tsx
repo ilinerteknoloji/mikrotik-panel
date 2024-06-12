@@ -10,17 +10,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { SignUpFormSchema, signUpFormSchema } from "./form-schema";
 import { signUpFormSubmitAction } from "./actions";
+import { SignUpFormSchema, signUpFormSchema } from "./form-schema";
 
 type Props = {};
 
 export function SignUpForm({}: Props) {
   const router = useRouter();
+  const { toast } = useToast();
   const form = useForm<SignUpFormSchema>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -35,11 +36,10 @@ export function SignUpForm({}: Props) {
 
   const onSubmit = async (values: SignUpFormSchema) => {
     const response = await signUpFormSubmitAction(values);
-    if (!response.ok) {
-      const error = await response.json();
+    if (!response.status) {
       return toast({
-        title: `Error - ${error.error}`,
-        description: error.message,
+        title: `Error`,
+        description: response.message,
       });
     }
     return router.push("/sign-in");
@@ -47,7 +47,11 @@ export function SignUpForm({}: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        action="POST"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8"
+      >
         <div className="flex gap-4">
           <FormField
             name="firstName"
