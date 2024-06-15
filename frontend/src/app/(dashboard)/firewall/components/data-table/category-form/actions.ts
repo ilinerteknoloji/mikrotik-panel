@@ -19,7 +19,7 @@ export async function getCategories(): Promise<FormAction<Categories>> {
     const session = await getServerSession(authConfig);
     const response = await fetch(`${env.BACKEND_URL}/ip-categories`, {
       headers: {
-        Authorization: `Bearer ${session?.tokens.accessToken.token}`,
+        Authorization: `Bearer ${session?.accessToken}`,
       },
     });
     const responseJson = await response.json();
@@ -47,7 +47,7 @@ export async function updateCategory(
     const response = await fetch(`${env.BACKEND_URL}/address-lists`, {
       method: "PATCH",
       headers: {
-        Authorization: `Bearer ${session?.tokens.accessToken.token}`,
+        Authorization: `Bearer ${session?.accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

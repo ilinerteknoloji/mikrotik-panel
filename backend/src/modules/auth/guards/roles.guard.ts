@@ -18,11 +18,10 @@ export class RolesGuard implements CanActivate {
     if (!requiredRoles) return true;
     const { user } = context.switchToHttp().getRequest();
     const isRoleMatch = requiredRoles.some((role) => user.role?.includes(role));
-    if (!isRoleMatch) {
+    if (!isRoleMatch)
       throw new ForbiddenException(
         "You don't have permission to access this resource",
       );
-    }
     return true;
   }
 }

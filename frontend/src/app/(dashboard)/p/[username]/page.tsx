@@ -14,7 +14,7 @@ export default async function ProfilePage({ params: { username } }: Props) {
   const response = await fetch(`${env.BACKEND_URL}/users/${username}`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${session?.tokens.accessToken.token}`,
+      Authorization: `Bearer ${session?.accessToken}`,
     },
   });
   const profile = await response.json();
@@ -22,7 +22,7 @@ export default async function ProfilePage({ params: { username } }: Props) {
     <>
       Profile Page
       <h1>{username}</h1>
-      <h1>{session?.user.username}</h1>
+      <h1>{JSON.stringify(profile)}</h1>
       <div>
         <Link href="/">Home</Link>
       </div>

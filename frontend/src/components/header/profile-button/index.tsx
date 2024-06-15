@@ -1,5 +1,4 @@
-"use client";
-
+import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -10,20 +9,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LoaderCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { SignOutButton } from "./sign-out-button";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { SignOutButton } from "./sign-out-button";
 
 type Props = {};
 
-export function ProfileButton({}: Props) {
-  const { data: session } = useSession();
+export async function ProfileButton({}: Props) {
+  const session = await getServerSession(authConfig);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="hover:cursor-pointer">
-          {/* <AvatarImage src="/images/logo.svg" /> */}
           <AvatarFallback>
             {session?.user.username ? (
               session.user.username.at(0)?.toUpperCase()

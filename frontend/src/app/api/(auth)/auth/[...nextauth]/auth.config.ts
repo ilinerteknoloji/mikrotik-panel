@@ -1,47 +1,45 @@
 import { env } from "@/schema";
-import { responseSchema } from "@/types";
-import { AuthOptions } from "next-auth";
+import { signInResponseSchema } from "@/types/schemas/response/auth/sign-in.schema";
+import { tokensResponseSchema } from "@/types/schemas/response/auth/tokens.schema";
+import { AuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { z } from "zod";
 
 export const refreshToken = async (token: JWT): Promise<JWT> => {
-  console.log("refresh token");
-  const response = await fetch(`${env.BACKEND_URL}/auth/refresh-token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-refresh-token": token.tokens.refreshToken.token,
-    },
-  });
-  const user = await response.json();
-  const tokenSchema = z.object({
-    accessToken: z.object({
-      token: z.string(),
-      expiresAt: z.number(),
-    }),
-    refreshToken: z.object({
-      token: z.string(),
-      expiresAt: z.number(),
-    }),
-  });
-  const result = tokenSchema.safeParse(user.response);
-  if (!response.ok || !result.success) {
-    throw new Error("Failed to refresh token");
+  // console.log({ type: "refreshToken", token });
+  console.log(`Refresh Token ${new Date().toLocaleString("tr")}`);
+  if (!token.refreshToken) throw new Error("Missing refresh token");
+  try {
+    const response = await fetch(`${env.BACKEND_URL}/auth/refresh-token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-refresh-token": token.refreshToken,
+      },
+    });
+    if (!response.ok)
+      throw new Error(response.statusText ?? "Failed to refresh token");
+    const responseJson = await response.json();
+    const parsedResponse = tokensResponseSchema.safeParse(responseJson);
+    if (!parsedResponse.success) throw new Error("Failed to refresh token");
+    if (!parsedResponse.data.status)
+      throw new Error(
+        parsedResponse.data.response.error ?? "Failed to refresh token",
+      );
+    const tokens = parsedResponse.data.response;
+    return {
+      ...token,
+      user: token.user,
+      accessToken: tokens.accessToken.token,
+      expiresAt: tokens.accessToken.expiresAt,
+      refreshToken: tokens.refreshToken.token ?? token.refreshToken,
+    };
+  } catch (error) {
+    return {
+      ...token,
+      error: error instanceof Error ? error.message : "Failed to refresh token",
+    };
   }
-  return {
-    ...token,
-    tokens: {
-      accessToken: {
-        token: result.data.accessToken.token,
-        expiresAt: result.data.accessToken.expiresAt,
-      },
-      refreshToken: {
-        token: result.data.refreshToken.token,
-        expiresAt: result.data.refreshToken.expiresAt,
-      },
-    },
-  };
 };
 
 export const authConfig: AuthOptions = {
@@ -58,39 +56,58 @@ export const authConfig: AuthOptions = {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const response = await fetch(`${env.BACKEND_URL}/auth/sign-in`, {
           method: "POST",
           body: JSON.stringify(credentials),
           headers: { "Content-Type": "application/json" },
         });
-        const user = await response.json();
-        const result = responseSchema.safeParse(user);
-        if (response.ok && result.success && result.data.status) {
-          return user.response;
-        }
-
-        throw Error(user?.error ?? "Failed to sign in");
+        const responseJson = await response.json();
+        if (!response.ok)
+          throw Error(response.statusText ?? "Failed to sign in");
+        const parsedResponse = signInResponseSchema.safeParse(responseJson);
+        if (!parsedResponse.success) throw Error("Failed to sign in");
+        if (!parsedResponse.data.status)
+          throw Error(parsedResponse.data.response.error);
+        const {
+          user: { id, username, role },
+          tokens,
+        } = parsedResponse.data.response;
+        return {
+          id,
+          username,
+          role,
+          accessToken: tokens.accessToken.token,
+          refreshToken: tokens.refreshToken.token,
+          expiresAt: tokens.accessToken.expiresAt,
+        };
       },
     }),
   ],
   callbacks: {
-    async jwt({ user, token }) {
-      if (user) {
+    async jwt({ user, token }): Promise<JWT> {
+      if (user)
         return {
-          ...user,
-          ...token,
+          user: { id: +user.id, username: user.username, role: user.role },
+          // @ts-expect-error
+          accessToken: user?.accessToken ?? token?.accessToken,
+          // @ts-expect-error
+          expiresAt: user?.expiresAt ?? token?.expiresAt,
+          // @ts-expect-error
+          refreshToken: user?.refreshToken ?? token?.refreshToken,
         };
-      }
-      if (Date.now() < token.tokens.accessToken.expiresAt) {
-        return token;
-      }
+      if (Date.now() < token.expiresAt) return token;
       return await refreshToken(token);
     },
-    async session({ token, session }) {
-      session.user = { ...token.user };
-      session.tokens = { ...token.tokens };
-      return session;
+    async session({ token, session }): Promise<Session> {
+      if (token.user) session.user = token.user as User;
+      return {
+        user: session.user,
+        accessToken: token.accessToken,
+        expiresAt: token.expiresAt,
+        refreshToken: token.refreshToken,
+        expires: session.expires,
+      };
     },
   },
 };

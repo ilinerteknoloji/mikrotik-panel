@@ -1,4 +1,5 @@
 import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
+import { ServerToast } from "@/components/general/server-toast";
 import { env } from "@/schema";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
@@ -12,19 +13,20 @@ export const metadata: Metadata = {
 };
 
 export default async function FirewallPage({}: Props) {
-  const token = await getServerSession(authConfig);
+  const session = await getServerSession(authConfig);
   const userIpsResponse = await fetch(`${env.BACKEND_URL}/user-ips?limit=100`, {
     headers: {
-      Authorization: `Bearer ${token?.tokens.accessToken.token}`,
+      Authorization: `Bearer ${session?.accessToken}`,
     },
   });
-  if (!userIpsResponse.ok) {
-    return <>null</>;
-  }
   const userIps = await userIpsResponse.json();
   return (
     <div className="w-full">
-      <DataTable columns={columns} data={userIps.response} />
+      <DataTable columns={columns} data={userIps?.response ?? []} />
+      {!userIpsResponse.ok ? (
+        // TODO: Add error message
+        <ServerToast title="Error" description={userIpsResponse.statusText} />
+      ) : null}
     </div>
   );
 }

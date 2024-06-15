@@ -5,7 +5,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -15,13 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { CategoryFormSchema, categoryFormSchema } from "./schema";
-import { getCategories, updateCategory } from "./actions";
 import { useToast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { getCategories, updateCategory } from "./actions";
+import { CategoryFormSchema, categoryFormSchema } from "./schema";
 
 type Props = {
   ip: string;
@@ -67,7 +66,7 @@ export function CategoryForm({ ip }: Props) {
       }
     };
     getCategoriesFromServer();
-  }, []);
+  }, [toast]);
 
   if (categories.length === 0) {
     return <LoaderCircle className="animate-spin" />;

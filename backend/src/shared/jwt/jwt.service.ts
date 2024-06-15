@@ -48,9 +48,7 @@ export class JwtService {
         algorithms: [this.algorithm],
       },
       (error, decoded) => {
-        if (error) {
-          throw new UnauthorizedException(error.message);
-        }
+        if (error) throw new UnauthorizedException(error.message);
         payload = decoded as PayloadType;
       },
     );

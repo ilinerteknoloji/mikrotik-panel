@@ -28,26 +28,6 @@ export class UsersRepository {
     status: boolean | undefined,
   ) {
     const offset = (page - 1) * limit;
-    // console.log(offset, limit, search, role, status);
-
-    // const query = this.drizzle
-    //   .select()
-    //   .from(usersSchema)
-    //   .limit(limit)
-    //   .offset(offset);
-    // if (search)
-    //   query.where(
-    //     or(
-    //       ilike(usersSchema.id, `%${search}%`),
-    //       ilike(usersSchema.firstName, `%${search}%`),
-    //       ilike(usersSchema.lastName, `%${search}%`),
-    //       ilike(usersSchema.username, `%${search}%`),
-    //       ilike(usersSchema.email, `%${search}%`),
-    //       ilike(usersSchema.phoneNumber, `%${search}%`),
-    //     ),
-    //   );
-    // if (role) query.where(eq(usersSchema.role, role));
-
     const query = this.drizzle.query.usersSchema.findMany({
       where: (fields, { like, or, and }) =>
         and(
@@ -67,9 +47,6 @@ export class UsersRepository {
       limit,
       offset,
     });
-    console.log((await query).length);
-    console.log(query.toSQL());
-
     return query;
   }
 
