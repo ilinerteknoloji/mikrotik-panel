@@ -1,11 +1,11 @@
 import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
 import { filterUsersPublicInformations } from "src/lib/utils";
-import { IpCategoriesRepository } from "src/modules/ip-categories/ip-categories.repository";
 import { UserIpsRepository } from "src/modules/user-ips/user-ips.repository";
 import { EnvService } from "src/shared/env/env.service";
 import { RequestUserType } from "src/types";
 import { AddressListsRepository } from "./address-lists.repository";
 import { UpdateAddressListDto } from "./dto/update-address-list.dto";
+import { IpCategoriesRepository } from "../ip-categories/ip-categories.repository";
 
 @Injectable()
 export class AddressListsService {

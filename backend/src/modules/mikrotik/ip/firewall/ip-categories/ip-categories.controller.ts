@@ -9,8 +9,8 @@ import {
 } from "@nestjs/common";
 import { Roles } from "src/lib/decorators/roles.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
-import { AuthGuard } from "../auth/guards/auth.guard";
-import { RolesGuard } from "../auth/guards/roles.guard";
+import { AuthGuard } from "src/modules/auth/guards/auth.guard";
+import { RolesGuard } from "src/modules/auth/guards/roles.guard";
 import { CreateIpCategoryDto } from "./dto/create-ip-category.dto";
 import { UpdateIpCategoryDto } from "./dto/update-ip-category.dto";
 import { IpCategoriesService } from "./ip-categories.service";
@@ -22,24 +22,24 @@ export class IpCategoriesController {
   constructor(private readonly ipCategoriesService: IpCategoriesService) {}
 
   @Post()
-  create(@Body() createIpCategoryDto: CreateIpCategoryDto) {
+  public async create(@Body() createIpCategoryDto: CreateIpCategoryDto) {
     return this.ipCategoriesService.create(createIpCategoryDto);
   }
 
   @Get()
   @Roles(UserRole.ADMIN, UserRole.USER)
-  findAll() {
+  public async findAll() {
     return this.ipCategoriesService.findAll();
   }
 
   @Get(":id")
   @Roles(UserRole.ADMIN, UserRole.USER)
-  findOne(@Param("id") id: string) {
+  public async findOne(@Param("id") id: string) {
     return this.ipCategoriesService.findOne(+id);
   }
 
   @Patch(":id")
-  update(
+  public async update(
     @Param("id") id: string,
     @Body() updateIpCategoryDto: UpdateIpCategoryDto,
   ) {
@@ -47,7 +47,7 @@ export class IpCategoriesController {
   }
 
   // @Delete(":id")
-  // remove(@Param("id") id: string) {
+  // public async remove(@Param("id") id: string) {
   //   return this.ipCategoriesService.remove(+id);
   // }
 }

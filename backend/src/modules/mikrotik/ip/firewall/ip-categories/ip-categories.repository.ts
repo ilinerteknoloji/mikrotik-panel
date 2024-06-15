@@ -13,11 +13,11 @@ import { UpdateIpCategoryDto } from "./dto/update-ip-category.dto";
 export class IpCategoriesRepository {
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly drizzle: Drizzle) {}
 
-  async create(createIpCategoryDto: CreateIpCategoryDto) {
+  public async create(createIpCategoryDto: CreateIpCategoryDto) {
     return this.drizzle.insert(ipCategoriesSchema).values(createIpCategoryDto);
   }
 
-  async findByKey<
+  public async findByKey<
     K extends keyof IpCategoriesSchemaType,
     T extends IpCategoriesSchemaType[K],
   >(key: K, value: T) {
@@ -28,7 +28,7 @@ export class IpCategoriesRepository {
     });
   }
 
-  async update(id: number, updateIpCategoryDto: UpdateIpCategoryDto) {
+  public async update(id: number, updateIpCategoryDto: UpdateIpCategoryDto) {
     const updated = await this.drizzle
       .update(ipCategoriesSchema)
       .set(updateIpCategoryDto)
