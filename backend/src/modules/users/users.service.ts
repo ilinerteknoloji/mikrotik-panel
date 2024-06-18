@@ -7,7 +7,7 @@ import { UserRole } from "src/lib/enums/user-role.enum";
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  findAll(
+  public async findAll(
     page: number,
     limit: number,
     search: string,
@@ -24,21 +24,21 @@ export class UsersService {
     return users;
   }
 
-  findById(id: number) {
+  public async findById(id: number) {
     return `This action returns a #${id} user`;
   }
 
-  findByUsername(username: string) {
+  public async findByUsername(username: string) {
     return `This action returns a #${username} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  public async update(id: number, updateUserDto: UpdateUserDto) {
     console.log(updateUserDto);
 
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
+  public async remove(id: number) {
     return `This action removes a #${id} user`;
   }
 }
