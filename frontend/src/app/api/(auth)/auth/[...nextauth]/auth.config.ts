@@ -97,7 +97,10 @@ export const authConfig: AuthOptions = {
           refreshToken: user?.refreshToken ?? token?.refreshToken,
         };
       if (Date.now() < token.expiresAt) return token;
-      return await refreshToken(token);
+      const refreshTokenResponse = await refreshToken(token);
+      if (refreshTokenResponse.error)
+        throw new Error(refreshTokenResponse.error);
+      return refreshTokenResponse;
     },
     async session({ token, session }): Promise<Session> {
       if (token.user) session.user = token.user as User;

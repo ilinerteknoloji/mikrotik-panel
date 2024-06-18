@@ -1,4 +1,8 @@
-import { Inject, Injectable } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
 import {
@@ -21,19 +25,29 @@ export class JwtRepository {
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly drizzle: Drizzle) {}
 
   public async createRefreshToken(token: RefreshTokenSchemaInsertType) {
-    const isExist = await this.findRefreshTokenByToken(token.token);
-    if (isExist.length > 0) return isExist[0].id;
-    const [{ insertId }] = await this.drizzle
-      .insert(refreshTokenSchema)
-      .values(token);
-    return insertId;
+    try {
+      const isExist = await this.findRefreshTokenByToken(token.token);
+      if (isExist.length > 0) return isExist[0].id;
+      const [{ insertId }] = await this.drizzle
+        .insert(refreshTokenSchema)
+        .values(token);
+      return insertId;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   public async createAccessToken(token: AccessTokenSchemaInsertType) {
-    const [{ insertId }] = await this.drizzle
-      .insert(accessTokenSchema)
-      .values(token);
-    return insertId;
+    try {
+      const isExist = await this.findAccessTokenByToken(token.token);
+      if (isExist.length > 0) return isExist[0].id;
+      const [{ insertId }] = await this.drizzle
+        .insert(accessTokenSchema)
+        .values(token);
+      return insertId;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   public async updateTokenStatusByToken(tokenType: TokenType, token: string) {
