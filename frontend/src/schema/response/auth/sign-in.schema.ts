@@ -1,4 +1,4 @@
-import { createResponseSchema } from "@/types";
+import { createResponseSchema } from "@/schema";
 import { z } from "zod";
 import { userSchema } from "../user.schema";
 import { tokensSchema } from "./tokens.schema";

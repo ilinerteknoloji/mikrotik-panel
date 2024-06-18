@@ -2,34 +2,49 @@
 
 import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
 import { env } from "@/schema";
+import {
+  IpCategoriesSchema,
+  ipCategoriesResponseSchema,
+} from "@/schema/response/firewall/ip-categories.schema";
 import { FormAction } from "@/types";
 import { getServerSession } from "next-auth";
 
-type Categories = {
-  id: number;
-  title: string;
-  description: string;
-  status: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}[];
-
-export async function getCategories(): Promise<FormAction<Categories>> {
+export async function getCategories(): Promise<FormAction<IpCategoriesSchema>> {
   try {
     const session = await getServerSession(authConfig);
-    const response = await fetch(`${env.BACKEND_URL}/ip-categories`, {
-      headers: {
-        Authorization: `Bearer ${session?.accessToken}`,
+    const ipCategoriesResponse = await fetch(
+      `${env.BACKEND_URL}/ip-categories`,
+      {
+        headers: {
+          Authorization: `Bearer ${session?.accessToken}`,
+        },
       },
-    });
-    const responseJson = await response.json();
-    if (response.ok) {
+    );
+    if (!ipCategoriesResponse.ok) {
       return {
-        status: true,
-        data: responseJson.response,
+        status: false,
+        message: ipCategoriesResponse.statusText,
       };
     }
-    throw new Error(responseJson.response.message);
+    const ipCategoriesJson = await ipCategoriesResponse.json();
+    const parsedIpCategories =
+      ipCategoriesResponseSchema.safeParse(ipCategoriesJson);
+    if (!parsedIpCategories.success) {
+      return {
+        status: false,
+        message: parsedIpCategories.error.errors[0].message,
+      };
+    }
+    if (!parsedIpCategories.data.status) {
+      return {
+        status: false,
+        message: parsedIpCategories.data.error,
+      };
+    }
+    return {
+      status: true,
+      data: parsedIpCategories.data.response,
+    };
   } catch (error) {
     return {
       status: false,

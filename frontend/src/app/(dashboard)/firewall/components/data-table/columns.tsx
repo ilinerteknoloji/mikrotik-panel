@@ -7,10 +7,10 @@ import { ArrowUpDown } from "lucide-react";
 import { CategoryForm } from "./category-form";
 
 export type UserIps = {
+  index: number;
   id: number;
   ip: string;
   status: boolean;
-  updatedAt: Date;
 };
 
 export const columns: ColumnDef<UserIps>[] = [
@@ -19,6 +19,23 @@ export const columns: ColumnDef<UserIps>[] = [
     header: "",
     cell: ({ row }) => {
       return <Checkbox id={`user-ips-${row.index}`} />;
+    },
+  },
+  {
+    accessorKey: "index",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          index
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return row.index + 1;
     },
   },
   {
@@ -62,19 +79,6 @@ export const columns: ColumnDef<UserIps>[] = [
     header: "Status",
     cell: ({ row }) => {
       return row.original.status ? "Active" : "Passive";
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated At",
-    cell: ({ row }) => {
-      const date: string = row.getValue("updatedAt");
-      const localeDate = new Date(date).toLocaleDateString("tr", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-      return localeDate;
     },
   },
 ];

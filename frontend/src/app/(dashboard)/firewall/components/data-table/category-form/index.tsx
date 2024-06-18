@@ -21,28 +21,18 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getCategories, updateCategory } from "./actions";
 import { CategoryFormSchema, categoryFormSchema } from "./schema";
+import { IpCategoriesSchema } from "@/schema/response/firewall/ip-categories.schema";
 
 type Props = {
   ip: string;
 };
 
-type Categories = {
-  id: number;
-  title: string;
-  description: string;
-  status: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}[];
-
 export function CategoryForm({ ip }: Props) {
   const { toast } = useToast();
-  const [categories, setCategories] = useState<Categories>([]);
+  const [categories, setCategories] = useState<IpCategoriesSchema>([]);
   const form = useForm<CategoryFormSchema>({
     resolver: zodResolver(categoryFormSchema),
-    defaultValues: {
-      category: "",
-    },
+    defaultValues: { category: "" },
   });
 
   const onChange = async (values: string) => {
@@ -83,7 +73,7 @@ export function CategoryForm({ ip }: Props) {
               <Select onValueChange={onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Category" />
+                    <SelectValue placeholder={"Select Category"} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
