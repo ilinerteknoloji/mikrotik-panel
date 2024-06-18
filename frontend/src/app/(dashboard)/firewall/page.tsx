@@ -6,12 +6,6 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { DataTable } from "./components/data-table";
 import { columns } from "./components/data-table/columns";
-import {
-  IpCategoriesSchema,
-  IpCategorySchema,
-  ipCategoriesResponseSchema,
-} from "@/schema/response/firewall/ip-categories.schema";
-import { CategoryFormSchema } from "./components/data-table/category-form/schema";
 
 type Props = {};
 
