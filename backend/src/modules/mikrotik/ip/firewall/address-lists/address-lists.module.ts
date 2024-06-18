@@ -20,5 +20,6 @@ import { IpCategoriesModule } from "../ip-categories/ip-categories.module";
   ],
   controllers: [AddressListsController],
   providers: [AddressListsService, AddressListsRepository],
+  exports: [AddressListsRepository],
 })
 export class AddressListsModule {}

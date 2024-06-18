@@ -55,7 +55,6 @@ export class AuthService {
     if (!isMatch) invalidCredentials();
     const publicData = filterUsersPublicInformations(users);
     const tokens = await this.generateTokens(users);
-    // FIXME: Implement the following code
     return {
       user: { ...publicData, details: user_details },
       tokens,
