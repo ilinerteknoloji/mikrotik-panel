@@ -43,8 +43,8 @@ Content-Type: application/json
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
 {
-    "ips": ["192.0.34.21","192.0.34.25","192.0.34.26","192.0.34.27","192.0.34.28","192.0.34.29","192.0.34.30"],
-    "userId": 1
+    "ips": ["192.0.34.41","192.0.34.45","192.0.34.46","192.0.34.47","192.0.34.48","192.0.34.49","192.0.34.30"],
+    "userId": 2
 }
 
 ### Get All IPs

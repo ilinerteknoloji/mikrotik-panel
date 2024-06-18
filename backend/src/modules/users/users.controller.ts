@@ -30,7 +30,7 @@ export class UsersController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
-  public async findAll(
+  public findAll(
     @Query("page", PagePipe) page: number,
     @Query("limit", LimitPipe) limit: number,
     @Query("search") search: string = "",
@@ -41,7 +41,7 @@ export class UsersController {
   }
 
   @Get(":identifier")
-  public async findById(
+  public findById(
     @Param("identifier") identifier: string,
     @User() user: RequestUserType,
   ) {
@@ -59,20 +59,17 @@ export class UsersController {
   }
 
   // @Get(":username")
-  // findByUsername(@Param("username") username: string) {
+  // public findByUsername(@Param("username") username: string) {
   //   return this.usersService.findByUsername(username);
   // }
 
   @Patch(":id")
-  public async update(
-    @Param("id") id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  public update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(":id")
-  public async remove(@Param("id") id: string) {
+  public remove(@Param("id") id: string) {
     return this.usersService.remove(+id);
   }
 }

@@ -28,12 +28,12 @@ export class UserIpsController {
 
   @Post()
   @Roles(UserRole.ADMIN)
-  create(@Body() createIpDto: CreateUserIpDto) {
+  public create(@Body() createIpDto: CreateUserIpDto) {
     return this.userIpsService.create(createIpDto);
   }
 
   @Get()
-  findAll(
+  public findAll(
     @Query("page", PagePipe) page: number,
     @Query("limit", LimitPipe) limit: number,
     @Query("search") search: string = "",
@@ -43,12 +43,12 @@ export class UserIpsController {
   }
 
   @Get(":id")
-  findOne(@Param("id", ParseIntPipe) id: number) {
+  public findOne(@Param("id", ParseIntPipe) id: number) {
     return this.userIpsService.findOne(id);
   }
 
   @Patch(":id")
-  update(
+  public update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateIpDto: UpdateUserIpDto,
   ) {
@@ -56,7 +56,7 @@ export class UserIpsController {
   }
 
   // @Delete(":id")
-  // remove(@Param("id", ParseIntPipe) id: number) {
+  // public remove(@Param("id", ParseIntPipe) id: number) {
   //   return this.ipsService.remove(id);
   // }
 }

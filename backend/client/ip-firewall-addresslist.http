@@ -37,8 +37,13 @@ Content-Type: application/json
 
 ### Get address lists by Id
 # @name getAddressListsById
-GET {{url}}/11 HTTP/1.1
+GET {{url}} HTTP/1.1
 Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}
+
+### Get address lists by Id
+# @name getAddressListsById
+GET {{url}}/112 HTTP/1.1
+Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
 ### Get all address lists by Id
 # @name getAllAddressListsById
@@ -47,5 +52,6 @@ Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.tok
 Content-Type: application/json
 
 {
-    "list": "Category 4 Updated"
+    "ip": "192.0.34.49",
+    "list": "Deneme"
 }

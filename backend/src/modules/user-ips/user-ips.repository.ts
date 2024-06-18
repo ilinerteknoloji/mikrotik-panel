@@ -1,13 +1,14 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Global, Inject, Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
-import { Drizzle } from "src/types";
 import {
   MikrotikUserIpsSchemaType,
   mikrotikUserIpsSchema,
 } from "src/shared/drizzle/schemas";
+import { Drizzle } from "src/types";
 import { UpdateUserIpDto } from "./dto/update-user-ip.dto";
 
+@Global()
 @Injectable()
 export class UserIpsRepository {
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly drizzle: Drizzle) {}

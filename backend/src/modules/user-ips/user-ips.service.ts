@@ -3,20 +3,22 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import { RequestUserType } from "src/types";
+import { AddressListsService } from "../mikrotik/ip/firewall/address-lists/address-lists.service";
 import { UsersRepository } from "../users/users.repository";
-import { UserIpsRepository } from "./user-ips.repository";
 import { CreateUserIpDto } from "./dto/create-user-ip.dto";
 import { UpdateUserIpDto } from "./dto/update-user-ip.dto";
-import { RequestUserType } from "src/types";
+import { UserIpsRepository } from "./user-ips.repository";
 
 @Injectable()
 export class UserIpsService {
   constructor(
     private readonly userIpsRepository: UserIpsRepository,
     private readonly userRepository: UsersRepository,
+    private readonly addressListService: AddressListsService,
   ) {}
 
-  async create(createIpDto: CreateUserIpDto) {
+  public async create(createIpDto: CreateUserIpDto) {
     await this.userRepository.findUserByKey("id", createIpDto.userId);
     const created = [];
     const errors: string[] = [];
@@ -35,6 +37,13 @@ export class UserIpsService {
         );
         if (response !== undefined) {
           created.push(response);
+          const addressList =
+            await this.addressListService.createAddressListWithDefault(ip);
+          if (!addressList) {
+            errors.push(`Failed to create address list for IP ${ip}.`);
+          } else if (typeof addressList === "string") {
+            errors.push(addressList);
+          }
         } else {
           errors.push(`Failed to create IP ${ip}.`);
         }
@@ -46,15 +55,20 @@ export class UserIpsService {
     };
   }
 
-  findAll(page: number, limit: number, search: string, user: RequestUserType) {
+  public async findAll(
+    page: number,
+    limit: number,
+    search: string,
+    user: RequestUserType,
+  ) {
     return this.userIpsRepository.findAllByUserId(page, limit, search, user.id);
   }
 
-  findOne(id: number) {
+  public async findOne(id: number) {
     return this.userIpsRepository.findOneById(id);
   }
 
-  async update(id: number, updateUserIpDto: UpdateUserIpDto) {
+  public async update(id: number, updateUserIpDto: UpdateUserIpDto) {
     const ip = await this.userIpsRepository.findOneById(id);
     if (ip === undefined) throw new NotFoundException(`IP not found.`);
     if (!updateUserIpDto.status) {
@@ -72,7 +86,7 @@ export class UserIpsService {
     return this.userIpsRepository.update(id, updateUserIpDto);
   }
 
-  // remove(id: number) {
+  // public async remove(id: number) {
   //   return `This action removes a #${id} ip`;
   // }
 }

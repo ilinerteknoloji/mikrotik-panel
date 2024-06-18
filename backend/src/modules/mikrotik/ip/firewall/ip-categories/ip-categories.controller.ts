@@ -22,24 +22,24 @@ export class IpCategoriesController {
   constructor(private readonly ipCategoriesService: IpCategoriesService) {}
 
   @Post()
-  public async create(@Body() createIpCategoryDto: CreateIpCategoryDto) {
+  public create(@Body() createIpCategoryDto: CreateIpCategoryDto) {
     return this.ipCategoriesService.create(createIpCategoryDto);
   }
 
   @Get()
   @Roles(UserRole.ADMIN, UserRole.USER)
-  public async findAll() {
+  public findAll() {
     return this.ipCategoriesService.findAll();
   }
 
   @Get(":id")
   @Roles(UserRole.ADMIN, UserRole.USER)
-  public async findOne(@Param("id") id: string) {
+  public findOne(@Param("id") id: string) {
     return this.ipCategoriesService.findOne(+id);
   }
 
   @Patch(":id")
-  public async update(
+  public update(
     @Param("id") id: string,
     @Body() updateIpCategoryDto: UpdateIpCategoryDto,
   ) {
@@ -47,7 +47,7 @@ export class IpCategoriesController {
   }
 
   // @Delete(":id")
-  // public async remove(@Param("id") id: string) {
+  // public remove(@Param("id") id: string) {
   //   return this.ipCategoriesService.remove(+id);
   // }
 }

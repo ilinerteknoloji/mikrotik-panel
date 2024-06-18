@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   UseGuards,
 } from "@nestjs/common";
@@ -17,24 +18,25 @@ import { UpdateAddressListDto } from "./dto/update-address-list.dto";
 
 @Controller("address-lists")
 @UseGuards(AuthGuard)
-@Roles(UserRole.ADMIN)
+@Roles(UserRole.ADMIN, UserRole.USER)
 export class AddressListsController {
   constructor(private readonly addressListsService: AddressListsService) {}
 
   @Get()
-  findAll() {
-    return this.addressListsService.findAll();
+  public findAll(@User() user: RequestUserType) {
+    return this.addressListsService.findAll(user);
   }
 
   @Get(":id")
-  @Roles(UserRole.ADMIN, UserRole.USER)
-  findOne(@Param("id") id: string, @User() user: RequestUserType) {
-    return this.addressListsService.findOne(id, user);
+  public findOne(
+    @Param("id", ParseIntPipe) mikrotikUserIpsId: number,
+    @User() user: RequestUserType,
+  ) {
+    return this.addressListsService.findOne(mikrotikUserIpsId, user);
   }
 
   @Patch()
-  @Roles(UserRole.ADMIN, UserRole.USER)
-  update(
+  public update(
     @Body() updateAddressListDto: UpdateAddressListDto,
     @User() user: RequestUserType,
   ) {
@@ -42,7 +44,8 @@ export class AddressListsController {
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
+  @Roles(UserRole.ADMIN)
+  public remove(@Param("id") id: string) {
     return this.addressListsService.remove(+id);
   }
 }

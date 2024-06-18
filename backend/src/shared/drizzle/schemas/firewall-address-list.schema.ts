@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
-import { int, mysqlTable } from "drizzle-orm/mysql-core";
+import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { ipCategoriesSchema, mikrotikUserIpsSchema } from ".";
 
 export const firewallAddressListSchema = mysqlTable("firewall_address_list", {
@@ -10,6 +10,7 @@ export const firewallAddressListSchema = mysqlTable("firewall_address_list", {
   address: int("mikrotik_user_ips_id")
     .notNull()
     .references(() => mikrotikUserIpsSchema.id),
+  mikrotikId: varchar("mikrotik_id", { length: 255 }).notNull(),
 });
 
 export const firewallAddressListRelations = relations(

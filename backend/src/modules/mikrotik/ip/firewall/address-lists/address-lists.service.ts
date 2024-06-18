@@ -1,11 +1,18 @@
-import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { filterUsersPublicInformations } from "src/lib/utils";
-import { UserIpsRepository } from "src/modules/user-ips/user-ips.repository";
 import { EnvService } from "src/shared/env/env.service";
 import { RequestUserType } from "src/types";
+import { zodAddressListSchema } from "src/types/zod-schemas/zod-address-list.schema";
+import { z } from "zod";
+import { IpCategoriesRepository } from "../ip-categories/ip-categories.repository";
 import { AddressListsRepository } from "./address-lists.repository";
 import { UpdateAddressListDto } from "./dto/update-address-list.dto";
-import { IpCategoriesRepository } from "../ip-categories/ip-categories.repository";
+import { UsersRepository } from "src/modules/users/users.repository";
 
 @Injectable()
 export class AddressListsService {
@@ -17,8 +24,8 @@ export class AddressListsService {
   constructor(
     private readonly env: EnvService,
     private readonly addressListsRepository: AddressListsRepository,
-    private readonly userIpsRepository: UserIpsRepository,
     private readonly ipCategoriesRepository: IpCategoriesRepository,
+    private readonly userRepository: UsersRepository,
   ) {
     this.host = this.env.get("MIKROTIK_HOST");
     this.username = this.env.get("MIKROTIK_USERNAME");
@@ -26,13 +33,92 @@ export class AddressListsService {
     this.auth = btoa(`${this.username}:${this.password}`);
   }
 
-  findAll() {
-    return `This action returns all addressLists`;
+  public async createAddressListWithDefault(
+    ip: string,
+  ): Promise<boolean | string> {
+    const isActiveAddressList =
+      await this.addressListsRepository.findByIpOnlyActive(ip);
+    const list = await this.ipCategoriesRepository.findByKey("id", 1);
+    const addressLists = await fetch(
+      `${this.host}/rest/ip/firewall/address-list`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Basic ${this.auth}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    const allLists = await addressLists.json();
+    const parsedAddressList = z.array(zodAddressListSchema).safeParse(allLists);
+    if (!parsedAddressList.success) return parsedAddressList.error.message;
+    const isActive = parsedAddressList.data.find(
+      (parsedAddress) => parsedAddress.address === ip,
+    );
+    let createdIp: Response;
+    if (isActive) {
+      createdIp = await fetch(
+        `${this.host}/rest/ip/firewall/address-list/${isActive[".id"]}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Basic ${this.auth}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            list: list[0].title,
+            address: isActiveAddressList.ip,
+          }),
+        },
+      );
+    } else {
+      createdIp = await fetch(
+        `${this.host}/rest/ip/firewall/address-list/add`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Basic ${this.auth}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            list: list[0].title,
+            address: isActiveAddressList.ip,
+          }),
+        },
+      );
+    }
+    const createdAddressList = await createdIp.json();
+    if (!createdIp.ok) return createdIp.statusText;
+    const addressList = await this.addressListsRepository.create({
+      address: isActiveAddressList.id,
+      list: 1,
+      mikrotikId: isActive ? isActive[".id"] : createdAddressList.ret,
+    });
+    return addressList[0].insertId > 0 ? true : false;
   }
 
-  async findOne(id: string, user: RequestUserType) {
+  public async findAll(user: RequestUserType) {
+    if (user.role === "admin") {
+      return this.addressListsRepository.findAllActive();
+    }
+    return this.addressListsRepository.findAllActiveByUserId(user.id);
+  }
+
+  public async findOne(mikrotikUserIpsId: number, user: RequestUserType) {
+    const addressListData = await this.addressListsRepository.findById(
+      "address",
+      mikrotikUserIpsId,
+    );
+    if (
+      !addressListData ||
+      !addressListData.address.status ||
+      (addressListData.address.userId !== user.id && user.role !== "admin")
+    ) {
+      throw new NotFoundException("Address list not found");
+    }
+
     const response = await fetch(
-      `${this.host}/rest/ip/firewall/address-list/*${id}`,
+      `${this.host}/rest/ip/firewall/address-list/${addressListData.mikrotikId}`,
       {
         method: "GET",
         headers: {
@@ -47,26 +133,23 @@ export class AddressListsService {
         response.status,
       );
     }
-    const userIps = await this.userIpsRepository.findByKeyOnlyActiveWithUser(
-      "ip",
-      addressList.address,
-    );
-    if (!userIps && user.role !== "admin") {
-      throw new NotFoundException("User IP not found");
+    if (user.role !== "admin") {
+      return {
+        addressList,
+        ip: addressListData.address,
+        category: addressListData.ipCategory,
+      };
     }
 
-    const { id: userIpsId, ip, status, createdAt, updatedAt, userId } = userIps;
-    const publicUser = filterUsersPublicInformations(userIps.user);
+    const userInfo = await this.userRepository.findUserByKey(
+      "id",
+      addressListData.address.userId,
+    );
+    const publicUser = filterUsersPublicInformations(userInfo[0]);
     return {
       addressList,
-      ip: {
-        userIpsId,
-        ip,
-        status,
-        createdAt,
-        updatedAt,
-        userId,
-      },
+      ip: addressListData.address,
+      category: addressListData.ipCategory,
       user: publicUser,
     };
   }
@@ -76,25 +159,8 @@ export class AddressListsService {
     user: RequestUserType,
   ) {
     const { ip, list } = updateAddressListDto;
-    const response = await fetch(`${this.host}/rest/ip/firewall/address-list`, {
-      method: "GET",
-      headers: {
-        Authorization: `Basic ${this.auth}`,
-      },
-    });
-    const addressList = await response.json();
-    if (!response.ok) {
-      throw new HttpException(
-        { message: response.statusText, statusCode: response.status },
-        response.status,
-      );
-    }
-    // const addressListId = addressList.find((address) => address[".id"] === id);
-    console.log({ addressList });
-    const userIps = await this.userIpsRepository.findByKeyOnlyActiveWithUser(
-      "ip",
-      ip,
-    );
+    const userIps =
+      await this.addressListsRepository.findByIpWithAddressListAndUser(ip);
     if (!userIps && user.role !== "admin") {
       throw new NotFoundException("User IP not found");
     }
@@ -106,9 +172,9 @@ export class AddressListsService {
       throw new NotFoundException("Category not found");
     }
     const updatedResponse = await fetch(
-      `${this.host}/rest/ip/firewall/address-list`,
+      `${this.host}/rest/ip/firewall/address-list/${userIps.addressList[0].mikrotikId}`,
       {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           Authorization: `Basic ${this.auth}`,
           "Content-Type": "application/json",
@@ -129,10 +195,21 @@ export class AddressListsService {
         updatedResponse.status,
       );
     }
+    const updatedAddressListData = await this.addressListsRepository.update(
+      userIps.addressList[0].id,
+      {
+        list: isValidCategory[0].id,
+      },
+    );
+
+    if (!updatedAddressListData)
+      throw new InternalServerErrorException("Address list not updated");
+
     return { updatedAddressList };
   }
 
   remove(id: number) {
+    // TODO: Implement this method
     return `This action removes a #${id} addressList`;
   }
 }
