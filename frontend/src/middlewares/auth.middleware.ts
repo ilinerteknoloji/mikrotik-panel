@@ -1,3 +1,4 @@
+import { env } from "@/schema";
 import next from "next";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,12 +9,11 @@ const isPublic = (pathname: string) =>
 
 export async function authMiddleware(request: NextRequest) {
   const { nextUrl } = request;
-  const { pathname, origin } = nextUrl;
-
+  const { pathname } = nextUrl;
   const token = await getToken({
     req: request,
+    secret: env.NEXTAUTH_SECRET,
   });
-
   const url = request.nextUrl.clone();
   if (!isPublic(pathname) && !token) {
     url.pathname = "/sign-in";
