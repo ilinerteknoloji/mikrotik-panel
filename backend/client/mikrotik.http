@@ -1,0 +1,33 @@
+POST http://{{router}}/rest/tool/torch HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+Content-Type: application/json
+
+{
+    "interface": "ether1",
+    "duration": "5",
+    "src-address": "91.102.163.17",
+    "dst-address": "0.0.0.0/0"
+}
+
+### Ping
+# @name ping
+POST http://{{router}}/rest/tool/ping HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+
+### Get Interfaces
+# @name getInterfaces
+GET http://{{router}}/rest/interface HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+
+# ### Generate Interface
+# # @name generateInterface
+# POST http://{{router}}/rest/interface HTTP/1.1
+# Authorization: Basic {{username}}:{{password}}
+# Content-Type: application/json
+
+# {
+#     "name": "ether1",
+#     "type": "ether",
+#     "mac-address": "00:00:00:00:00:00",
+#     "comment": "Generated Interface"
+# }
