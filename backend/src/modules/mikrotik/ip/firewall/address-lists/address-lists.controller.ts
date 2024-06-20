@@ -15,9 +15,10 @@ import { AuthGuard } from "src/modules/auth/guards/auth.guard";
 import { RequestUserType } from "src/types";
 import { AddressListsService } from "./address-lists.service";
 import { UpdateAddressListDto } from "./dto/update-address-list.dto";
+import { RolesGuard } from "src/modules/auth/guards/roles.guard";
 
 @Controller("address-lists")
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN, UserRole.USER)
 export class AddressListsController {
   constructor(private readonly addressListsService: AddressListsService) {}

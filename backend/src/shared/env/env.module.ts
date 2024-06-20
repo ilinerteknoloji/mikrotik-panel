@@ -1,7 +1,8 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { EnvService } from "./env.service";
 import { GenerateKeysModule } from "../keys/generate-keys.module";
 
+@Global()
 @Module({
   imports: [GenerateKeysModule],
   providers: [EnvService],
