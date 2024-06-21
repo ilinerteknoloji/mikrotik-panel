@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const zodAddressListSchema = z.object({
+export const addressListSchema = z.object({
   ".id": z.string(),
   address: z.string(),
   list: z.string(),

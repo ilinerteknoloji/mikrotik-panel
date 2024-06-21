@@ -7,12 +7,12 @@ import {
 import { filterUsersPublicInformations } from "src/lib/utils";
 import { EnvService } from "src/shared/env/env.service";
 import { RequestUserType } from "src/types";
-import { zodAddressListSchema } from "src/types/zod-schemas/zod-address-list.schema";
 import { z } from "zod";
 import { IpCategoriesRepository } from "../ip-categories/ip-categories.repository";
 import { AddressListsRepository } from "./address-lists.repository";
 import { UpdateAddressListDto } from "./dto/update-address-list.dto";
 import { UsersRepository } from "src/modules/users/users.repository";
+import { addressListSchema } from "src/types/zod-schemas/mikrotik/ip/firewall/address-list.schema";
 
 @Injectable()
 export class AddressListsService {
@@ -50,7 +50,7 @@ export class AddressListsService {
       },
     );
     const allLists = await addressLists.json();
-    const parsedAddressList = z.array(zodAddressListSchema).safeParse(allLists);
+    const parsedAddressList = z.array(addressListSchema).safeParse(allLists);
     if (!parsedAddressList.success) return parsedAddressList.error.message;
     const isActive = parsedAddressList.data.find(
       (parsedAddress) => parsedAddress.address === ip,
