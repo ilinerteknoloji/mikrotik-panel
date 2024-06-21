@@ -1,0 +1,28 @@
+@auth=http://localhost:4000/auth
+@url=http://localhost:4000/interface
+
+### Sign In as Admin
+# @name signInAdmin
+POST {{auth}}/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johndoe1111",
+    "password": "Password1111*!"
+}
+
+### Sign In as User
+# @name signInUser
+POST {{auth}}/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johndoe1732",
+    "password": "Password1732*!"
+}
+
+
+### Get All Interfaces
+# @name getAllInterfaces
+GET {{url}} HTTP/1.1
+Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}
