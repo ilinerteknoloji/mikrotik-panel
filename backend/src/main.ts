@@ -8,6 +8,7 @@ import { EnvService } from "./shared/env/env.service";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(EnvService);
+  app.enableCors();
   app.enableShutdownHooks();
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalPipes(new ValidationPipe(validationPipeOptions));

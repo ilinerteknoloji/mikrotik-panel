@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
-import { TorchService } from "./torch.service";
-import { CreateTorchDto } from "./dto/create-torch.dto";
 import { AuthGuard } from "src/modules/auth/guards/auth.guard";
+import { CreateTorchDto } from "./dto/create-torch.dto";
+import { TorchService } from "./torch.service";
 
 @Controller("torch")
 @UseGuards(AuthGuard)

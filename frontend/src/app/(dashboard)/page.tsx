@@ -1,23 +1,37 @@
-import { getServerSession } from "next-auth";
-import Image from "next/image";
-import { authConfig } from "../api/(auth)/auth/[...nextauth]/auth.config";
-import Link from "next/link";
+import { TorchChart } from "@/components/chats";
+import { TorchTables } from "@/components/torch-tables";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default async function Home() {
-  const session = await getServerSession(authConfig);
+export default function Home() {
   return (
-    <div>
-      <h1 className="text-5xl">MikroTik</h1>
-      <Image
-        src="/images/logo.svg"
-        alt="MikroTik Logo"
-        width={250}
-        height={250}
-        priority
-      />
-      <Link href="/sign-in">Sign In</Link>
-      <Link href={`/p/${session?.user.username}`}>Profile</Link>
-      <div className="text-sm">{JSON.stringify(session, null, 2)}</div>
+    <div className="min-h-full space-y-4">
+      <TorchChart />
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-5 xl:grid-cols-6">
+        <TorchTables className="col-span-1 lg:col-span-4 xl:col-span-5" />
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>Torch Settings</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4 [&>*]:w-full">
+              {/* TODO:  Implements onClicks0 */}
+              <Button type="button" size="default" variant="default">
+                Start | Stop
+              </Button>
+              <Button type="button" size="default" variant="default">
+                Reset Zoom
+              </Button>
+              <Button type="button" size="default" variant="default">
+                Clear Data History
+              </Button>
+              <Button type="button" size="default" variant="default">
+                Refresh
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
 }

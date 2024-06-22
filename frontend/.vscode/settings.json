@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "chartjs",
         "clsx",
         "hookform",
         "Iliner",
@@ -16,4 +17,5 @@
     "css.customData": [
         ".vscode/css-custom-data.json"
     ],
+    "CodeGPT.apiKey": "CodeGPT Plus Beta",
 }

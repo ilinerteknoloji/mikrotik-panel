@@ -23,16 +23,14 @@ export const refreshToken = async (token: JWT): Promise<JWT> => {
     const parsedResponse = tokensResponseSchema.safeParse(responseJson);
     if (!parsedResponse.success) throw new Error("Failed to refresh token");
     if (!parsedResponse.data.status)
-      throw new Error(
-        parsedResponse.data.response.error ?? "Failed to refresh token",
-      );
+      throw new Error(parsedResponse.data.response.error);
     const tokens = parsedResponse.data.response;
     return {
       ...token,
       user: token.user,
       accessToken: tokens.accessToken.token,
       expiresAt: tokens.accessToken.expiresAt,
-      refreshToken: tokens.refreshToken.token ?? token.refreshToken,
+      refreshToken: tokens.refreshToken.token,
     };
   } catch (error) {
     return {
@@ -97,6 +95,8 @@ export const authConfig: AuthOptions = {
           refreshToken: user?.refreshToken ?? token?.refreshToken,
         };
       if (Date.now() < token.expiresAt) return token;
+      console.log("jwt refresh token");
+
       const refreshTokenResponse = await refreshToken(token);
       if (refreshTokenResponse.error)
         throw new Error(refreshTokenResponse.error);
@@ -104,13 +104,23 @@ export const authConfig: AuthOptions = {
     },
     async session({ token, session }): Promise<Session> {
       if (token.user) session.user = token.user as User;
-      return {
+      const sessionData = {
         user: session.user,
         accessToken: token.accessToken,
         expiresAt: token.expiresAt,
         refreshToken: token.refreshToken,
         expires: session.expires,
       };
+      if (Date.now() < token.expiresAt) return sessionData;
+      console.log("session refresh token");
+      const {
+        refreshToken: rToken,
+        accessToken,
+        expiresAt,
+        error,
+      } = await refreshToken(token);
+      if (error) throw new Error(error);
+      return { ...sessionData, accessToken, expiresAt, refreshToken: rToken };
     },
   },
 };

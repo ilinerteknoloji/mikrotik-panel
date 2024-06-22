@@ -43,6 +43,6 @@ export class TorchRepository {
     const parsedTorch = z.array(torchSchema).safeParse(torchJson);
     if (!parsedTorch.success)
       throw new InternalServerErrorException("Failed to parse torch response");
-    return torchJson;
+    return parsedTorch.data;
   }
 }
