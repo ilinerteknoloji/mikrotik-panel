@@ -1,13 +1,10 @@
-import { env } from "@/schema";
-import { signInResponseSchema } from "@/schema/response/auth/sign-in.schema";
-import { tokensResponseSchema } from "@/schema/response/auth/tokens.schema";
+import { env } from "@/lib/schema/env";
+import { signInResponseSchema } from "@/lib/schema/response/auth/sign-in.schema";
 import { AuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const refreshToken = async (token: JWT): Promise<JWT> => {
-  // console.log({ type: "refreshToken", token });
-  console.log(`Refresh Token ${new Date().toLocaleString("tr")}`);
   if (!token.refreshToken) throw new Error("Missing refresh token");
   try {
     const response = await fetch(`${env.BACKEND_URL}/auth/refresh-token`, {
@@ -17,17 +14,17 @@ export const refreshToken = async (token: JWT): Promise<JWT> => {
         "x-refresh-token": token.refreshToken,
       },
     });
-    if (!response.ok)
-      throw new Error(response.statusText ?? "Failed to refresh token");
     const responseJson = await response.json();
-    const parsedResponse = tokensResponseSchema.safeParse(responseJson);
+    const parsedResponse = signInResponseSchema.safeParse(responseJson);
     if (!parsedResponse.success) throw new Error("Failed to refresh token");
-    if (!parsedResponse.data.status)
-      throw new Error(parsedResponse.data.response.error);
-    const tokens = parsedResponse.data.response;
+    if (!parsedResponse.data.status) throw new Error(parsedResponse.data.error);
+    const {
+      user: { id, username, role },
+      tokens,
+    } = parsedResponse.data.response;
     return {
       ...token,
-      user: token.user,
+      user: { id, username, role },
       accessToken: tokens.accessToken.token,
       expiresAt: tokens.accessToken.expiresAt,
       refreshToken: tokens.refreshToken.token,
@@ -61,12 +58,9 @@ export const authConfig: AuthOptions = {
           headers: { "Content-Type": "application/json" },
         });
         const responseJson = await response.json();
-        if (!response.ok)
-          throw Error(response.statusText ?? "Failed to sign in");
         const parsedResponse = signInResponseSchema.safeParse(responseJson);
         if (!parsedResponse.success) throw Error("Failed to sign in");
-        if (!parsedResponse.data.status)
-          throw Error(parsedResponse.data.response.error);
+        if (!parsedResponse.data.status) throw Error(parsedResponse.data.error);
         const {
           user: { id, username, role },
           tokens,
@@ -95,8 +89,6 @@ export const authConfig: AuthOptions = {
           refreshToken: user?.refreshToken ?? token?.refreshToken,
         };
       if (Date.now() < token.expiresAt) return token;
-      console.log("jwt refresh token");
-
       const refreshTokenResponse = await refreshToken(token);
       if (refreshTokenResponse.error)
         throw new Error(refreshTokenResponse.error);
@@ -112,7 +104,6 @@ export const authConfig: AuthOptions = {
         expires: session.expires,
       };
       if (Date.now() < token.expiresAt) return sessionData;
-      console.log("session refresh token");
       const {
         refreshToken: rToken,
         accessToken,

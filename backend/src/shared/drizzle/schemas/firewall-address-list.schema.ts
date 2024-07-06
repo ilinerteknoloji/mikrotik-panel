@@ -2,7 +2,7 @@ import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
 import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { ipCategoriesSchema, mikrotikUserIpsSchema } from ".";
 
-export const firewallAddressListSchema = mysqlTable("firewall_address_list", {
+export const firewallAddressListSchema = mysqlTable("firewall_addresses", {
   id: int("id").primaryKey().autoincrement(),
   list: int("ip_categories_id")
     .notNull()

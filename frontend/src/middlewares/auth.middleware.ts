@@ -1,11 +1,10 @@
-import { env } from "@/schema";
-import next from "next";
+import { env } from "@/lib/schema/env";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-const publicPages = ["/sign-in", "/sign-up", "/forgot-password"];
-const isPublic = (pathname: string) =>
-  publicPages.some((page) => pathname.startsWith(page));
+const privatePages = ["/dashboard"];
+const isPrivate = (pathname: string) =>
+  privatePages.some((page) => pathname.startsWith(page));
 
 export async function authMiddleware(request: NextRequest) {
   const { nextUrl } = request;
@@ -15,11 +14,8 @@ export async function authMiddleware(request: NextRequest) {
     secret: env.NEXTAUTH_SECRET,
   });
   const url = request.nextUrl.clone();
-  if (!isPublic(pathname) && !token) {
+  if (isPrivate(pathname) && !token) {
     url.pathname = "/sign-in";
-    return NextResponse.redirect(url);
-  } else if (isPublic(pathname) && token) {
-    url.pathname = "/";
     return NextResponse.redirect(url);
   }
   return NextResponse.next();

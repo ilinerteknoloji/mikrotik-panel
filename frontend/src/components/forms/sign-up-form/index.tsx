@@ -38,7 +38,7 @@ export function SignUpForm({}: Props) {
     const response = await signUpFormSubmitAction(values);
     if (!response.status) {
       return toast({
-        title: `Error`,
+        title: "Error",
         description: response.message,
       });
     }

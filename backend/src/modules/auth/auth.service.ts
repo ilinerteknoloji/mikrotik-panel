@@ -1,9 +1,11 @@
-import { ConflictException, HttpException, Injectable } from "@nestjs/common";
-import { invalidCredentials } from "src/lib/throws";
 import {
-  filterSignInValueType,
-  filterUsersPublicInformations,
-} from "src/lib/utils";
+  ConflictException,
+  ForbiddenException,
+  HttpException,
+  Injectable,
+} from "@nestjs/common";
+import { invalidCredentials } from "src/lib/throws";
+import { filterUsersPublicInformations } from "src/lib/utils";
 import { formatPhoneNumber } from "src/lib/utils/format-phone-number.utils";
 import { UsersSchemaInsertType } from "src/shared/drizzle/schemas";
 import { EncryptionService } from "src/shared/encryption/encryption.service";
@@ -24,6 +26,17 @@ export class AuthService {
     private readonly jwtRepository: JwtRepository,
   ) {}
 
+  /**
+   * signUp
+   * @description Create a new user
+   * @public
+   * @async
+   * @param {CreateUserDto} signUpAuthDto
+   * @returns {Promise<{ message: string; user: { ...publicData, details: user_details } }>}
+   * @memberof AuthService
+   * @example
+   * signUp(signUpAuthDto);
+   */
   public async signUp(signUpAuthDto: CreateUserDto) {
     try {
       signUpAuthDto.phoneNumber = formatPhoneNumber(signUpAuthDto.phoneNumber);
@@ -46,11 +59,22 @@ export class AuthService {
     }
   }
 
+  /**
+   * signIn
+   * @description Sign in user
+   * @public
+   * @async
+   * @param {SignInAuthDto} signInDto
+   * @returns {Promise<{ user: { ...publicData, details: user_details }; tokens: { accessToken, refreshToken } }>}
+   * @memberof AuthService
+   * @example
+   * signIn(signInDto);
+   */
   public async signIn(signInDto: SignInAuthDto) {
     const { username, password } = signInDto;
-    const key = filterSignInValueType(username);
     const [{ users, user_details }] =
-      await this.usersRepository.findUserByKeyWithDetail(key, username);
+      await this.usersRepository.findUserWithUniqueValues(username);
+    if (!users.status) throw new ForbiddenException("User is not active");
     const isMatch = await this.encryption.compare(password, users.password);
     if (!isMatch) invalidCredentials();
     const publicData = filterUsersPublicInformations(users);
@@ -61,6 +85,17 @@ export class AuthService {
     };
   }
 
+  /**
+   * signOut
+   * @description Sign out user
+   * @public
+   * @async
+   * @param {RequestUserType} user
+   * @returns {Promise<{ message: string }>}
+   * @memberof AuthService
+   * @example
+   * signOut(user);
+   */
   public async signOut(user: RequestUserType) {
     await this.makeTokenStatusFalse(user.refreshTokenId);
     return {
@@ -68,11 +103,39 @@ export class AuthService {
     };
   }
 
+  /**
+   * refreshToken
+   * @description Refresh token
+   * @public
+   * @async
+   * @param {RequestUserType} user
+   * @returns {Promise<{ user: { ...publicData, details: user_details }; tokens: { accessToken, refreshToken } }>}
+   * @memberof AuthService
+   * @example
+   * refreshToken(user);
+   */
   public async refreshToken(user: RequestUserType) {
     await this.makeTokenStatusFalse(user.refreshTokenId);
-    return await this.generateTokens(user);
+    const [users] = await this.usersRepository.findUserByKey("id", user.id);
+    const tokens = await this.generateTokens(user);
+    return {
+      user: filterUsersPublicInformations(users),
+      tokens,
+    };
   }
 
+  /**
+   * isUserExists
+   * @description Check if user exists
+   * @private
+   * @async
+   * @param {UsersSchemaInsertType} { username, email, phoneNumber }
+   * @returns {Promise<never>}
+   * @memberof AuthService
+   * @example
+   * isUserExists({ username, email, phoneNumber });
+   * @throws {ConflictException}
+   */
   private async isUserExists({
     username,
     email,
@@ -97,6 +160,17 @@ export class AuthService {
     throw new ConflictException(`[${message.join(", ")}] already exists`);
   }
 
+  /**
+   * makeTokenStatusFalse
+   * @description Make token status false
+   * @private
+   * @async
+   * @param {number} refreshTokenId
+   * @returns {Promise<void>}
+   * @memberof AuthService
+   * @example
+   * makeTokenStatusFalse(refreshTokenId);
+   */
   private async makeTokenStatusFalse(refreshTokenId: number) {
     await Promise.all([
       this.jwtRepository.updateTokenStatus(
@@ -108,6 +182,17 @@ export class AuthService {
     ]);
   }
 
+  /**
+   * generateTokens
+   * @description Generate tokens
+   * @private
+   * @async
+   * @param {PayloadType} { id, role, username }
+   * @returns {Promise<{ accessToken, refreshToken }>}
+   * @memberof AuthService
+   * @example
+   * generateTokens({ id, role, username });
+   */
   private async generateTokens({ id, role, username }: PayloadType) {
     const payload = { id, role, username };
     const { accessToken, refreshToken } = this.jwt.generateTokens(payload);

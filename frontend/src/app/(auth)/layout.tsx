@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { World } from "@/components/world";
+import { World } from "@/components/general/world";
 import Logo from "@/images/logo.svg";
 import { headers } from "next/headers";
 import Image from "next/image";

@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import {
@@ -70,6 +70,25 @@ export class UsersRepository {
       .select()
       .from(usersSchema)
       .where(eq(usersSchema[keyName], value))
+      .innerJoin(
+        userDetailsSchema,
+        eq(usersSchema.id, userDetailsSchema.userId),
+      );
+    if (!user.length) throw new NotFoundException("User not found");
+    return user;
+  }
+
+  public async findUserWithUniqueValues(value: string) {
+    const user = await this.drizzle
+      .select()
+      .from(usersSchema)
+      .where(
+        or(
+          eq(usersSchema.username, value),
+          eq(usersSchema.email, value),
+          eq(usersSchema.phoneNumber, value),
+        ),
+      )
       .innerJoin(
         userDetailsSchema,
         eq(usersSchema.id, userDetailsSchema.userId),

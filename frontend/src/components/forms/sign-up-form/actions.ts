@@ -1,11 +1,15 @@
-import { FormAction } from "@/types";
+"use server";
+
+import { FormAction } from "@/lib/types";
 import { SignUpFormSchema } from "./form-schema";
+import { env } from "@/lib/schema/env";
+import { signUpResponseSchema } from "@/lib/schema/response/auth/sign-up.schema";
 
 export async function signUpFormSubmitAction(
   values: SignUpFormSchema,
 ): Promise<FormAction<undefined>> {
   try {
-    const response = await fetch(`/api/sign-up`, {
+    const response = await fetch(`${env.BACKEND_URL}/auth/sign-up`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -13,13 +17,16 @@ export async function signUpFormSubmitAction(
       body: JSON.stringify(values),
     });
     const responseJson = await response.json();
-    if (!response.ok)
-      return {
-        status: false,
-        message: Array.isArray(responseJson.message)
-          ? responseJson.message.join(", ")
-          : responseJson.message,
-      };
+    const parsedResponse = signUpResponseSchema.safeParse(responseJson);
+    if (!parsedResponse.success) {
+      throw new Error("An error occurred while parsing the response");
+    } else if (!parsedResponse.data.status) {
+      const message = parsedResponse.data.response.message;
+      throw new Error(Array.isArray(message) ? message.join(", ") : message);
+    } else if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
     return {
       status: true,
       data: responseJson,

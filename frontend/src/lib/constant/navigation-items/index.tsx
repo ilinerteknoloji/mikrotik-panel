@@ -11,12 +11,12 @@ import React from "react";
 export const navigationItems = [
   {
     title: "Home",
-    href: "/",
+    href: "/dashboard",
     icon: <HomeIcon />,
   },
   {
     title: "Firewall",
-    href: "/firewall",
+    href: "/dashboard/firewall",
     icon: <FileSlidersIcon />,
   },
 ] as const;
@@ -28,22 +28,22 @@ export const allPages: {
 }[] = [
   {
     title: "Profile",
-    href: "/p/",
+    href: "/dashboard/p/",
     icon: <User />,
   },
   {
     title: "Devices",
-    href: "/devices",
+    href: "/dashboard/devices",
     icon: <MonitorSmartphone />,
   },
   {
     title: "Settings",
-    href: "/settings",
+    href: "/dashboard/settings",
     icon: <Settings />,
   },
   {
     title: "Billing",
-    href: "/billing",
+    href: "/dashboard/billing",
     icon: <Receipt />,
   },
   ...navigationItems,

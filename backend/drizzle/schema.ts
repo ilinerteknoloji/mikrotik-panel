@@ -137,7 +137,7 @@ export const mikrotik_user_ips = mysqlTable("mikrotik_user_ips", {
 
 export const refresh_token = mysqlTable("refresh_token", {
 	id: int("id").autoincrement().notNull(),
-	user_id: int("user_id").notNull(),
+	user_id: int("user_id").notNull().references(() => users.id),
 	token: text("token").notNull(),
 	status: tinyint("status").default(1),
 	expires_at: timestamp("expires_at", { mode: 'string' }).notNull(),
@@ -152,7 +152,7 @@ export const refresh_token = mysqlTable("refresh_token", {
 
 export const user_details = mysqlTable("user_details", {
 	id: int("id").autoincrement().notNull(),
-	user_id: int("user_id").notNull(),
+	user_id: int("user_id").notNull().references(() => users.id),
 	is_email_verified: tinyint("is_email_verified").default(0),
 	is_phone_number_verified: tinyint("is_phone_number_verified").default(0),
 	address: varchar("address", { length: 255 }),
@@ -172,9 +172,9 @@ export const user_details = mysqlTable("user_details", {
 
 export const user_device = mysqlTable("user_device", {
 	id: int("id").autoincrement().notNull(),
-	user_id: int("user_id").notNull(),
-	device_id: int("device_id").notNull(),
-	ip_id: int("ip_id").notNull(),
+	user_id: int("user_id").notNull().references(() => users.id),
+	device_id: int("device_id").notNull().references(() => devices.id),
+	ip_id: int("ip_id").notNull().references(() => ips.id),
 	created_at: timestamp("created_at", { mode: 'string' }).default(sql`(now())`),
 },
 (table) => {
@@ -185,8 +185,8 @@ export const user_device = mysqlTable("user_device", {
 
 export const user_devices_refresh_tokens = mysqlTable("user_devices_refresh_tokens", {
 	id: int("id").autoincrement().notNull(),
-	user_devices_id: int("user_devices_id").notNull(),
-	refresh_token_id: int("refresh_token_id").notNull(),
+	user_devices_id: int("user_devices_id").notNull().references(() => user_device.id),
+	refresh_token_id: int("refresh_token_id").notNull().references(() => refresh_token.id),
 	created_at: timestamp("created_at", { mode: 'string' }).default(sql`(now())`),
 },
 (table) => {
@@ -211,8 +211,8 @@ export const users = mysqlTable("users", {
 (table) => {
 	return {
 		users_id: primaryKey({ columns: [table.id], name: "users_id"}),
+		users_username_unique: unique("users_username_unique").on(table.username),
 		users_email_unique: unique("users_email_unique").on(table.email),
 		users_phone_number_unique: unique("users_phone_number_unique").on(table.phone_number),
-		users_username_unique: unique("users_username_unique").on(table.username),
 	}
 });

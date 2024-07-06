@@ -37,7 +37,7 @@ export function SignInForm({}: Props) {
     signIn("credentials", {
       username: values.username,
       password: values.password,
-      callbackUrl: "/",
+      callbackUrl: "/dashboard",
     });
   };
 

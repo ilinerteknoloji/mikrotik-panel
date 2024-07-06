@@ -17,7 +17,7 @@ export const refreshTokenSchema = mysqlTable("refresh_token", {
   userId: int("user_id")
     .notNull()
     .references(() => usersSchema.id),
-  token: text("token").notNull().unique(),
+  token: text("token").notNull(),
   status: boolean("status").default(true),
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow(),

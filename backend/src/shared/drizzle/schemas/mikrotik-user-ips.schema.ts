@@ -26,6 +26,7 @@ export const mikrotikUserIpsRelations = relations(
     user: one(usersSchema, {
       fields: [mikrotikUserIpsSchema.userId],
       references: [usersSchema.id],
+      relationName: "mikrotik_user_ips_user_id_fk",
     }),
     addressList: many(firewallAddressListSchema),
   }),
