@@ -16,7 +16,7 @@ export function Header({}: Props) {
     <header>
       <div className="flex h-16 gap-4 md:h-20">
         <Link
-          href="/"
+          href="/dashboard"
           className="hidden h-full w-48 min-w-48 max-w-48 items-end gap-2 border-r px-2 py-2 md:flex lg:w-64 lg:min-w-64 lg:max-w-64 lg:px-4"
         >
           <Image src={Logo} alt="Mikrotik Panel Logo" className="size-16" />

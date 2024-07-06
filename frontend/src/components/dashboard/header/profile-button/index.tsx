@@ -34,7 +34,10 @@ export async function ProfileButton({}: Props) {
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link href="/p/[username]" as={`/p/${session?.user.username}`}>
+        <Link
+          href="/dashboard/p/[username]"
+          as={`/dashboard/p/${session?.user.username}`}
+        >
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </Link>
         <DropdownMenuItem>Billing</DropdownMenuItem>

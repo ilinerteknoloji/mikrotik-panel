@@ -1,5 +1,5 @@
 import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
-import { env } from "@/schema";
+import { env } from "@/lib/schema/env";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
@@ -28,6 +28,9 @@ export default async function ProfilePage({ params: { username } }: Props) {
       </div>
       <div className="size-96">
         <pre>{JSON.stringify(profile, null, 2)}</pre>
+      </div>
+      <div className="size-96">
+        <pre>{JSON.stringify(session, null, 2)}</pre>
       </div>
       <Link href="/sign-in">Sign In</Link>
     </>

@@ -7,14 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Toggle } from "@/components/ui/toggle";
 import { useToast } from "@/components/ui/use-toast";
+import { env } from "@/lib/schema/env";
+import { torchResponseSchema } from "@/lib/schema/response/tool/torch";
 import { useTorchStore } from "@/stores";
+import { Pause, Play } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { LineChart } from "./chart";
-import { env } from "@/lib/schema/env";
-import { torchResponseSchema } from "@/lib/schema/response/tool/torch";
-import { set } from "zod";
 
 type Props = {};
 
@@ -22,6 +23,7 @@ export function TorchChart({}: Props) {
   const { data: session } = useSession();
   const { toast } = useToast();
   const setData = useTorchStore((state) => state.setData);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +35,7 @@ export function TorchChart({}: Props) {
         },
         body: JSON.stringify({
           interface: "ether1",
-          duration: 2,
+          duration: 5,
         }),
       });
       const torchJson = await torchResponse.json();
@@ -64,10 +66,8 @@ export function TorchChart({}: Props) {
         ]);
       }
     };
-    let intervalId;
-    if (session?.accessToken) intervalId = setInterval(fetchData, 2000);
+    if (session?.accessToken) setIntervalId(setInterval(fetchData, 5000));
     else clearInterval(intervalId);
-    // if (session?.accessToken) fetchData();
   }, [session]);
 
   if (!session) return null;
