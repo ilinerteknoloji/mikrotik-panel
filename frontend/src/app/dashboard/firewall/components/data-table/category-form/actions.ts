@@ -77,8 +77,6 @@ export async function updateCategory(
       return r.response.message;
     }
   } catch (error) {
-    console.log(error);
-
     return error instanceof Error ? error.message : "An error accrued";
   }
 }
