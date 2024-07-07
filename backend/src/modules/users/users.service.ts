@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
+import { UserRole } from "src/lib/enums/user-role.enum";
+import { filterUsersPublicInformations } from "src/lib/utils";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersRepository } from "./users.repository";
-import { UserRole } from "src/lib/enums/user-role.enum";
 
 @Injectable()
 export class UsersService {
@@ -25,11 +26,21 @@ export class UsersService {
   }
 
   public async findById(id: number) {
-    return `This action returns a #${id} user`;
+    const [{ users, user_details }] =
+      await this.usersRepository.findUserByKeyWithDetail("id", id);
+    return {
+      ...filterUsersPublicInformations(users),
+      user_details,
+    };
   }
 
   public async findByUsername(username: string) {
-    return `This action returns a #${username} user`;
+    const [{ users, user_details }] =
+      await this.usersRepository.findUserByKeyWithDetail("username", username);
+    return {
+      ...filterUsersPublicInformations(users),
+      details: user_details,
+    };
   }
 
   public async update(id: number, updateUserDto: UpdateUserDto) {

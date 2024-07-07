@@ -24,8 +24,10 @@ export class RefreshTokenGuard implements CanActivate {
     const payload = this.jwt.verifyToken(refreshToken, "refresh");
     const tokenInfo =
       await this.jwtRepository.findRefreshTokenByToken(refreshToken);
-    if (!tokenInfo.length || !tokenInfo[0].status)
-      throw new UnauthorizedException("Token is invalid");
+    // FIXME:
+    // if (!tokenInfo.length || !tokenInfo[0].status)
+    //   throw new UnauthorizedException("Token is invalid");
+    if (!tokenInfo.length) throw new UnauthorizedException("Token is invalid");
     req.user = {
       id: payload.id,
       username: payload.username,

@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { Roles } from "src/lib/decorators/roles.decorator";
+import { UseRoles } from "src/lib/decorators/roles.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import { LimitPipe, PagePipe } from "src/lib/pipes";
 import { AuthGuard } from "../auth/guards/auth.guard";
@@ -22,12 +22,12 @@ import { RequestUserType } from "src/types";
 
 @Controller("user-ips")
 @UseGuards(AuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN, UserRole.USER)
+@UseRoles(UserRole.ADMIN, UserRole.USER)
 export class UserIpsController {
   constructor(private readonly userIpsService: UserIpsService) {}
 
   @Post()
-  @Roles(UserRole.ADMIN)
+  @UseRoles(UserRole.ADMIN)
   public create(@Body() createIpDto: CreateUserIpDto) {
     return this.userIpsService.create(createIpDto);
   }

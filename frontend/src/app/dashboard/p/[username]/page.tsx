@@ -1,7 +1,16 @@
 import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
+import { UpdateProfileForm } from "@/components/forms/update-profile";
+import { ServerAlerts } from "@/components/general/server-alerts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { env } from "@/lib/schema/env";
+import { userResponseSchema } from "@/lib/schema/response/user.schema";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 
 type Props = {
   params: {
@@ -17,22 +26,44 @@ export default async function ProfilePage({ params: { username } }: Props) {
       Authorization: `Bearer ${session?.accessToken}`,
     },
   });
-  const profile = await response.json();
+  const responseJson = await response.json();
+  const parsedResponse = userResponseSchema.safeParse(responseJson);
+
   return (
-    <>
-      Profile Page
-      <h1>{username}</h1>
-      <h1>{JSON.stringify(profile)}</h1>
-      <div>
-        <Link href="/">Home</Link>
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {!parsedResponse.success
+          ? parsedResponse.error.errors.map((error, index) => (
+              <ServerAlerts
+                key={index}
+                title="Error"
+                description={error.path.join(".") + ": " + error.message}
+              />
+            ))
+          : null}
+        {parsedResponse.success && !parsedResponse.data.status ? (
+          <ServerAlerts title="Error" description={parsedResponse.data.error} />
+        ) : null}
       </div>
-      <div className="size-96">
-        <pre>{JSON.stringify(profile, null, 2)}</pre>
-      </div>
-      <div className="size-96">
-        <pre>{JSON.stringify(session, null, 2)}</pre>
-      </div>
-      <Link href="/sign-in">Sign In</Link>
-    </>
+
+      <ServerAlerts
+        title="Error"
+        description={session?.expiresAt.toString() ?? ""}
+      />
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{username} Profile</CardTitle>
+          <CardDescription>
+            This is the profile page for {username}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          Profile Page
+          <h1>{username}</h1>
+          <UpdateProfileForm />
+        </CardContent>
+      </Card>
+    </div>
   );
 }

@@ -7,7 +7,7 @@ import {
   Post,
   UseGuards,
 } from "@nestjs/common";
-import { Roles } from "src/lib/decorators/roles.decorator";
+import { UseRoles } from "src/lib/decorators/roles.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import { AuthGuard } from "src/modules/auth/guards/auth.guard";
 import { RolesGuard } from "src/modules/auth/guards/roles.guard";
@@ -17,7 +17,7 @@ import { IpCategoriesService } from "./ip-categories.service";
 
 @Controller("ip-categories")
 @UseGuards(AuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN)
+@UseRoles(UserRole.ADMIN)
 export class IpCategoriesController {
   constructor(private readonly ipCategoriesService: IpCategoriesService) {}
 
@@ -27,13 +27,13 @@ export class IpCategoriesController {
   }
 
   @Get()
-  @Roles(UserRole.ADMIN, UserRole.USER)
+  @UseRoles(UserRole.ADMIN, UserRole.USER)
   public findAll() {
     return this.ipCategoriesService.findAll();
   }
 
   @Get(":id")
-  @Roles(UserRole.ADMIN, UserRole.USER)
+  @UseRoles(UserRole.ADMIN, UserRole.USER)
   public findOne(@Param("id") id: string) {
     return this.ipCategoriesService.findOne(+id);
   }

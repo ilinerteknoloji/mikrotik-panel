@@ -43,7 +43,6 @@ export class ResponseInterceptor implements NestInterceptor {
       error instanceof HttpException
         ? error
         : new InternalServerErrorException(error.message);
-
     throw new HttpException(
       {
         status: false,

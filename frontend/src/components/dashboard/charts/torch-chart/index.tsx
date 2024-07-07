@@ -7,12 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Toggle } from "@/components/ui/toggle";
 import { useToast } from "@/components/ui/use-toast";
 import { env } from "@/lib/schema/env";
 import { torchResponseSchema } from "@/lib/schema/response/tool/torch";
 import { useTorchStore } from "@/stores";
-import { Pause, Play } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { LineChart } from "./chart";

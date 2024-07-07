@@ -9,7 +9,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from "@nestjs/common";
-import { Roles } from "src/lib/decorators/roles.decorator";
+import { UseRoles } from "src/lib/decorators/roles.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
@@ -29,7 +29,7 @@ export class UsersController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @UseRoles(UserRole.ADMIN)
   public findAll(
     @Query("page", PagePipe) page: number,
     @Query("limit", LimitPipe) limit: number,

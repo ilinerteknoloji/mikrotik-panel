@@ -1,11 +1,11 @@
 import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
-import { ServerToast } from "@/components/general/server-toast";
+import { ServerAlerts } from "@/components/general/server-alerts";
+import { env } from "@/lib/schema/env";
+import { addressListsResponseSchema } from "@/lib/schema/response/firewall/address-list.schema";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { DataTable } from "./components/data-table";
 import { columns } from "./components/data-table/columns";
-import { addressListsResponseSchema } from "@/lib/schema/response/firewall/address-list.schema";
-import { env } from "@/lib/schema/env";
 
 type Props = {};
 
@@ -38,13 +38,13 @@ export default async function FirewallPage({}: Props) {
       withIndexUserIps.push({ ...ip, index }),
     );
   return (
-    <div className="w-full">
+    <div className="w-full space-y-4">
       {!userIpsResponse.ok ? (
-        <ServerToast title="Error" description={userIpsResponse.statusText} />
+        <ServerAlerts title="Error" description={userIpsResponse.statusText} />
       ) : null}
       {!parsedUserIps.success
         ? parsedUserIps.error.errors.map((error, index) => (
-            <ServerToast
+            <ServerAlerts
               key={index}
               title="Error"
               description={error.message}
@@ -52,7 +52,7 @@ export default async function FirewallPage({}: Props) {
           ))
         : null}
       {parsedUserIps.success && !parsedUserIps.data.status ? (
-        <ServerToast title="Error" description={parsedUserIps.data.error} />
+        <ServerAlerts title="Error" description={parsedUserIps.data.error} />
       ) : null}
       <DataTable
         columns={columns}

@@ -8,7 +8,7 @@ import {
   Patch,
   UseGuards,
 } from "@nestjs/common";
-import { Roles } from "src/lib/decorators/roles.decorator";
+import { UseRoles } from "src/lib/decorators/roles.decorator";
 import { User } from "src/lib/decorators/user.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import { AuthGuard } from "src/modules/auth/guards/auth.guard";
@@ -19,7 +19,7 @@ import { RolesGuard } from "src/modules/auth/guards/roles.guard";
 
 @Controller("address-lists")
 @UseGuards(AuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN, UserRole.USER)
+@UseRoles(UserRole.ADMIN, UserRole.USER)
 export class AddressListsController {
   constructor(private readonly addressListsService: AddressListsService) {}
 
@@ -45,7 +45,7 @@ export class AddressListsController {
   }
 
   @Delete(":id")
-  @Roles(UserRole.ADMIN)
+  @UseRoles(UserRole.ADMIN)
   public remove(@Param("id") id: string) {
     return this.addressListsService.remove(+id);
   }

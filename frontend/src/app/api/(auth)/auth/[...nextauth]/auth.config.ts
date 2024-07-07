@@ -22,6 +22,7 @@ export const refreshToken = async (token: JWT): Promise<JWT> => {
       user: { id, username, role },
       tokens,
     } = parsedResponse.data.response;
+    console.log(tokens);
     return {
       ...token,
       user: { id, username, role },

@@ -1,8 +1,8 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { EnvService } from "src/shared/env/env.service";
-import { CreateTorchDto } from "./dto/create-torch.dto";
-import { z } from "zod";
 import { torchSchema } from "src/types/zod-schemas/mikrotik/tool/torch/torch.schema";
+import { z } from "zod";
+import { CreateTorchDto } from "./dto/create-torch.dto";
 
 @Injectable()
 export class TorchRepository {
@@ -18,12 +18,7 @@ export class TorchRepository {
     this.auth = btoa(`${this.username}:${this.password}`);
   }
 
-  public async create({
-    interface: interfaceName,
-    duration,
-    srcAddress,
-    dstAddress,
-  }: CreateTorchDto) {
+  public async create({ interface: interfaceName, duration }: CreateTorchDto) {
     const torchResponse = await fetch(`${this.host}/rest/tool/torch`, {
       method: "POST",
       headers: {
@@ -33,8 +28,6 @@ export class TorchRepository {
       body: JSON.stringify({
         interface: interfaceName,
         duration: duration,
-        "src-address": srcAddress,
-        "dst-address": dstAddress,
       }),
     });
     const torchJson = await torchResponse.json();

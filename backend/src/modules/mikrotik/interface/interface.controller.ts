@@ -1,12 +1,12 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
-import { Roles } from "src/lib/decorators/roles.decorator";
+import { UseRoles } from "src/lib/decorators/roles.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import { AuthGuard } from "src/modules/auth/guards/auth.guard";
 import { InterfaceService } from "./interface.service";
 
 @Controller("interface")
 @UseGuards(AuthGuard)
-@Roles(UserRole.ADMIN)
+@UseRoles(UserRole.ADMIN)
 export class InterfaceController {
   constructor(private readonly interfaceService: InterfaceService) {}
 
@@ -16,7 +16,7 @@ export class InterfaceController {
   // }
 
   @Get()
-  @Roles(UserRole.ADMIN, UserRole.USER)
+  @UseRoles(UserRole.ADMIN, UserRole.USER)
   public findAll() {
     return this.interfaceService.findAll();
   }

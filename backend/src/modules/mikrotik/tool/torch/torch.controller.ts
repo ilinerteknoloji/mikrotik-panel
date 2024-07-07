@@ -2,14 +2,18 @@ import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "src/modules/auth/guards/auth.guard";
 import { CreateTorchDto } from "./dto/create-torch.dto";
 import { TorchService } from "./torch.service";
+import { RolesGuard } from "src/modules/auth/guards/roles.guard";
+import { UserRole } from "src/lib/enums/user-role.enum";
+import { UseRoles } from "src/lib/decorators/roles.decorator";
 
 @Controller("torch")
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
+@UseRoles(UserRole.ADMIN)
 export class TorchController {
   constructor(private readonly torchService: TorchService) {}
 
-  // TODO: Role Guard
   @Post()
+  @UseRoles(UserRole.ADMIN, UserRole.USER)
   public create(@Body() createTorchDto: CreateTorchDto) {
     return this.torchService.create(createTorchDto);
   }

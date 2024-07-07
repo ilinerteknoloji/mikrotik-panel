@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createResponseSchema } from ".";
 
 export const userDetailsSchema = z.object({
   id: z.number(),
@@ -26,3 +27,5 @@ export const userSchema = z.object({
   updatedAt: z.string(),
   details: userDetailsSchema.optional(),
 });
+
+export const userResponseSchema = createResponseSchema(userSchema);
