@@ -8,10 +8,15 @@ import { ProfileButton } from "./profile-button";
 import { SearchInput } from "./search-input";
 import { ThemeButton } from "./theme-button";
 import { Button } from "@/components/ui/button";
+import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
 
 type Props = {};
 
-export function Header({}: Props) {
+export async function Header({}: Props) {
+  const session = await getServerSession(authConfig);
+
   return (
     <header>
       <div className="flex h-16 gap-4 md:h-20">
@@ -40,14 +45,18 @@ export function Header({}: Props) {
               <SearchInput />
             </div>
 
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              className="rounded-full p-2"
-            >
-              <Settings className="size-6" />
-            </Button>
+            {session?.user.role === "admin" ? (
+              <Link href="/admin">
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="rounded-full p-2"
+                >
+                  <Settings className="size-6" />
+                </Button>
+              </Link>
+            ) : null}
 
             <Button
               type="button"
