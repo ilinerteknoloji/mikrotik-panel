@@ -15,7 +15,7 @@ export function TorchTables({ className }: Props) {
 
   const data = [];
   for (let i = 0; i < labels.length; i++) {
-    data.unshift({
+    data.push({
       labels: labels[i],
       rxData: rxData[i],
       rxPacketsData: rxPacketsData[i],

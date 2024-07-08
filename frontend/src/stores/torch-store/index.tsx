@@ -24,11 +24,11 @@ export const useTorchStore = create(
       setData: (data) => {
         set((state) => {
           return {
-            labels: [...state.labels, data[0]],
-            rxData: [...state.rxData, data[1]],
-            rxPacketsData: [...state.rxPacketsData, data[2]],
-            txData: [...state.txData, data[3]],
-            txPacketsData: [...state.txPacketsData, data[4]],
+            labels: [data[0], ...state.labels],
+            rxData: [data[1], ...state.rxData],
+            rxPacketsData: [data[2], ...state.rxPacketsData],
+            txData: [data[3], ...state.txData],
+            txPacketsData: [data[4], ...state.txPacketsData],
           };
         });
       },
