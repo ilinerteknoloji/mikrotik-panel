@@ -21,6 +21,11 @@ export const envSchema = z.object({
   MIKROTIK_HOST: z.string(),
   MIKROTIK_USERNAME: z.string(),
   MIKROTIK_PASSWORD: z.string(),
+  MAIL_USERNAME: z.string(),
+  MAIL_EMAIL: z.string(),
+  MAIL_PASSWORD: z.string(),
+  MAIL_HOST: z.string(),
+  MAIL_PORT: z.coerce.number(),
 });
 
 export type EnvSchemaType = z.infer<typeof envSchema>;
