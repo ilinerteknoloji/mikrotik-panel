@@ -29,7 +29,7 @@ export const navigationItemsAdmin = [
   },
   {
     title: "Admin Interface",
-    href: "/admin/interfaces",
+    href: "/admin/interface",
     icon: <FileSlidersIcon />,
   },
 ] as const;
