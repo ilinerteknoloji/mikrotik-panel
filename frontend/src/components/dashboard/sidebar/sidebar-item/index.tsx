@@ -1,12 +1,12 @@
 "use client";
 
-import { navigationItems } from "@/lib/constant";
+import { allPages, navigationItemsDashboard } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { usePageStore } from "@/stores";
 import Link from "next/link";
 
-type PageName = (typeof navigationItems)[number]["title"];
-type Href = (typeof navigationItems)[number]["href"];
+type PageName = (typeof allPages)[number]["title"];
+type Href = (typeof allPages)[number]["href"];
 type Props = {
   item: {
     title: PageName;

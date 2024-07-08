@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import React from "react";
 
-export const navigationItems = [
+export const navigationItemsDashboard = [
   {
     title: "Home",
     href: "/dashboard",
@@ -17,6 +17,19 @@ export const navigationItems = [
   {
     title: "Firewall",
     href: "/dashboard/firewall",
+    icon: <FileSlidersIcon />,
+  },
+] as const;
+
+export const navigationItemsAdmin = [
+  {
+    title: "Admin Home",
+    href: "/admin",
+    icon: <HomeIcon />,
+  },
+  {
+    title: "Admin Interface",
+    href: "/admin/interfaces",
     icon: <FileSlidersIcon />,
   },
 ] as const;
@@ -46,5 +59,6 @@ export const allPages: {
     href: "/dashboard/billing",
     icon: <Receipt />,
   },
-  ...navigationItems,
+  ...navigationItemsDashboard,
+  ...navigationItemsAdmin,
 ] as const;
