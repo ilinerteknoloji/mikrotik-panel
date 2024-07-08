@@ -36,9 +36,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function LineChart({}: Props) {
+export function TorchAreaChart({}: Props) {
   const { labels, rxData, rxPacketsData, txData, txPacketsData } =
     useTorchStore();
+  // TODO: Implement timeRange state
   const [timeRange, setTimeRange] = useState(
     labels.length < 100 ? labels.length : 100,
   ); // [5, 10, 15, 30, 60]

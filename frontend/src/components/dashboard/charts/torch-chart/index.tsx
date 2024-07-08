@@ -13,7 +13,7 @@ import { torchResponseSchema } from "@/lib/schema/response/tool/torch";
 import { useTorchStore } from "@/stores";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { LineChart } from "./chart";
+import { TorchAreaChart } from "./chart";
 
 type Props = {};
 
@@ -77,7 +77,7 @@ export function TorchChart({}: Props) {
         <CardDescription>Real-time traffic monitoring tool</CardDescription>
       </CardHeader>
       <CardContent>
-        <LineChart />
+        <TorchAreaChart />
       </CardContent>
     </Card>
   );
