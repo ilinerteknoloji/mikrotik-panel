@@ -61,6 +61,7 @@ export default async function ProfilePage({ params: { username } }: Props) {
         <CardContent>
           Profile Page
           <h1>{username}</h1>
+          <pre>{JSON.stringify(session, null, 2)}</pre>
           <UpdateProfileForm />
         </CardContent>
       </Card>

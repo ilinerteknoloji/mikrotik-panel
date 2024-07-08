@@ -1,9 +1,8 @@
 import { env } from "@/lib/schema/env";
 import { signInResponseSchema } from "@/lib/schema/response/auth/sign-in.schema";
-import { AuthOptions, getServerSession, Session, User } from "next-auth";
+import { AuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { getSession } from "next-auth/react";
 
 export const refreshToken = async (token: JWT): Promise<JWT> => {
   if (!token.refreshToken) throw new Error("Missing refresh token");
@@ -78,7 +77,23 @@ export const authConfig: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ user, token }): Promise<JWT> {
+    async jwt({ user, token, trigger }): Promise<JWT> {
+      if (trigger === "update") {
+        const {
+          refreshToken: rToken,
+          accessToken,
+          expiresAt,
+          user: newUser,
+          error,
+        } = await refreshToken(token);
+        if (error) throw new Error(error);
+        return {
+          accessToken,
+          expiresAt,
+          refreshToken: rToken,
+          user: newUser,
+        };
+      }
       if (user)
         return {
           user: { id: +user.id, username: user.username, role: user.role },
@@ -95,7 +110,7 @@ export const authConfig: AuthOptions = {
         throw new Error(refreshTokenResponse.error);
       return refreshTokenResponse;
     },
-    async session({ token, session }): Promise<Session> {
+    async session({ token, session, trigger, newSession }): Promise<Session> {
       if (token.user) session.user = token.user as User;
       const sessionData = {
         user: session.user,
@@ -113,6 +128,11 @@ export const authConfig: AuthOptions = {
       } = await refreshToken(token);
       if (error) throw new Error(error);
       return { ...sessionData, accessToken, expiresAt, refreshToken: rToken };
+    },
+  },
+  events: {
+    updateUser(message) {
+      console.log("update user", message);
     },
   },
 };

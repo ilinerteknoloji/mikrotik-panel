@@ -1,4 +1,4 @@
-import { SidebarItem } from "@/components/dashboard/sidebar/sidebar-item";
+import { SidebarItem } from "@/components/general/sidebar/sidebar-item";
 import {
   Sheet,
   SheetContent,

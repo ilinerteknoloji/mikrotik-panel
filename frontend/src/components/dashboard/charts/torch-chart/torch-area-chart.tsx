@@ -41,7 +41,7 @@ export function TorchAreaChart({}: Props) {
     useTorchStore();
   // TODO: Implement timeRange state
   const [timeRange, setTimeRange] = useState(
-    labels.length < 100 ? labels.length : 100,
+    labels.length < 30 ? labels.length : 30,
   ); // [5, 10, 15, 30, 60]
   const data: {
     time: string;

@@ -13,7 +13,7 @@ import { torchResponseSchema } from "@/lib/schema/response/tool/torch";
 import { useTorchStore } from "@/stores";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { TorchAreaChart } from "./chart";
+import { TorchAreaChart } from "./torch-area-chart";
 
 type Props = {};
 

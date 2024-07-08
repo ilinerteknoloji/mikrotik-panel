@@ -1,5 +1,5 @@
-import { Header } from "@/components/dashboard/header";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { Header } from "@/components/general/header";
+import { Sidebar } from "@/components/general/sidebar";
 
 export default function AdminLayout({
   children,
