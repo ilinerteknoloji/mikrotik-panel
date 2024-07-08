@@ -1,8 +1,9 @@
 import { env } from "@/lib/schema/env";
 import { signInResponseSchema } from "@/lib/schema/response/auth/sign-in.schema";
-import { AuthOptions, Session, User } from "next-auth";
+import { AuthOptions, getServerSession, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { getSession } from "next-auth/react";
 
 export const refreshToken = async (token: JWT): Promise<JWT> => {
   if (!token.refreshToken) throw new Error("Missing refresh token");
