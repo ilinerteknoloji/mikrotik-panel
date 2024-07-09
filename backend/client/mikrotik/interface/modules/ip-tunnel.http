@@ -1,5 +1,5 @@
 @auth=http://localhost:4000/auth
-@url=http://localhost:4000/interface/bridge
+@url=http://localhost:4000/interface/ip-tunnel
 
 ### Sign In as Admin
 # @name signInAdmin
@@ -21,13 +21,14 @@ Content-Type: application/json
     "password": "Password1732*!"
 }
 
-### Create Bridge Interface
-# @name createBridgeInterface
+### Create Ip Tunnel Interface
+# @name createIpTunnelInterface
 POST {{url}} HTTP/1.1
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 Content-Type: application/json
 
 {
-    "name": "Api Bridge3",
-    "comment": "Bridge created using API"
+    "remoteAddress": "192.162.125.251",
+    "name": "Api Ip Tunnel",
+    "comment": "Ip Tunnel created using API"
 }

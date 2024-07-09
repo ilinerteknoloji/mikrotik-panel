@@ -14,7 +14,6 @@ import { envSchema } from "./shared/env/env.schema";
 import { JwtModule } from "./shared/jwt/jwt.module";
 import { GenerateKeysModule } from "./shared/keys/generate-keys.module";
 import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
-import { BridgeModule } from "./modules/mikrotik/interface/modules/bridge/bridge.module";
 
 @Module({
   imports: [
@@ -35,7 +34,6 @@ import { BridgeModule } from "./modules/mikrotik/interface/modules/bridge/bridge
     AddressListsModule,
     TorchModule,
     InterfaceModule,
-    BridgeModule,
   ],
   controllers: [],
   providers: [],

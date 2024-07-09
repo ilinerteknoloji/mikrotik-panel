@@ -25,7 +25,9 @@ export class BridgeRepository {
           Authorization: `Basic ${this.auth}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(this.dtoToMikrotikJson(createBridgeDto)),
+        body: JSON.stringify(
+          this.createBridgeToToMikrotikJson(createBridgeDto),
+        ),
       },
     );
     const createJson = await createResponse.json();
@@ -37,7 +39,7 @@ export class BridgeRepository {
     return createJson;
   }
 
-  private dtoToMikrotikJson(createBridgeDto: CreateBridgeDto) {
+  private createBridgeToToMikrotikJson(createBridgeDto: CreateBridgeDto) {
     return {
       "add-dhcp-option82": createBridgeDto.addDhcpOption82,
       "admin-mac": createBridgeDto.adminMac,
