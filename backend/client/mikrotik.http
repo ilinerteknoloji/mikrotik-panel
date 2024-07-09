@@ -13,3 +13,50 @@ Content-Type: application/json
 # @name getInterfaces
 GET http://{{router}}/rest/interface HTTP/1.1
 Authorization: Basic {{username}}:{{password}}
+
+### Add Bridge Interface - 
+# @name addBridgeInterface
+POST http://{{router}}/rest/interface/bridge/add HTTP/1.1
+Authorization: Basic {{username}}:{{password}}
+Content-Type: application/json
+
+{
+  "add-dhcp-option82": "no", 
+  "admin-mac": "00:00:00:00:00:00", 
+  "ageing-time": "00:05:00", 
+  "arp": "enabled", 
+  "arp-timeout": "auto", 
+  "auto-mac": "yes", 
+  "comment": "", 
+  "dhcp-snooping": "no", 
+  "disabled": "no", 
+  "ether-type": "0x8100", 
+  "fast-forward": "yes", 
+  "forward-delay": "00:00:15", 
+  "frame-types": "admit-all", 
+  "igmp-snooping": "no", 
+  "igmp-version": "2", 
+  "ingress-filtering": "no", 
+  "last-member-interval": "1s", 
+  "last-member-query-count": 2, 
+  "max-hops": 20, 
+  "max-message-age": "00:00:20", 
+  "membership-interval": "4m20s", 
+  "mld-version": "1", 
+  "mtu": "auto", 
+  "multicast-querier": "no", 
+  "multicast-router": "temporary-query", 
+  "name": "bridge123", 
+  "priority": 32768, 
+  "protocol-mode": "rstp", 
+  "pvid": 1, 
+  "querier-interval": "4m15s", 
+  "query-interval": "2m5s", 
+  "query-response-interval": "10s", 
+  "region-name": "", 
+  "region-revision": 0, 
+  "startup-query-count": 2, 
+  "startup-query-interval": "31s250ms", 
+  "transmit-hold-count": 6, 
+  "vlan-filtering": "no"
+}

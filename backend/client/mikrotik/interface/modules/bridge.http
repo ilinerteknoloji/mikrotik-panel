@@ -1,0 +1,33 @@
+@auth=http://localhost:4000/auth
+@url=http://localhost:4000/interface/bridge
+
+### Sign In as Admin
+# @name signInAdmin
+POST {{auth}}/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johndoe1111",
+    "password": "Password1111*!"
+}
+
+### Sign In as User
+# @name signInUser
+POST {{auth}}/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johndoe1732",
+    "password": "Password1732*!"
+}
+
+### Create Bridge Interface
+# @name createBridgeInterface
+POST {{url}} HTTP/1.1
+Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
+Content-Type: application/json
+
+{
+    "name": "Api Bridge1",
+    "comment": "Bridge created using API"
+}
