@@ -23,8 +23,6 @@ export async function signUpFormSubmitAction(
     } else if (!parsedResponse.data.status) {
       const message = parsedResponse.data.response.message;
       throw new Error(Array.isArray(message) ? message.join(", ") : message);
-    } else if (!response.ok) {
-      throw new Error(response.statusText);
     }
 
     return {

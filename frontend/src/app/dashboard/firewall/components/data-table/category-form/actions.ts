@@ -20,27 +20,13 @@ export async function getCategories(): Promise<FormAction<IpCategoriesSchema>> {
         },
       },
     );
-    if (!ipCategoriesResponse.ok) {
-      return {
-        status: false,
-        message: ipCategoriesResponse.statusText,
-      };
-    }
     const ipCategoriesJson = await ipCategoriesResponse.json();
     const parsedIpCategories =
       ipCategoriesResponseSchema.safeParse(ipCategoriesJson);
-    if (!parsedIpCategories.success) {
-      return {
-        status: false,
-        message: parsedIpCategories.error.errors[0].message,
-      };
-    }
-    if (!parsedIpCategories.data.status) {
-      return {
-        status: false,
-        message: parsedIpCategories.data.error,
-      };
-    }
+    if (!parsedIpCategories.success)
+      throw new Error(parsedIpCategories.error.message);
+    if (!parsedIpCategories.data.status)
+      throw new Error(parsedIpCategories.data.error);
     return {
       status: true,
       data: parsedIpCategories.data.response,
@@ -71,11 +57,8 @@ export async function updateCategory(
       }),
     });
     const r = await response.json();
-    if (response.ok) {
-      return `${category} updated`;
-    } else {
-      return r.response.message;
-    }
+    if (!response.ok) throw new Error(r.response.message);
+    return `${category} updated`;
   } catch (error) {
     return error instanceof Error ? error.message : "An error accrued";
   }

@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getCategories, updateCategory } from "./actions";
 import { CategoryFormSchema, categoryFormSchema } from "./schema";
-import { IpCategoriesSchema } from "@/schema/response/firewall/ip-categories.schema";
+import { IpCategoriesSchema } from "@/lib/schema/response/firewall/ip-categories.schema";
 
 type Props = {
   ip: string;

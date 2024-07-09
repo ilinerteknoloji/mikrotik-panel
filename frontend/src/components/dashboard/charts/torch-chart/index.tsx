@@ -38,12 +38,7 @@ export function TorchChart({}: Props) {
       });
       const torchJson = await torchResponse.json();
       const parsedTorch = torchResponseSchema.safeParse(torchJson);
-      if (!torchResponse.ok) {
-        toast({
-          title: "Error",
-          description: torchResponse.statusText,
-        });
-      } else if (!parsedTorch.success) {
+      if (!parsedTorch.success) {
         toast({
           title: "Parsing Error",
           description: parsedTorch.error.toString(),

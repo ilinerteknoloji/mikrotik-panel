@@ -8,6 +8,7 @@ export class InterfaceService {
   constructor(private readonly interfaceRepository: InterfaceRepository) {}
 
   public async create(createInterfaceDto: CreateInterfaceDto) {
+    console.log(createInterfaceDto);
     return "This action adds a new interface";
   }
 
@@ -31,6 +32,7 @@ export class InterfaceService {
   }
 
   public async update(id: number, updateInterfaceDto: UpdateInterfaceDto) {
+    console.log(updateInterfaceDto);
     return `This action updates a #${id} interface`;
   }
 

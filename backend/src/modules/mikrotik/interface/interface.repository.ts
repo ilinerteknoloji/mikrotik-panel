@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { EnvService } from "src/shared/env/env.service";
 import { interfaceSchema } from "src/types/zod-schemas/mikrotik/interface/interface.schema";
 import { z } from "zod";
@@ -24,12 +28,12 @@ export class InterfaceRepository {
         Authorization: `Basic ${this.auth}`,
       },
     });
-    if (!interfacesResponse.ok)
-      throw new InternalServerErrorException("Failed to fetch interfaces");
     const interfacesJson = await interfacesResponse.json();
-    const parsedInterfaces = z.array(interfaceSchema).safeParse(interfacesJson);
-    if (!parsedInterfaces.success)
-      throw new InternalServerErrorException("Failed to fetch interfaces");
-    return parsedInterfaces.data;
+    if (!interfacesResponse.ok)
+      throw new HttpException(
+        interfacesJson?.detail ?? interfacesResponse.statusText,
+        interfacesResponse.status,
+      );
+    return Array.isArray(interfacesJson) ? interfacesJson : [interfacesJson];
   }
 }

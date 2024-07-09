@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { env } from "@/lib/schema/env";
-import { authMiddleware } from "@/middlewares/auth.middleware";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authConfig } from "../api/(auth)/auth/[...nextauth]/auth.config";
@@ -19,7 +18,6 @@ export default async function AdminPage({}: Props) {
     },
   });
   const responseJson = await response.json();
-
   return (
     <Card>
       <CardHeader>

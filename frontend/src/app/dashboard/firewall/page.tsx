@@ -39,9 +39,6 @@ export default async function FirewallPage({}: Props) {
     );
   return (
     <div className="w-full space-y-4">
-      {!userIpsResponse.ok ? (
-        <ServerAlerts title="Error" description={userIpsResponse.statusText} />
-      ) : null}
       {!parsedUserIps.success
         ? parsedUserIps.error.errors.map((error, index) => (
             <ServerAlerts
