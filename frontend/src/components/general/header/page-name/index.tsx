@@ -23,13 +23,15 @@ export function PageName({}: Props) {
       }
     }
   }, [path, href, setPage, pageName]);
+  return <span />;
+  // BUG: yanlış sayfa adı gözükmüyor
 
-  return (
-    <Suspense fallback={<LoaderCircle className="animate-spin" />}>
-      <div className="flex items-center justify-center gap-2">
-        {allPages.find((item) => item.href === href)?.icon}
-        <h2 className="text-xl">{pageName}</h2>
-      </div>
-    </Suspense>
-  );
+  // return (
+  //   <Suspense fallback={<LoaderCircle className="animate-spin" />}>
+  //     <div className="flex items-center justify-center gap-2">
+  //       {allPages.find((item) => item.href === href)?.icon}
+  //       <h2 className="text-xl">{pageName}</h2>
+  //     </div>
+  //   </Suspense>
+  // );
 }
