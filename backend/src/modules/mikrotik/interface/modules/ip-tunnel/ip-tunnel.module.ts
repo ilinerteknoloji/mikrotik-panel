@@ -10,3 +10,4 @@ import { IpTunnelRepository } from "./ip-tunnel.repository";
   exports: [],
 })
 export class IpTunnelModule {}
+// https://wiki.mikrotik.com/wiki/Manual:Interface/IPIP

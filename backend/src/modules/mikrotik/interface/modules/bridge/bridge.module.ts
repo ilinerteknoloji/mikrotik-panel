@@ -10,3 +10,4 @@ import { BridgeRepository } from "./bridge.repository";
   exports: [],
 })
 export class BridgeModule {}
+// https://wiki.mikrotik.com/wiki/Manual:Interface/Bridge
