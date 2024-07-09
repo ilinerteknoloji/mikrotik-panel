@@ -7,6 +7,6 @@ import { BridgeRepository } from "./bridge.repository";
   imports: [],
   controllers: [BridgeController],
   providers: [BridgeService, BridgeRepository],
-  exports: [BridgeService, BridgeRepository],
+  exports: [],
 })
 export class BridgeModule {}
