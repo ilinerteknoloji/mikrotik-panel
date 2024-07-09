@@ -12,20 +12,6 @@ type Props = {};
 export function PageName({}: Props) {
   const { pageName, href, setPage } = usePageStore((state) => state);
   const path = usePathname();
-  const { update } = useSession();
-
-  useEffect(() => {
-    const interval = setInterval(() => update(), 1000 * 60 * 60);
-    return () => clearInterval(interval);
-  }, [update]);
-
-  useEffect(() => {
-    const visibilityHandler = () =>
-      document.visibilityState === "visible" && update();
-    window.addEventListener("visibilitychange", visibilityHandler, false);
-    return () =>
-      window.removeEventListener("visibilitychange", visibilityHandler, false);
-  }, [update]);
 
   useEffect(() => {
     if (path !== href) {

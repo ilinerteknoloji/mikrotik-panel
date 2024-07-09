@@ -39,28 +39,31 @@ export function TorchChart({}: Props) {
       const torchJson = await torchResponse.json();
       const parsedTorch = torchResponseSchema.safeParse(torchJson);
       if (!parsedTorch.success) {
-        toast({
+        console.log(torchJson);
+
+        console.log(parsedTorch.error.message);
+        return toast({
           title: "Parsing Error",
-          description: parsedTorch.error.toString(),
+          description: parsedTorch.error.message,
         });
       } else if (!parsedTorch.data.status) {
-        toast({
+        const { error } = parsedTorch.data;
+        return toast({
           title: "Error",
-          description: parsedTorch.data.error,
+          description: Array.isArray(error) ? error.join(", ") : error,
         });
-      } else {
-        const response = parsedTorch.data.response;
-        setData([
-          response.name,
-          response.torchData[0].rx,
-          response.torchData[0]["rx-packets"],
-          response.torchData[0].tx,
-          response.torchData[0]["tx-packets"],
-        ]);
       }
+      const response = parsedTorch.data.response;
+      setData([
+        response.name,
+        response.torchData[0].rx,
+        response.torchData[0]["rx-packets"],
+        response.torchData[0].tx,
+        response.torchData[0]["tx-packets"],
+      ]);
     };
     if (session?.accessToken) setIntervalId(setInterval(fetchData, 5000));
-    else clearInterval(intervalId);
+    return () => clearInterval(intervalId);
   }, [session]);
 
   if (!session) return null;

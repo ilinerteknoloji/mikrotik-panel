@@ -1,8 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { env } from "@/lib/schema/env";
+import { InterfacesChart } from "@/components/admin/interface-chart";
+import { TorchChart } from "@/components/dashboard/charts";
+import { TorchTables } from "@/components/dashboard/torch-tables";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authConfig } from "../api/(auth)/auth/[...nextauth]/auth.config";
 
 type Props = {};
 
@@ -11,21 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminPage({}: Props) {
-  const session = await getServerSession(authConfig);
-  const response = await fetch(`${env.BACKEND_URL}/interface`, {
-    headers: {
-      authorization: `Bearer ${session?.accessToken}`,
-    },
-  });
-  const responseJson = await response.json();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Admin Page</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <pre>{JSON.stringify(responseJson, null, 2)}</pre>
-      </CardContent>
-    </Card>
+    <section className="flex flex-col gap-4">
+      <InterfacesChart />
+      <TorchChart />
+      <TorchTables />
+    </section>
   );
 }

@@ -19,8 +19,9 @@ export class InterfaceService {
       if (item.disabled === "false") {
         publicInterfaces.push({
           id: item[".id"],
-          "default-name": item["default-name"],
+          defaultName: item["default-name"],
           name: item.name,
+          type: item.type,
         });
       }
     });

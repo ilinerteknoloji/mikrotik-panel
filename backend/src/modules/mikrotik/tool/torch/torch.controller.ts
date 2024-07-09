@@ -13,7 +13,6 @@ export class TorchController {
   constructor(private readonly torchService: TorchService) {}
 
   @Post()
-  @UseRoles(UserRole.ADMIN, UserRole.USER)
   public create(@Body() createTorchDto: CreateTorchDto) {
     return this.torchService.create(createTorchDto);
   }

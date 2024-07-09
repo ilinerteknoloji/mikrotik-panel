@@ -1,3 +1,4 @@
+import { RefreshToken } from "@/components/general/refresh-token";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Providers>
+          <RefreshToken />
           {children}
           <Toaster />
         </Providers>

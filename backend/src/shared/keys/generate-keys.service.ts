@@ -7,7 +7,7 @@ import { TokenKeyType } from "src/types";
 @Injectable()
 export class GenerateKeysService {
   private readonly keySize: number = 2048;
-  private readonly mainPath: string = path.join(__dirname, "../../keys/");
+  private readonly mainPath: string = path.join(process.cwd(), "keys");
   private readonly publicAccessKeyPath: string = path.join(
     this.mainPath,
     "public_access.pem",

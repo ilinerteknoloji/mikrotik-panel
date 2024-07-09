@@ -25,8 +25,9 @@ export class AuthGuard implements CanActivate {
     const token = authorization.split(" ")[1];
     const payload = this.jwt.verifyToken(token, "access");
     const tokenInfo = await this.jwtRepository.findAccessTokenByToken(token);
-    if (!tokenInfo.length || !tokenInfo[0].status)
-      throw new UnauthorizedException("Token is invalid");
+    // FIXME: Uncomment this line to enable token validation
+    // if (!tokenInfo.length || !tokenInfo[0].status)
+    //   throw new UnauthorizedException("Token is invalid");
     const [user] = await this.userRepository.findUserByKey("id", payload.id);
     if (
       user.id !== payload.id ||
