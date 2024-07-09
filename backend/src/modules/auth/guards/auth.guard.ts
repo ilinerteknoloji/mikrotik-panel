@@ -21,13 +21,12 @@ export class AuthGuard implements CanActivate {
     const req: Request = context.switchToHttp().getRequest();
     const authorization = req.headers.authorization;
     if (!authorization || !authorization.startsWith("Bearer "))
-      throw new UnauthorizedException("Token is required");
+      throw new UnauthorizedException("Access Token is required");
     const token = authorization.split(" ")[1];
     const payload = this.jwt.verifyToken(token, "access");
     const tokenInfo = await this.jwtRepository.findAccessTokenByToken(token);
-    // FIXME: Uncomment this line to enable token validation
-    // if (!tokenInfo.length || !tokenInfo[0].status)
-    //   throw new UnauthorizedException("Token is invalid");
+    if (!tokenInfo.length || !tokenInfo[0].status)
+      throw new UnauthorizedException("Access Token is invalid");
     const [user] = await this.userRepository.findUserByKey("id", payload.id);
     if (
       user.id !== payload.id ||

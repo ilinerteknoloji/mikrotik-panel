@@ -18,13 +18,14 @@ import { TorchAreaChart } from "./torch-area-chart";
 type Props = {};
 
 export function TorchChart({}: Props) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { toast } = useToast();
   const setData = useTorchStore((state) => state.setData);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 
   useEffect(() => {
     const fetchData = async () => {
+      if (status === "loading") return;
       const torchResponse = await fetch(`${env.BACKEND_URL}/torch`, {
         method: "POST",
         headers: {
@@ -39,9 +40,6 @@ export function TorchChart({}: Props) {
       const torchJson = await torchResponse.json();
       const parsedTorch = torchResponseSchema.safeParse(torchJson);
       if (!parsedTorch.success) {
-        console.log(torchJson);
-
-        console.log(parsedTorch.error.message);
         return toast({
           title: "Parsing Error",
           description: parsedTorch.error.message,
@@ -62,9 +60,10 @@ export function TorchChart({}: Props) {
         response.torchData[0]["tx-packets"],
       ]);
     };
-    if (session?.accessToken) setIntervalId(setInterval(fetchData, 5000));
+    if (session?.accessToken)
+      setIntervalId(setInterval(fetchData, 1000 * 60 * 5));
     return () => clearInterval(intervalId);
-  }, [session]);
+  }, [session, status]);
 
   if (!session) return null;
 

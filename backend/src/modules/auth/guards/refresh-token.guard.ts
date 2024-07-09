@@ -20,13 +20,13 @@ export class RefreshTokenGuard implements CanActivate {
     const refreshToken = Array.isArray(req.headers["x-refresh-token"])
       ? req.headers["x-refresh-token"][0]
       : req.headers["x-refresh-token"];
-    if (!refreshToken) throw new UnauthorizedException("Token is required");
+    if (!refreshToken)
+      throw new UnauthorizedException("Refresh token is required");
     const payload = this.jwt.verifyToken(refreshToken, "refresh");
     const tokenInfo =
       await this.jwtRepository.findRefreshTokenByToken(refreshToken);
-    // FIXME:
-    // if (!tokenInfo.length || !tokenInfo[0].status)
-    //   throw new UnauthorizedException("Token is invalid");
+    if (!tokenInfo.length || !tokenInfo[0].status)
+      throw new UnauthorizedException("Refresh token is invalid");
     if (!tokenInfo.length) throw new UnauthorizedException("Token is invalid");
     req.user = {
       id: payload.id,

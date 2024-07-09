@@ -32,8 +32,8 @@ POST {{url}}/sign-in HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "{{signUp.request.body.email}}",
-    "password": "{{signUp.request.body.password}}"
+    "username": "johndoe1111",
+    "password": "Password1111*!"
 }
 
 ### Sign Out
@@ -45,4 +45,4 @@ Authorization: Bearer {{signInLastRegisteredUser.response.body.response.tokens.a
 # @name refreshToken
 POST {{url}}/refresh-token HTTP/1.1
 # x-refresh-token: {{signInLastRegisteredUser.response.body.response.tokens.refreshToken.token}}
-x-refresh-token: {{refreshToken.response.body.response.refreshToken.token}}
+x-refresh-token: {{refreshToken.response.body.response.tokens.refreshToken.token}}

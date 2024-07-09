@@ -1,17 +1,25 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { refreshToken } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 
 type Props = {};
 
 export function RefreshToken({}: Props) {
   const { data: session, update, status } = useSession();
-  // TODO: Add RefreshToken
+
   useEffect(() => {
-    const interval = setInterval(() => update(), 1000 * 60 * 2);
+    const refreshTokenFn = async () => {
+      if (!session) return signOut();
+      const response = await refreshToken({ ...session });
+      if (response.error) return signOut();
+      delete response.error;
+      const newSession = await update({ ...response });
+    };
+    const interval = setInterval(refreshTokenFn, 1000 * 60 * 30);
     return () => clearInterval(interval);
-  }, [update]);
+  }, [update, session]);
 
   //   useEffect(() => {
   //     const visibilityHandler = () =>
@@ -20,12 +28,7 @@ export function RefreshToken({}: Props) {
   //     return () =>
   //       window.removeEventListener("visibilitychange", visibilityHandler, false);
   //   }, [update]);
-  // <>
-  //   {status} -{" "}
-  //   {status === "authenticated"
-  //     ? new Date(session.expiresAt).toLocaleString("tr")
-  //     : status}
-  // </>
-
   return <span />;
+
+  // return <span />;
 }

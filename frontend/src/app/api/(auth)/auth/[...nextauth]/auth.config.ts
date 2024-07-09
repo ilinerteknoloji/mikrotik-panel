@@ -77,23 +77,8 @@ export const authConfig: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ user, token, trigger }): Promise<JWT> {
-      if (trigger === "update") {
-        const {
-          refreshToken: rToken,
-          accessToken,
-          expiresAt,
-          user: newUser,
-          error,
-        } = await refreshToken(token);
-        if (error) throw new Error(error);
-        return {
-          accessToken,
-          expiresAt,
-          refreshToken: rToken,
-          user: newUser,
-        };
-      }
+    async jwt({ user, token, trigger, session }): Promise<JWT> {
+      if (trigger === "update") return { ...session };
       if (user)
         return {
           user: { id: +user.id, username: user.username, role: user.role },
@@ -119,6 +104,7 @@ export const authConfig: AuthOptions = {
         refreshToken: token.refreshToken,
         expires: session.expires,
       };
+      if (trigger === "update") return { ...sessionData, ...newSession };
       if (Date.now() < token.expiresAt) return sessionData;
       const {
         refreshToken: rToken,
@@ -128,11 +114,6 @@ export const authConfig: AuthOptions = {
       } = await refreshToken(token);
       if (error) throw new Error(error);
       return { ...sessionData, accessToken, expiresAt, refreshToken: rToken };
-    },
-  },
-  events: {
-    updateUser(message) {
-      console.log("update user", message);
     },
   },
 };

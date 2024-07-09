@@ -1,9 +1,12 @@
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import {
   ConflictException,
   ForbiddenException,
   HttpException,
+  Inject,
   Injectable,
 } from "@nestjs/common";
+import { Cache } from "cache-manager";
 import { invalidCredentials } from "src/lib/throws";
 import { filterUsersPublicInformations } from "src/lib/utils";
 import { formatPhoneNumber } from "src/lib/utils/format-phone-number.utils";
@@ -11,7 +14,7 @@ import { UsersSchemaInsertType } from "src/shared/drizzle/schemas";
 import { EncryptionService } from "src/shared/encryption/encryption.service";
 import { JwtRepository } from "src/shared/jwt/jwt.repository";
 import { JwtService } from "src/shared/jwt/jwt.service";
-import { PayloadType } from "src/types";
+import { GenerateTokenType, PayloadType } from "src/types";
 import { RequestUserType } from "src/types/request-user.types";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { UsersRepository } from "../users/users.repository";
@@ -24,6 +27,7 @@ export class AuthService {
     private readonly encryption: EncryptionService,
     private readonly jwt: JwtService,
     private readonly jwtRepository: JwtRepository,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
   /**
@@ -115,9 +119,16 @@ export class AuthService {
    * refreshToken(user);
    */
   public async refreshToken(user: RequestUserType) {
-    await this.makeTokenStatusFalse(user.refreshTokenId);
     const [users] = await this.usersRepository.findUserByKey("id", user.id);
-    const tokens = await this.generateTokens(user);
+    let tokens: {
+      accessToken: GenerateTokenType;
+      refreshToken: GenerateTokenType;
+    } = await this.cacheManager.get(user.id.toString());
+    if (!tokens) {
+      await this.makeTokenStatusFalse(user.refreshTokenId);
+      tokens = await this.generateTokens(user);
+      await this.cacheManager.set(user.id.toString(), tokens, 1000 * 60 * 5);
+    }
     return {
       user: filterUsersPublicInformations(users),
       tokens,

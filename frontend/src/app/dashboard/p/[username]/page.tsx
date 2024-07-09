@@ -61,7 +61,9 @@ export default async function ProfilePage({ params: { username } }: Props) {
         <CardContent>
           Profile Page
           <h1>{username}</h1>
-          <pre>{JSON.stringify(session, null, 2)}</pre>
+          <div className="max-w-[500px] hyphens-auto break-words">
+            <pre>{JSON.stringify(session, null, 2)}</pre>
+          </div>
           <UpdateProfileForm />
         </CardContent>
       </Card>
