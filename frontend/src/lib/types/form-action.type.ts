@@ -5,5 +5,5 @@ export type FormAction<T> =
     }
   | {
       status: false;
-      message: string | string[];
+      message: string;
     };

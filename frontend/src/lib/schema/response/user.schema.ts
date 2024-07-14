@@ -22,10 +22,30 @@ export const userSchema = z.object({
   username: z.string(),
   email: z.string(),
   phoneNumber: z.string(),
+  status: z.boolean().optional(),
   role: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
   details: userDetailsSchema.optional(),
 });
+export type UserSchema = z.infer<typeof userSchema>;
 
 export const userResponseSchema = createResponseSchema(userSchema);
+
+const usersSchema = z.array(userSchema);
+export const usersResponseSchema = createResponseSchema(usersSchema);
+export type UsersResponseSchema = z.infer<typeof usersResponseSchema>;
+
+export const totalUsersSchema = z.array(
+  z.object({
+    total_count: z.preprocess((x) => Number(x), z.number()),
+    admin_count: z.preprocess((x) => Number(x), z.number()),
+    active_admin: z.preprocess((x) => Number(x), z.number()),
+    passive_admin: z.preprocess((x) => Number(x), z.number()),
+    user_count: z.preprocess((x) => Number(x), z.number()),
+    active_user: z.preprocess((x) => Number(x), z.number()),
+    passive_user: z.preprocess((x) => Number(x), z.number()),
+  }),
+);
+export const totalUsersResponseSchema = createResponseSchema(totalUsersSchema);
+export type TotalUsersResponseSchema = z.infer<typeof totalUsersResponseSchema>;

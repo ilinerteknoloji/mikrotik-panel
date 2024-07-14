@@ -14,9 +14,8 @@ export class StatusPipe implements PipeTransform<string, boolean> {
       body: false,
       custom: false,
     };
-    if (!paramTypeAccess[metadata.type]) return undefined;
-    if (value === "true" || value === "1" || value) return true;
-    if (value === "false" || value === "0" || !value) return false;
-    return undefined;
+    if (!paramTypeAccess[metadata.type] || value === undefined)
+      return undefined;
+    return !!value ? true : false;
   }
 }

@@ -3,26 +3,33 @@ import { UserRole } from "src/lib/enums/user-role.enum";
 import { filterUsersPublicInformations } from "src/lib/utils";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersRepository } from "./users.repository";
+import { UsersSchemaType } from "src/shared/drizzle/schemas";
+import { OrderByPipeType } from "src/types";
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  public async findAll(
+  public findAll(
     page: number,
     limit: number,
     search: string,
     role: UserRole | undefined,
     status: boolean | undefined,
+    orderBy: OrderByPipeType<UsersSchemaType>,
   ) {
-    const users = this.usersRepository.findUsers(
+    return this.usersRepository.findUsers(
       page,
       limit,
       search,
       role,
       status,
+      orderBy,
     );
-    return users;
+  }
+
+  public allUsersCount() {
+    return this.usersRepository.allUsersCount();
   }
 
   public async findById(id: number) {

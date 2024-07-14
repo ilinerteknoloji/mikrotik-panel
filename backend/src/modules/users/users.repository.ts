@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { eq, or } from "drizzle-orm";
+import { eq, like, or, sql } from "drizzle-orm";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import {
@@ -8,6 +8,7 @@ import {
   userDetailsSchema,
   usersSchema,
 } from "src/shared/drizzle/schemas";
+import { OrderByPipeType } from "src/types";
 import { Drizzle } from "src/types/drizzle.types";
 
 @Injectable()
@@ -26,28 +27,50 @@ export class UsersRepository {
     search: string,
     role: UserRole | undefined,
     status: boolean | undefined,
+    orderBy: OrderByPipeType<UsersSchemaType>,
   ) {
     const offset = (page - 1) * limit;
-    const query = this.drizzle.query.usersSchema.findMany({
-      where: (fields, { like, or, and }) =>
-        and(
-          search
-            ? or(
-                like(fields.id, `%${search}%`),
-                like(fields.firstName, `%${search}%`),
-                like(fields.lastName, `%${search}%`),
-                like(fields.username, `%${search}%`),
-                like(fields.email, `%${search}%`),
-                like(fields.phoneNumber, `%${search}%`),
-              )
-            : null,
-          role ? eq(fields.role, role) : null,
-          status.toString() ? eq(fields.status, status) : null,
+    const conditions = [];
+    if (search.length > 0)
+      conditions.push(
+        or(
+          like(usersSchema.id, `%${search}%`),
+          like(usersSchema.firstName, `%${search}%`),
+          like(usersSchema.lastName, `%${search}%`),
+          like(usersSchema.username, `%${search}%`),
+          like(usersSchema.email, `%${search}%`),
+          like(usersSchema.phoneNumber, `%${search}%`),
         ),
+      );
+    if (role !== undefined) conditions.push(eq(usersSchema.role, role));
+    if (status !== undefined) conditions.push(eq(usersSchema.status, status));
+    return await this.drizzle.query.usersSchema.findMany({
+      columns: { password: false },
+      where: (fields, { and }) => and(...conditions),
       limit,
       offset,
+      orderBy(fields, operators) {
+        return operators[orderBy.order](fields[orderBy.key]);
+      },
     });
-    return query;
+  }
+
+  public async allUsersCount() {
+    const query = sql`
+    SELECT 
+      COUNT(*) AS total_count, 
+      SUM(role = 'admin') AS admin_count, 
+      SUM(status = TRUE AND role = 'admin') AS active_admin, 
+      SUM(status = FALSE AND role = 'admin') AS passive_admin, 
+      SUM(role = 'user') AS user_count, 
+      SUM(status = TRUE AND role = 'user') AS active_user, 
+      SUM(status = FALSE AND role = 'user') AS passive_user 
+    FROM users;
+  `;
+    const response = await this.drizzle.execute(query);
+    console.log(response[0]);
+
+    return response[0];
   }
 
   public async findUserByKey<K extends keyof UsersSchemaType>(

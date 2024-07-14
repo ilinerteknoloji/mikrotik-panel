@@ -58,10 +58,17 @@ export class UserIpsService {
   public async findAll(
     page: number,
     limit: number,
+    status: boolean,
     search: string,
     user: RequestUserType,
   ) {
-    return this.userIpsRepository.findAllByUserId(page, limit, search, user.id);
+    return this.userIpsRepository.findAllByUserId(
+      page,
+      limit,
+      status,
+      search,
+      user.id,
+    );
   }
 
   public async findOne(id: number) {

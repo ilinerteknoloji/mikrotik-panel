@@ -6,8 +6,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChartConfig } from "@/components/ui/chart";
-import { fetchInterfaces } from "@/lib/fetch-requests/interfaces/fetch-interfaces";
 import { InterfaceRadialChart } from "./interface-radial-chart";
+import { fetchInterfaces } from "@/lib/utils/fetch-requests/interfaces/fetch-interfaces";
 
 type Props = {};
 

@@ -1,4 +1,4 @@
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { NextFetchEvent, NextRequest } from "next/server";
 import { authMiddleware } from "./middlewares/auth.middleware";
 
 export default async function middleware(

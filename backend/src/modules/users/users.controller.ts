@@ -20,15 +20,17 @@ import { LimitPipe } from "src/lib/pipes/limit.pipe";
 import { RolePipe } from "src/lib/pipes/role.pipe";
 import { StatusPipe } from "src/lib/pipes/status.pipe";
 import { User } from "src/lib/decorators/user.decorator";
-import { RequestUserType } from "src/types";
+import { OrderByPipeType, RequestUserType } from "src/types";
+import { OrderByPipe } from "src/lib/pipes/order-by.pipe";
+import { usersSchema, UsersSchemaType } from "src/shared/drizzle/schemas";
 
 @Controller("users")
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
+@UseRoles(UserRole.ADMIN, UserRole.USER)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseGuards(RolesGuard)
   @UseRoles(UserRole.ADMIN)
   public findAll(
     @Query("page", PagePipe) page: number,
@@ -36,8 +38,29 @@ export class UsersController {
     @Query("search") search: string = "",
     @Query("role", RolePipe) role: UserRole | undefined,
     @Query("status", StatusPipe) status: boolean | undefined,
+    @Query(
+      "order-by",
+      new OrderByPipe<UsersSchemaType>(
+        { key: "id", order: "asc" },
+        usersSchema,
+      ),
+    )
+    orderBy: OrderByPipeType<UsersSchemaType>,
   ) {
-    return this.usersService.findAll(page, limit, search, role, status);
+    return this.usersService.findAll(
+      page,
+      limit,
+      search,
+      role,
+      status,
+      orderBy,
+    );
+  }
+
+  @Get("count")
+  @UseRoles(UserRole.ADMIN)
+  public allUsersCount() {
+    return this.usersService.allUsersCount();
   }
 
   @Get(":identifier")

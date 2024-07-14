@@ -37,6 +37,7 @@ export class UserIpsRepository {
   public async findAllByUserId(
     page: number,
     limit: number,
+    status: boolean,
     search: string,
     userId: number,
   ) {
@@ -45,12 +46,19 @@ export class UserIpsRepository {
       where(fields, { like, and, eq }) {
         return and(
           like(fields.ip, `%${search}%`),
-          // eq(fields.status, true),
+          eq(fields.status, status),
           eq(fields.userId, userId),
         );
       },
       limit,
       offset,
+      with: {
+        user: true,
+        addressList: true,
+      },
+      orderBy(fields, operators) {
+        return operators.asc(fields.id);
+      },
     });
   }
 

@@ -14,8 +14,9 @@ export default function AppPage({ error, reset }: Props) {
   }, [error]);
 
   return (
-    <div>
+    <div className="flex h-dvh w-full flex-col items-center justify-center gap-3">
       <h2>Something went wrong!</h2>
+      <p>{error.message}</p>
       <Button type="button" variant="default" onClick={() => reset()}>
         Try again
       </Button>

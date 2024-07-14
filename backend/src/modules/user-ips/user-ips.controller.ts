@@ -11,7 +11,7 @@ import {
 } from "@nestjs/common";
 import { UseRoles } from "src/lib/decorators/roles.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
-import { LimitPipe, PagePipe } from "src/lib/pipes";
+import { LimitPipe, PagePipe, StatusPipe } from "src/lib/pipes";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { CreateUserIpDto } from "./dto/create-user-ip.dto";
@@ -36,10 +36,11 @@ export class UserIpsController {
   public findAll(
     @Query("page", PagePipe) page: number,
     @Query("limit", LimitPipe) limit: number,
+    @Query("status", StatusPipe) status: boolean = true,
     @Query("search") search: string = "",
     @User() user: RequestUserType,
   ) {
-    return this.userIpsService.findAll(page, limit, search, user);
+    return this.userIpsService.findAll(page, limit, status, search, user);
   }
 
   @Get(":id")

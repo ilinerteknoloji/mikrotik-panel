@@ -17,7 +17,7 @@ export function RefreshToken({}: Props) {
       delete response.error;
       const newSession = await update({ ...response });
     };
-    const interval = setInterval(refreshTokenFn, 1000 * 60 * 30);
+    const interval = setInterval(refreshTokenFn, 1000 * 60 * 5);
     return () => clearInterval(interval);
   }, [update, session]);
 

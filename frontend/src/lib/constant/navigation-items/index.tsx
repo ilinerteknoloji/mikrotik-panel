@@ -2,9 +2,11 @@ import {
   FileSlidersIcon,
   HomeIcon,
   MonitorSmartphone,
+  NotebookTabs,
   Receipt,
   Settings,
   User,
+  Users,
 } from "lucide-react";
 import React from "react";
 
@@ -26,6 +28,16 @@ export const navigationItemsAdmin = [
     title: "Admin Home",
     href: "/admin",
     icon: <HomeIcon />,
+  },
+  {
+    title: "Users",
+    href: "/admin/users",
+    icon: <Users />,
+  },
+  {
+    title: "Ips",
+    href: "/admin/ips",
+    icon: <NotebookTabs />,
   },
   {
     title: "Admin Interface",
