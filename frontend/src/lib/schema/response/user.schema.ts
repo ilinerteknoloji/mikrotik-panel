@@ -33,6 +33,7 @@ export type UserSchema = z.infer<typeof userSchema>;
 export const userResponseSchema = createResponseSchema(userSchema);
 
 const usersSchema = z.array(userSchema);
+export type UsersSchema = z.infer<typeof usersSchema>;
 export const usersResponseSchema = createResponseSchema(usersSchema);
 export type UsersResponseSchema = z.infer<typeof usersResponseSchema>;
 
@@ -47,5 +48,5 @@ export const totalUsersSchema = z.array(
     passive_user: z.preprocess((x) => Number(x), z.number()),
   }),
 );
+export type TotalUsersSchema = z.infer<typeof totalUsersSchema>;
 export const totalUsersResponseSchema = createResponseSchema(totalUsersSchema);
-export type TotalUsersResponseSchema = z.infer<typeof totalUsersResponseSchema>;

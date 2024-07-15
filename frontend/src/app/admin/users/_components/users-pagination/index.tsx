@@ -13,8 +13,7 @@ type Props = {
   searchParams: UsersPageSearchParams;
 };
 
-export function Pagination({ searchParams }: Props) {
-  // TODO: Make SSR pagination
+export function UsersPagination({ searchParams }: Props) {
   const { data: session } = useSession();
   if (searchParams?.limit && searchParams.limit === 10)
     delete searchParams.limit;

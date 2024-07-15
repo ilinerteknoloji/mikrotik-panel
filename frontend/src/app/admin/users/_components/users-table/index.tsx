@@ -2,15 +2,12 @@ import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { UserSchema } from "@/lib/schema/response/user.schema";
 import { UsersTableItem } from "./users-table-item";
-import { UsersTableFooter } from "./users-table-footer";
 
 type Props = {
   users: UserSchema[];
@@ -41,7 +38,7 @@ export function UsersTable({ users }: Props) {
           <UsersTableItem key={index} user={user} />
         ))}
       </TableBody>
-      <UsersTableFooter />
+      {/* <UsersTableFooter /> */}
     </Table>
   );
 }

@@ -68,8 +68,6 @@ export class UsersRepository {
     FROM users;
   `;
     const response = await this.drizzle.execute(query);
-    console.log(response[0]);
-
     return response[0];
   }
 

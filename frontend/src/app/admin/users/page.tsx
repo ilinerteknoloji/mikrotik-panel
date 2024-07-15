@@ -7,16 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  UsersResponseSchema,
-  usersResponseSchema,
-} from "@/lib/schema/response/user.schema";
 import { UsersPageSearchParams } from "@/lib/types/admin/users-page";
-import { fetchBackEnd } from "@/lib/utils/fetch-requests";
-import { searchParamsToText } from "@/lib/utils/search-params-to-text";
+import { fetchAllUsers } from "@/lib/utils/fetch-requests/user/all-users";
 import type { Metadata } from "next";
-import { Pagination } from "./_components/pagination";
 import { UsersFilters } from "./_components/users-filters";
+import { UsersPagination } from "./_components/users-pagination";
 import { UsersTable } from "./_components/users-table";
 
 type Props = {
@@ -32,18 +27,12 @@ export default async function UsersPage({ searchParams }: Props) {
   if (searchParams.page < 1 || !searchParams?.page) searchParams.page = 1;
   if ((searchParams.limit && searchParams?.limit < 10) || !searchParams?.limit)
     searchParams.limit = 10;
-  if (searchParams?.limit && searchParams?.limit > 50) searchParams.limit = 50;
+  else if (searchParams?.limit > 50) searchParams.limit = 50;
 
   // unstable_noStore();
   // await new Promise((resolve) => setTimeout(resolve, 5000));
 
-  const response = await fetchBackEnd(
-    `users?${searchParamsToText(searchParams)}`,
-  );
-  let error: string = "";
-  let parsedUsers: UsersResponseSchema | undefined;
-  if (response.status) parsedUsers = usersResponseSchema.parse(response.data);
-  else error = response.message;
+  const response = await fetchAllUsers(searchParams);
 
   return (
     <section className="flex flex-col gap-4">
@@ -58,22 +47,14 @@ export default async function UsersPage({ searchParams }: Props) {
           <UsersFilters searchParams={searchParams} />
 
           <div className="flex flex-col items-center justify-center gap-4">
-            {parsedUsers ? (
-              <>
-                {!parsedUsers.status ? (
-                  <ServerAlerts title="Error" description={error} />
-                ) : null}
+            {!response.status ? (
+              <ServerAlerts title="Error" description={response.message} />
+            ) : null}
 
-                <UsersTable
-                  users={parsedUsers.status ? parsedUsers.response : []}
-                />
-              </>
-            ) : (
-              <ServerAlerts title="Error" description={error} />
-            )}
+            <UsersTable users={response.status ? response.data : []} />
           </div>
 
-          <Pagination searchParams={searchParams} />
+          <UsersPagination searchParams={searchParams} />
         </CardContent>
         <CardFooter></CardFooter>
       </Card>
