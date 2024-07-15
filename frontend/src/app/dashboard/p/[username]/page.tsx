@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { env } from "@/lib/schema/env";
-import { userResponseSchema } from "@/lib/schema/response/user.schema";
+import { userResponseSchema } from "@/lib/schema/response/user/user.schema";
 import { getServerSession } from "next-auth";
 
 type Props = {

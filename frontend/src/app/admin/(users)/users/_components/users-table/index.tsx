@@ -23,15 +23,6 @@ export function UsersTable({ users }: Props) {
       </TableCaption>
       <TableHeader>
         <TableRow>
-          {/* <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead>First Name</TableHead>
-          <TableHead>Last Name</TableHead>
-          <TableHead>Username</TableHead>
-          <TableHead>E-Mail</TableHead>
-          <TableHead>Phone Number</TableHead>
-          <TableHead className="text-center">Role</TableHead>
-          <TableHead className="text-center">Status</TableHead>
-          <TableHead className="text-center">Open</TableHead> */}
           <UsersTableHead
             className="w-[100px] font-semibold"
             typeofValue="number"

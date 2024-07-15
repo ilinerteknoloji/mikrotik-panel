@@ -1,7 +1,8 @@
-import { TableCell, TableRow } from "@/components/ui/table";
-import { UserDetailSheet } from "./user-detail-sheet";
 import { Badge } from "@/components/ui/badge";
+import { TableCell, TableRow } from "@/components/ui/table";
 import { UserSchema } from "@/lib/schema/response/user/user.schema";
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 type Props = {
   user: UserSchema;
@@ -27,7 +28,13 @@ export function UsersTableItem({ user }: Props) {
         </Badge>
       </TableCell>
       <TableCell className="text-center">
-        <UserDetailSheet userId={user.id} />
+        <Link
+          href="/admin/users/[username]"
+          as={`/admin/users/${user.username}`}
+        >
+          <ExternalLink />
+        </Link>
+        {/* <UserDetailSheet userId={user.id} /> */}
       </TableCell>
     </TableRow>
   );
