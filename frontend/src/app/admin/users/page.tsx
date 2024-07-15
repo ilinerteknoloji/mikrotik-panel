@@ -29,9 +29,6 @@ export default async function UsersPage({ searchParams }: Props) {
     searchParams.limit = 10;
   else if (searchParams?.limit > 50) searchParams.limit = 50;
 
-  // unstable_noStore();
-  // await new Promise((resolve) => setTimeout(resolve, 5000));
-
   const response = await fetchAllUsers(searchParams);
 
   return (

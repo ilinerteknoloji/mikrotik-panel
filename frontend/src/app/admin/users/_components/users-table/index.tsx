@@ -38,7 +38,6 @@ export function UsersTable({ users }: Props) {
           <UsersTableItem key={index} user={user} />
         ))}
       </TableBody>
-      {/* <UsersTableFooter /> */}
     </Table>
   );
 }

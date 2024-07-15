@@ -18,11 +18,15 @@ type Props = {
 export function StatusSelector({ searchParams }: Props) {
   const router = useRouter();
   const selectItems = [
-    { value: "all", title: "User Status" },
+    { value: "all", title: "All" },
     { value: "true", title: "Active" },
     { value: "false", title: "Passive" },
   ];
-  const role = searchParams?.role ?? "all";
+  let status = "all";
+  if (searchParams?.status && searchParams.status !== undefined)
+    status = "active";
+  else if (!searchParams?.status && searchParams?.status !== undefined)
+    status = "passive";
 
   const handleSelect = (value: string) => {
     if (value === "all") {
@@ -36,9 +40,9 @@ export function StatusSelector({ searchParams }: Props) {
 
   return (
     <div className="flex w-full max-w-full items-center justify-end gap-4 md:max-w-fit">
-      <Select onValueChange={handleSelect} defaultValue={role}>
+      <Select onValueChange={handleSelect} defaultValue={status}>
         <SelectTrigger className="w-fit capitalize">
-          <SelectValue placeholder={role} />
+          <SelectValue placeholder={status} />
         </SelectTrigger>
         <SelectContent className="min-w-fit">
           {selectItems.map((item, index) => (

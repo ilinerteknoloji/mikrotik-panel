@@ -12,7 +12,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -52,16 +51,6 @@ export default function UsersPageLoading() {
                 <UsersTableRowSkeleton key={index} />
               ))}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={8}>
-                  <Skeleton className="h-4 w-[100px]" />
-                </TableCell>
-                <TableCell className="text-right">
-                  <Skeleton className="h-4 w-[100px]" />
-                </TableCell>
-              </TableRow>
-            </TableFooter>
           </Table>
         </CardContent>
         <CardFooter></CardFooter>
