@@ -15,12 +15,17 @@ export function UsersFilters({ searchParams }: Props) {
   return (
     <div className="flex flex-col items-center justify-end gap-4 md:flex-row md:items-end">
       <SearchUsers searchParams={searchParams} />
-      <StatusSelector searchParams={searchParams} />
-      <RoleSelector searchParams={searchParams} />
-      <PageItemCountSelector searchParams={searchParams} />
-
-      <Link href="/admin/users">
-        <Button variant="destructive" size="icon">
+      <div className="flex w-full items-center gap-4 md:w-fit">
+        <StatusSelector searchParams={searchParams} />
+        <RoleSelector searchParams={searchParams} />
+        <PageItemCountSelector searchParams={searchParams} />
+      </div>
+      <Link href="/admin/users" className="w-full md:w-fit">
+        <Button
+          variant="destructive"
+          size="icon"
+          className="w-full px-2 md:w-fit"
+        >
           <XIcon />
         </Button>
       </Link>

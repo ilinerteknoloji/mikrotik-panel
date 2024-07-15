@@ -33,7 +33,7 @@ export function PageItemCountSelector({ searchParams }: Props) {
   return (
     <div className="flex w-full max-w-full items-center justify-end gap-4 md:max-w-fit">
       <Select onValueChange={handleSelect} defaultValue={limit}>
-        <SelectTrigger className="w-fit">
+        <SelectTrigger className="w-full capitalize md:w-fit">
           <SelectValue placeholder={limit} />
         </SelectTrigger>
         <SelectContent className="min-w-fit">

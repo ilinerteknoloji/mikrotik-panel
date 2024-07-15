@@ -13,13 +13,13 @@ type Props = {
   userId: number;
 };
 
-export function UserDetailSheet({ userId }: Props) {
+export async function UserDetailSheet({ userId }: Props) {
   return (
     <Sheet>
       <SheetTrigger title="Open User Detail" className="mx-auto">
         <ExternalLink />
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="md:min-w-[500px] lg:min-w-[900px]">
         <SheetHeader>
           <SheetTitle>Are you absolutely sure?</SheetTitle>
           <SheetDescription>
