@@ -35,10 +35,9 @@ export function UsersTableHead({
   });
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const [key, value] = searchParamList?.["order-by"]?.split(":") ?? [];
-    if (value && value === "desc" && key !== keyofValue) {
+    if (value && value === "desc") {
       delete searchParamList["order-by"];
-    }
-    if (value && value === "asc") {
+    } else if (value && value === "asc") {
       searchParamList["order-by"] = `${keyofValue}:desc`;
     } else {
       searchParamList["order-by"] = `${keyofValue}:asc`;
