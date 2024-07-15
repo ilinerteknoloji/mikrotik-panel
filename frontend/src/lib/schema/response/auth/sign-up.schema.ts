@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { userSchema } from "../user.schema";
 import { createResponseSchema } from "..";
+import { userSchema } from "../user/user.schema";
 
 export const signUpSchema = z.object({
   message: z.string(),
