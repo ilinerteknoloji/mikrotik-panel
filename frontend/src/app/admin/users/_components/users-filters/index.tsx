@@ -3,6 +3,9 @@ import { PageItemCountSelector } from "./page-item-count-selector";
 import { RoleSelector } from "./role-selector";
 import { SearchUsers } from "./search-users";
 import { StatusSelector } from "./status-selector";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { XIcon } from "lucide-react";
 
 type Props = {
   searchParams: UsersPageSearchParams;
@@ -15,6 +18,12 @@ export function UsersFilters({ searchParams }: Props) {
       <StatusSelector searchParams={searchParams} />
       <RoleSelector searchParams={searchParams} />
       <PageItemCountSelector searchParams={searchParams} />
+
+      <Link href="/admin/users">
+        <Button variant="destructive" size="icon">
+          <XIcon />
+        </Button>
+      </Link>
     </div>
   );
 }

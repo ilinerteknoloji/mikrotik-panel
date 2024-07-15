@@ -1,11 +1,11 @@
-import {
-  usersResponseSchema,
-  UsersSchema,
-} from "@/lib/schema/response/user.schema";
 import { FormAction } from "@/lib/types";
 import { UsersPageSearchParams } from "@/lib/types/admin/users-page";
 import { searchParamsToText } from "@/lib/utils/search-params-to-text";
 import { fetchBackEnd } from "../..";
+import {
+  usersResponseSchema,
+  UsersSchema,
+} from "@/lib/schema/response/user/user.schema";
 
 export async function fetchAllUsers(
   searchParams: UsersPageSearchParams,
