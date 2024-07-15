@@ -20,7 +20,7 @@ export function RoleSelector({ searchParams }: Props) {
   const roles = [
     {
       value: "all",
-      title: "User Role",
+      title: "All",
     },
     {
       value: "user",
