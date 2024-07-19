@@ -1,3 +1,5 @@
+"use server";
+
 import { FormAction } from "@/lib/types";
 import { UsersPageSearchParams } from "@/lib/types/admin/users-page";
 import { searchParamsToText } from "@/lib/utils/search-params-to-text";

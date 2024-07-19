@@ -1,3 +1,4 @@
+import { DataTablePagination } from "@/components/admin/data-table/pagination";
 import { ServerAlerts } from "@/components/general/server-alerts";
 import {
   Card,
@@ -11,7 +12,6 @@ import { UsersPageSearchParams } from "@/lib/types/admin/users-page";
 import { fetchAllUsers } from "@/lib/utils/fetch-requests/user/all-users";
 import type { Metadata } from "next";
 import { UsersFilters } from "./_components/users-filters";
-import { UsersPagination } from "./_components/users-pagination";
 import { UsersTable } from "./_components/users-table";
 
 type Props = {
@@ -32,8 +32,8 @@ export default async function UsersPage({ searchParams }: Props) {
   const response = await fetchAllUsers(searchParams);
 
   return (
-    <section className="flex flex-col gap-4">
-      <Card className="w-full">
+    <section>
+      <Card>
         <CardHeader>
           <CardTitle>Users</CardTitle>
           <CardDescription>
@@ -51,7 +51,10 @@ export default async function UsersPage({ searchParams }: Props) {
             <UsersTable users={response.status ? response.data : []} />
           </div>
 
-          <UsersPagination searchParams={searchParams} />
+          <DataTablePagination
+            searchParams={searchParams}
+            fetchData={fetchAllUsers}
+          />
         </CardContent>
         <CardFooter></CardFooter>
       </Card>

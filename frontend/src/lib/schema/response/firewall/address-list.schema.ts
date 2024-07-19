@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createResponseSchema } from "..";
 
-const addressListSchema = z.object({
+export const addressListSchema = z.object({
   id: z.number(),
   userId: z.number(),
   ip: z.string(),

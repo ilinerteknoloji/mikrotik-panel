@@ -47,9 +47,14 @@ Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.to
     "userId": 2
 }
 
-### Get All IPs
+### Get All IPs for User
 # @name getAllIPs
 GET {{url}}?page=1&limit=10&search=5 HTTP/1.1
+Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
+
+### Get All IPs
+# @name getAllIPs
+GET {{url}}?page=1&limit=10&search=5&isDashboardPage=true HTTP/1.1
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
 ### Get IP by ID

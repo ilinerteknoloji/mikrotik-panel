@@ -3,12 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { RequestUserType } from "src/types";
+import { OrderByPipeType, RequestUserType } from "src/types";
 import { AddressListsService } from "../mikrotik/ip/firewall/address-lists/address-lists.service";
 import { UsersRepository } from "../users/users.repository";
 import { CreateUserIpDto } from "./dto/create-user-ip.dto";
 import { UpdateUserIpDto } from "./dto/update-user-ip.dto";
 import { UserIpsRepository } from "./user-ips.repository";
+import { MikrotikUserIpsSchemaType } from "src/shared/drizzle/schemas";
 
 @Injectable()
 export class UserIpsService {
@@ -60,13 +61,24 @@ export class UserIpsService {
     limit: number,
     status: boolean,
     search: string,
+    isDashboardPage: boolean,
+    orderBy: OrderByPipeType<MikrotikUserIpsSchemaType>,
     user: RequestUserType,
   ) {
+    if (isDashboardPage)
+      return this.userIpsRepository.findAll(
+        page,
+        limit,
+        status,
+        search,
+        orderBy,
+      );
     return this.userIpsRepository.findAllByUserId(
       page,
       limit,
       status,
       search,
+      orderBy,
       user.id,
     );
   }

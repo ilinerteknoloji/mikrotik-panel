@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createResponseSchema } from "..";
 
-const ipCategorySchema = z.object({
+export const ipCategorySchema = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string(),

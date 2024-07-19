@@ -18,7 +18,12 @@ import { CreateUserIpDto } from "./dto/create-user-ip.dto";
 import { UpdateUserIpDto } from "./dto/update-user-ip.dto";
 import { UserIpsService } from "./user-ips.service";
 import { User } from "src/lib/decorators/user.decorator";
-import { RequestUserType } from "src/types";
+import { OrderByPipeType, RequestUserType } from "src/types";
+import { OrderByPipe } from "src/lib/pipes/order-by.pipe";
+import {
+  mikrotikUserIpsSchema,
+  MikrotikUserIpsSchemaType,
+} from "src/shared/drizzle/schemas";
 
 @Controller("user-ips")
 @UseGuards(AuthGuard, RolesGuard)
@@ -38,9 +43,23 @@ export class UserIpsController {
     @Query("limit", LimitPipe) limit: number,
     @Query("status", StatusPipe) status: boolean = true,
     @Query("search") search: string = "",
+    @Query("isDashboardPage", StatusPipe) isDashboardPage: boolean = false,
+    @Query(
+      "order-by",
+      new OrderByPipe({ key: "id", order: "asc" }, mikrotikUserIpsSchema),
+    )
+    orderBy: OrderByPipeType<MikrotikUserIpsSchemaType>,
     @User() user: RequestUserType,
   ) {
-    return this.userIpsService.findAll(page, limit, status, search, user);
+    return this.userIpsService.findAll(
+      page,
+      limit,
+      status,
+      search,
+      isDashboardPage,
+      orderBy,
+      user,
+    );
   }
 
   @Get(":id")

@@ -1,34 +1,29 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
-import { UsersPageSearchParams } from "@/lib/types/admin/users-page";
-import { fetchAllUsers } from "@/lib/utils/fetch-requests/user/all-users";
+import { FormAction } from "@/lib/types";
 import { searchParamsToText } from "@/lib/utils/search-params-to-text";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { dataTableSearchParamType } from "./search-params.type";
 
-type Props = {
-  searchParams: UsersPageSearchParams;
-};
+type Props<T, K> = Readonly<{
+  searchParams: T;
+  fetchData: (searchParams: T) => Promise<FormAction<K>>;
+}>;
 
-export function UsersPagination({ searchParams }: Props) {
+export async function DataTablePagination<
+  T extends dataTableSearchParamType,
+  K extends Array<any>,
+>({ searchParams, fetchData }: Props<T, K>) {
   if (searchParams?.limit && searchParams.limit === 10)
     delete searchParams.limit;
   const prevPage = +searchParams.page - 1;
   const nextPage = +searchParams.page + 1;
 
-  const [isExist, setIsExist] = useState(false);
-  useEffect(() => {
-    async function getData() {
-      const response = await fetchAllUsers({
-        ...searchParams,
-        page: nextPage,
-      });
-      if (response.status) setIsExist(response.data.length > 0);
-    }
-    getData();
-  }, [nextPage, searchParams]);
+  const response = await fetchData({
+    ...searchParams,
+    page: nextPage,
+  });
+  const isExist = response.status ? response.data.length > 0 : false;
 
   return (
     <div className="flex w-full justify-end gap-4">

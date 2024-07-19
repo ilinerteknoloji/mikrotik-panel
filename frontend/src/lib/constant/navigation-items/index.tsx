@@ -35,8 +35,8 @@ export const navigationItemsAdmin = [
     icon: <Users />,
   },
   {
-    title: "Ips",
-    href: "/admin/ips",
+    title: "User Ips",
+    href: "/admin/user-ips",
     icon: <NotebookTabs />,
   },
   {
