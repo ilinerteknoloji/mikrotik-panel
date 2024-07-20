@@ -1,11 +1,9 @@
 "use client";
 
-import { allPages } from "@/lib/constant";
+import { allPages } from "@/lib/constant/navigation-items/all-pages";
 import { usePageStore } from "@/stores";
-import { LoaderCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 
 type Props = {};
 

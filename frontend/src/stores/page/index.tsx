@@ -1,4 +1,4 @@
-import { allPages } from "@/lib/constant";
+import { allPages } from "@/lib/constant/navigation-items/all-pages";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

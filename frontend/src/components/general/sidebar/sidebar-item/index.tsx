@@ -1,8 +1,7 @@
 "use client";
 
-import { allPages, navigationItemsDashboard } from "@/lib/constant";
+import { allPages } from "@/lib/constant/navigation-items/all-pages";
 import { cn } from "@/lib/utils";
-import { usePageStore } from "@/stores";
 import Link from "next/link";
 
 type PageName = (typeof allPages)[number]["title"];

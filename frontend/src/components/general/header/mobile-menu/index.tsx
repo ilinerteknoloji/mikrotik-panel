@@ -15,6 +15,8 @@ type Props = {
 };
 
 export function MobileMenu({ type }: Props) {
+  const navigationItems =
+    type === "admin" ? navigationItemsAdmin : navigationItemsDashboard;
   return (
     <div className="block md:hidden">
       <Sheet>
@@ -26,11 +28,7 @@ export function MobileMenu({ type }: Props) {
             <SheetTitle>Mikrotik Panel</SheetTitle>
           </SheetHeader>
 
-          {[
-            ...(type === "admin"
-              ? navigationItemsAdmin
-              : navigationItemsDashboard),
-          ].map((item, index) => (
+          {navigationItems.map((item, index) => (
             <SidebarItem key={index} item={item} />
           ))}
         </SheetContent>
