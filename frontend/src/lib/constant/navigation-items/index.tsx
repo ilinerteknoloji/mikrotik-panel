@@ -40,8 +40,8 @@ export const navigationItemsAdmin = [
     icon: <NotebookTabs />,
   },
   {
-    title: "Admin Interface",
-    href: "/admin/interface",
+    title: "Interfaces",
+    href: "/admin/interfaces",
     icon: <FileSlidersIcon />,
   },
 ] as const;

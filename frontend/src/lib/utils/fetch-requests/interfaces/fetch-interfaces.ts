@@ -1,36 +1,22 @@
 "use server";
 
-import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
 import { env } from "@/lib/schema/env";
 import {
   InterfaceItem,
   interfacesResponseSchema,
 } from "@/lib/schema/response/interfaces";
 import { FormAction } from "@/lib/types";
-import { getServerSession } from "next-auth";
+import { fetchBackEnd } from "..";
 
 export async function fetchInterfaces(): Promise<
   FormAction<Array<InterfaceItem>>
 > {
   try {
-    const session = await getServerSession(authConfig);
-    const interfacesResponse = await fetch(`${env.BACKEND_URL}/interface`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${session?.accessToken}`,
-      },
-    });
-    const interfacesJson = await interfacesResponse.json();
-    const parsedInterfaces = interfacesResponseSchema.safeParse(interfacesJson);
-    if (!parsedInterfaces.success)
-      throw new Error(parsedInterfaces.error.message);
-    else if (!parsedInterfaces.data.status)
-      throw new Error(parsedInterfaces.data.error);
-    const { response } = parsedInterfaces.data;
-    return {
-      status: true,
-      data: response,
-    };
+    const response = await fetchBackEnd(`${env.BACKEND_URL}/interface`);
+    if (!response.status) throw new Error(response.message);
+    const parsed = interfacesResponseSchema.parse(response.data);
+    if (!parsed.status) throw new Error(parsed.error);
+    return { status: true, data: parsed.response };
   } catch (error) {
     return {
       status: false,

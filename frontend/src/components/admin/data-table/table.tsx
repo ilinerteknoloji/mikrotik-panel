@@ -2,14 +2,12 @@ import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import { DataTableRow } from "./table-row";
 import { DataTableWithOrderBy } from "./table-header-with-order-by";
+import { DataTableRow } from "./table-row";
 
 type Props<T> = Readonly<{
   data: T[];
