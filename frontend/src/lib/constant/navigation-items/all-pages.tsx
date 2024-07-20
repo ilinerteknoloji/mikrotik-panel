@@ -2,12 +2,9 @@ import { MonitorSmartphone, Receipt, Settings, User } from "lucide-react";
 import React from "react";
 import { navigationItemsAdmin } from "./admin-navigation-items";
 import { navigationItemsDashboard } from "./dashboard-navigation-items";
+import { NavigationItem } from "./navigation-item.type";
 
-export const allPages: {
-  title: string;
-  href: string;
-  icon: React.ReactNode;
-}[] = [
+export const allPages: NavigationItem[] = [
   {
     title: "Profile",
     href: "/dashboard/p/",

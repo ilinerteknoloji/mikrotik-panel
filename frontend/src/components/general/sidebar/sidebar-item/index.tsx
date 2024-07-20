@@ -1,35 +1,53 @@
 "use client";
 
-import { allPages } from "@/lib/constant/navigation-items/all-pages";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { NavigationItem } from "@/lib/constant/navigation-items/navigation-item.type";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { SidebarItemLink } from "./sidebar-item-link";
 
-type PageName = (typeof allPages)[number]["title"];
-type Href = (typeof allPages)[number]["href"];
 type Props = {
-  item: {
-    title: PageName;
-    href: Href;
-    icon: React.ReactNode;
-  };
+  item: NavigationItem;
 };
 
 export function SidebarItem({ item }: Props) {
+  const [isExpanded, setIsExpanded] = useState(false);
   // const pageName = usePageStore((state) => state.pageName);
   // const setPage = usePageStore((state) => state.setPage);
 
   return (
-    <Link
-      href={item.href}
-      className={cn(
-        "flex gap-2 rounded px-4 py-2 transition-colors duration-300 ease-in-out hover:bg-secondary",
-        // pageName === item.title ? "text-primary" : "text-muted-foreground",
-      )}
-      // onClick={() => setPage(item.title, item.href)}
-      // BUG: yanlış sayfa adı gözükmüyor
-    >
-      {item.icon}
-      {item.title}
-    </Link>
+    <Collapsible>
+      <div className="flex h-9 w-full items-center justify-between">
+        <SidebarItemLink item={item} />
+        {item.children ? (
+          <CollapsibleTrigger className="group/trigger" asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsExpanded((prev) => !prev)}
+            >
+              {isExpanded ? (
+                <ChevronDown />
+              ) : (
+                <ChevronRight className="transition-transform duration-300 group-hover/trigger:rotate-90" />
+              )}
+            </Button>
+          </CollapsibleTrigger>
+        ) : null}
+      </div>
+      {item.children ? (
+        <CollapsibleContent className="relative ml-3 flex flex-col gap-3 pl-3 before:absolute before:bottom-[18px] before:left-0 before:top-0 before:border-l before:border-secondary">
+          {item.children.map((child, index) => (
+            <SidebarItem key={index} item={child} />
+          ))}
+        </CollapsibleContent>
+      ) : null}
+    </Collapsible>
   );
 }

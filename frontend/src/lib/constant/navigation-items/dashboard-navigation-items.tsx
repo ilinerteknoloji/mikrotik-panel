@@ -1,6 +1,7 @@
 import { FileSlidersIcon, HomeIcon } from "lucide-react";
+import { NavigationItem } from "./navigation-item.type";
 
-export const navigationItemsDashboard = [
+export const navigationItemsDashboard: NavigationItem[] = [
   {
     title: "Home",
     href: "/dashboard",
