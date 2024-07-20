@@ -19,7 +19,6 @@ export class OrderByPipe<T extends Record<string, unknown>>
     };
     if (!paramTypeAccess[metadata.type] || !value || !value.includes(":"))
       return this.defaultOrderBy;
-
     const [key, order] = value.split(":");
     const orderToLowerCase = order.toLowerCase();
     if (!this.schema[key]) return this.defaultOrderBy;
