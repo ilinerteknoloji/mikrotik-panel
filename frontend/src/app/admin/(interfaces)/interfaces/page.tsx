@@ -1,5 +1,4 @@
 import { DataTable } from "@/components/admin/data-table/table";
-import { InterfacesChart } from "@/components/admin/interface-chart";
 import { ServerAlerts } from "@/components/general/server-alerts";
 import {
   Card,
@@ -9,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { fetchInterfaces } from "@/lib/utils/fetch-requests/interfaces/fetch-interfaces";
 import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
@@ -37,7 +35,6 @@ export default async function InterfacesPage({}: Props) {
             {!response.status ? (
               <ServerAlerts title="Error" description={response.message} />
             ) : null}
-
             <DataTable
               data={response.status ? response.data : []}
               headerData={[

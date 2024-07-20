@@ -6,12 +6,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { navigationItemsDashboard } from "@/lib/constant";
+import { navigationItemsAdmin } from "@/lib/constant/navigation-items/admin-navigation-items";
+import { navigationItemsDashboard } from "@/lib/constant/navigation-items/dashboard-navigation-items";
 import { Menu } from "lucide-react";
 
-type Props = {};
+type Props = {
+  type: "admin" | "dashboard";
+};
 
-export function MobileMenu({}: Props) {
+export function MobileMenu({ type }: Props) {
   return (
     <div className="block md:hidden">
       <Sheet>
@@ -23,7 +26,11 @@ export function MobileMenu({}: Props) {
             <SheetTitle>Mikrotik Panel</SheetTitle>
           </SheetHeader>
 
-          {navigationItemsDashboard.map((item, index) => (
+          {[
+            ...(type === "admin"
+              ? navigationItemsAdmin
+              : navigationItemsDashboard),
+          ].map((item, index) => (
             <SidebarItem key={index} item={item} />
           ))}
         </SheetContent>

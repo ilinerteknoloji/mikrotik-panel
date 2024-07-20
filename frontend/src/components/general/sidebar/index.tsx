@@ -1,4 +1,5 @@
-import { navigationItemsAdmin, navigationItemsDashboard } from "@/lib/constant";
+import { navigationItemsAdmin } from "@/lib/constant/navigation-items/admin-navigation-items";
+import { navigationItemsDashboard } from "@/lib/constant/navigation-items/dashboard-navigation-items";
 import { SidebarItem } from "./sidebar-item";
 
 type Props = {

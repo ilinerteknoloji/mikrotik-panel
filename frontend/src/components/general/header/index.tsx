@@ -37,7 +37,7 @@ export async function Header({ type }: Props) {
 
         <div className="flex w-full items-center justify-between gap-4 px-4">
           <div className="flex gap-4">
-            <MobileMenu />
+            <MobileMenu type={type} />
             <PageName />
           </div>
 

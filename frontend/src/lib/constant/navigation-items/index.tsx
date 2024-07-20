@@ -1,50 +1,7 @@
-import {
-  FileSlidersIcon,
-  HomeIcon,
-  MonitorSmartphone,
-  NotebookTabs,
-  Receipt,
-  Settings,
-  User,
-  Users,
-} from "lucide-react";
+import { MonitorSmartphone, Receipt, Settings, User } from "lucide-react";
 import React from "react";
-
-export const navigationItemsDashboard = [
-  {
-    title: "Home",
-    href: "/dashboard",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Firewall",
-    href: "/dashboard/firewall",
-    icon: <FileSlidersIcon />,
-  },
-] as const;
-
-export const navigationItemsAdmin = [
-  {
-    title: "Admin Home",
-    href: "/admin",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Users",
-    href: "/admin/users",
-    icon: <Users />,
-  },
-  {
-    title: "User Ips",
-    href: "/admin/user-ips",
-    icon: <NotebookTabs />,
-  },
-  {
-    title: "Interfaces",
-    href: "/admin/interfaces",
-    icon: <FileSlidersIcon />,
-  },
-] as const;
+import { navigationItemsAdmin } from "./admin-navigation-items";
+import { navigationItemsDashboard } from "./dashboard-navigation-items";
 
 export const allPages: {
   title: string;
