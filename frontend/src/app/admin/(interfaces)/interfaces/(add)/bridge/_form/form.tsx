@@ -38,10 +38,13 @@ import {
   multicastRouterValues,
   protocolModeValues,
 } from "./schema";
+import { addBridge } from "./actions";
+import { useToast } from "@/components/ui/use-toast";
 
 type Props = Readonly<{}>;
 
 export function BridgeForm({}: Props) {
+  const { toast } = useToast();
   const form = useForm<BridgeFormSchema>({
     resolver: zodResolver(bridgeFormSchema),
     defaultValues: {
@@ -56,40 +59,52 @@ export function BridgeForm({}: Props) {
       disabled: false,
       etherType: etherTypeValues[0],
       fastForward: true,
-      forwardDelay: "",
+      forwardDelay: "00:00:15",
       frameTypes: frameTypesValues[0],
       igmpSnooping: false,
       igmpVersion: igmpVersionValues[0],
-      ingressFiltering: false,
+      ingressFiltering: true,
       l2mtu: "",
-      lastMemberInterval: "",
-      lastMemberQueryCount: 0,
-      maxHops: 0,
-      maxMessageAge: "",
-      membershipInterval: "",
+      lastMemberInterval: "1.00",
+      lastMemberQueryCount: 2,
+      maxHops: 20,
+      maxMessageAge: "00:00:20",
+      membershipInterval: "260.00",
       mldVersion: mdlVersionValues[0],
       mtu: 1500,
       multicastQuerier: false,
       multicastRouter: multicastRouterValues[0],
       name: "",
-      priority: 0,
+      priority: 32768,
       protocolMode: protocolModeValues[0],
       pvid: 1,
-      querierInterval: "",
-      queryInterval: "",
-      queryResponseInterval: "",
+      querierInterval: "255.00",
+      queryInterval: "125.00",
+      queryResponseInterval: "10.00",
       regionName: "",
       regionRevision: 0,
-      startupQueryCount: 0,
-      startupQueryInterval: "",
-      transmitHoldCount: 0,
+      startupQueryCount: 2,
+      startupQueryInterval: "31.25",
+      transmitHoldCount: 6,
       vlanFiltering: false,
     },
   });
 
   const onSubmit = async (data: BridgeFormSchema) => {
-    console.log(data);
+    const response = await addBridge(data);
+    if (!response.status)
+      return toast({
+        title: "Error",
+        description: response.message,
+      });
+    form.reset();
+    return toast({
+      title: "Success",
+      description: response.data,
+    });
   };
+
+  // TODO: add description for each field
 
   return (
     <Form {...form}>
@@ -98,21 +113,21 @@ export function BridgeForm({}: Props) {
           control={form.control}
           name="disabled"
           render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center gap-4">
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+              <div className="space-y-0.5">
                 <FormLabel className="capitalize">
                   {field.name.replace(/([A-Z])/g, " $1").trim()}
                   {bridgeFormSchema.shape[field.name].isOptional() ? "?" : ""}
                 </FormLabel>
-                <FormControl>
-                  <Switch
-                    name={field.name}
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
+                <FormDescription />
               </div>
-              <FormDescription />
+              <FormControl>
+                <Switch
+                  name={field.name}
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -198,51 +213,28 @@ export function BridgeForm({}: Props) {
                 )}
               />
 
-              {/* <FormField
-                control={form.control}
-                name="l2mtu"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="capitalize">
-                      {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {bridgeFormSchema.shape[field.name].isOptional()
-                        ? "?"
-                        : ""}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder={field.name.replace(/([A-Z])/g, " $1").trim()}
-                        className="capitalize"
-                      />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
               <FormField
                 control={form.control}
                 name="autoMac"
                 render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-4">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
                       <FormLabel className="capitalize">
                         {field.name.replace(/([A-Z])/g, " $1").trim()}
                         {bridgeFormSchema.shape[field.name].isOptional()
                           ? "?"
                           : ""}
                       </FormLabel>
-                      <FormControl>
-                        <Switch
-                          name={field.name}
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
+                      <FormDescription />
                     </div>
-                    <FormDescription />
+
+                    <FormControl>
+                      <Switch
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -373,23 +365,23 @@ export function BridgeForm({}: Props) {
                 control={form.control}
                 name="igmpSnooping"
                 render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-4">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
                       <FormLabel className="capitalize">
                         {field.name.replace(/([A-Z])/g, " $1").trim()}
                         {bridgeFormSchema.shape[field.name].isOptional()
                           ? "?"
                           : ""}
                       </FormLabel>
-                      <FormControl>
-                        <Switch
-                          name={field.name}
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
+                      <FormDescription />
                     </div>
-                    <FormDescription />
+                    <FormControl>
+                      <Switch
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -399,23 +391,23 @@ export function BridgeForm({}: Props) {
                 control={form.control}
                 name="dhcpSnooping"
                 render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-4">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
                       <FormLabel className="capitalize">
                         {field.name.replace(/([A-Z])/g, " $1").trim()}
                         {bridgeFormSchema.shape[field.name].isOptional()
                           ? "?"
                           : ""}
                       </FormLabel>
-                      <FormControl>
-                        <Switch
-                          name={field.name}
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
+                      <FormDescription />
                     </div>
-                    <FormDescription />
+                    <FormControl>
+                      <Switch
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -425,23 +417,23 @@ export function BridgeForm({}: Props) {
                 control={form.control}
                 name="fastForward"
                 render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-4">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
                       <FormLabel className="capitalize">
                         {field.name.replace(/([A-Z])/g, " $1").trim()}
                         {bridgeFormSchema.shape[field.name].isOptional()
                           ? "?"
                           : ""}
                       </FormLabel>
-                      <FormControl>
-                        <Switch
-                          name={field.name}
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
+                      <FormDescription />
                     </div>
-                    <FormDescription />
+                    <FormControl>
+                      <Switch
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -452,24 +444,755 @@ export function BridgeForm({}: Props) {
           <AccordionItem value="stp">
             <AccordionTrigger>STP</AccordionTrigger>
             <AccordionContent className="space-y-8 p-2">
-              <p>STP Content</p>
-              <p>STP Content</p>
+              <FormField
+                control={form.control}
+                name="protocolMode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="capitalize">
+                          <SelectValue placeholder={field.value} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {protocolModeValues.map((value) => (
+                          <SelectItem
+                            key={value}
+                            value={value}
+                            className="capitalize"
+                          >
+                            {value}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value}
+                        type="number"
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="regionName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                        disabled={form.watch("protocolMode") !== "mstp"}
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="regionRevision"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value}
+                        type="number"
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                        disabled={form.watch("protocolMode") !== "mstp"}
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="maxMessageAge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="forwardDelay"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="transmitHoldCount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="number"
+                        value={field.value}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="maxHops"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value}
+                        type="number"
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="villan">
             <AccordionTrigger>Villan</AccordionTrigger>
             <AccordionContent className="space-y-8 p-2">
-              <p>Villan Content</p>
-              <p>Villan Content</p>
+              <FormField
+                control={form.control}
+                name="vlanFiltering"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                      <FormLabel className="capitalize">
+                        {field.name.replace(/([A-Z])/g, " $1").trim()}
+                        {bridgeFormSchema.shape[field.name].isOptional()
+                          ? "?"
+                          : ""}
+                      </FormLabel>
+                      <FormDescription />
+                    </div>
+                    <FormControl>
+                      <Switch
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {form.watch("vlanFiltering") ? (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="etherType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="capitalize">
+                          {field.name.replace(/([A-Z])/g, " $1").trim()}
+                          {bridgeFormSchema.shape[field.name].isOptional()
+                            ? "?"
+                            : ""}
+                        </FormLabel>
+                        <Select
+                          name={field.name}
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="capitalize">
+                              <SelectValue
+                                className="capitalize"
+                                placeholder={field.value}
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {etherTypeValues.map((value) => (
+                              <SelectItem
+                                key={value}
+                                value={value}
+                                className="capitalize"
+                              >
+                                {value}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="pvid"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="capitalize">
+                          {field.name.replace(/([A-Z])/g, " $1").trim()}
+                          {bridgeFormSchema.shape[field.name].isOptional()
+                            ? "?"
+                            : ""}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="number"
+                            value={field.value}
+                            placeholder={field.name
+                              .replace(/([A-Z])/g, " $1")
+                              .trim()}
+                            className="capitalize"
+                          />
+                        </FormControl>
+                        <FormDescription />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="frameTypes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="capitalize">
+                          {field.name.replace(/([A-Z])/g, " $1").trim()}
+                          {bridgeFormSchema.shape[field.name].isOptional()
+                            ? "?"
+                            : ""}
+                        </FormLabel>
+                        <Select
+                          name={field.name}
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="capitalize">
+                              <SelectValue
+                                className="capitalize"
+                                placeholder={field.value}
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {frameTypesValues.map((value) => (
+                              <SelectItem
+                                key={value}
+                                value={value}
+                                className="capitalize"
+                              >
+                                {value.replaceAll("-", " ")}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="ingressFiltering"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel className="capitalize">
+                            {field.name.replace(/([A-Z])/g, " $1").trim()}
+                            {bridgeFormSchema.shape[field.name].isOptional()
+                              ? "?"
+                              : ""}
+                          </FormLabel>
+                          <FormDescription />
+                        </div>
+                        <FormControl>
+                          <Switch
+                            name={field.name}
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              ) : null}
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="igmp">
             <AccordionTrigger>IGMP Snooping</AccordionTrigger>
             <AccordionContent className="space-y-8 p-2">
-              <p>IGMP Snooping Content</p>
-              <p>IGMP Snooping Content</p>
+              <FormField
+                control={form.control}
+                name="igmpVersion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <Select
+                      name={field.name}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="capitalize">
+                          <SelectValue
+                            className="capitalize"
+                            placeholder={field.value}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {igmpVersionValues.map((value) => (
+                          <SelectItem
+                            key={value}
+                            value={value}
+                            className="capitalize"
+                          >
+                            {value}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {form.watch("igmpSnooping") ? (
+                <FormField
+                  control={form.control}
+                  name="mldVersion"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="capitalize">
+                        {field.name.replace(/([A-Z])/g, " $1").trim()}
+                        {bridgeFormSchema.shape[field.name].isOptional()
+                          ? "?"
+                          : ""}
+                      </FormLabel>
+                      <Select
+                        name={field.name}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="capitalize">
+                            <SelectValue
+                              className="capitalize"
+                              placeholder={field.value}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {mdlVersionValues.map((value) => (
+                            <SelectItem
+                              key={value}
+                              value={value}
+                              className="capitalize"
+                            >
+                              {value}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : null}
+
+              <FormField
+                control={form.control}
+                name="multicastRouter"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <Select
+                      name={field.name}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="capitalize">
+                          <SelectValue
+                            className="capitalize"
+                            placeholder={field.value}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {multicastRouterValues.map((value) => (
+                          <SelectItem
+                            key={value}
+                            value={value}
+                            className="capitalize"
+                          >
+                            {value.replaceAll("-", " ")}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="multicastQuerier"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                      <FormLabel className="capitalize">
+                        {field.name.replace(/([A-Z])/g, " $1").trim()}
+                        {bridgeFormSchema.shape[field.name].isOptional()
+                          ? "?"
+                          : ""}
+                      </FormLabel>
+                      <FormDescription />
+                    </div>
+                    <FormControl>
+                      <Switch
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="startupQueryCount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastMemberQueryCount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastMemberInterval"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="membershipInterval"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="queryInterval"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="queryResponseInterval"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="startupQueryInterval"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">
+                      {field.name.replace(/([A-Z])/g, " $1").trim()}
+                      {bridgeFormSchema.shape[field.name].isOptional()
+                        ? "?"
+                        : ""}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value}
+                        placeholder={field.name
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                        className="capitalize"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

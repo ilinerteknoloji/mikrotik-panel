@@ -28,6 +28,6 @@ Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.to
 Content-Type: application/json
 
 {
-    "name": "Api Bridge3",
+    "name": "Api 13",
     "comment": "Bridge created using API"
 }

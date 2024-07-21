@@ -16,7 +16,7 @@ export default async function BridgePage({}: Props) {
           <CardTitle>Add a new Bridge</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="w-96 max-w-full">
+          <div className="mx-auto w-[500px] max-w-full">
             <BridgeForm />
           </div>
         </CardContent>

@@ -14,18 +14,7 @@ export class InterfaceService {
 
   public async findAll() {
     const interfaces = await this.interfaceRepository.fetchAll();
-    const publicInterfaces: Record<string, string>[] = [];
-    interfaces.forEach((item) => {
-      if (item.disabled === "false") {
-        publicInterfaces.push({
-          id: item[".id"],
-          defaultName: item["default-name"],
-          name: item.name,
-          type: item.type,
-        });
-      }
-    });
-    return publicInterfaces;
+    return interfaces;
   }
 
   public async findOne(id: number) {

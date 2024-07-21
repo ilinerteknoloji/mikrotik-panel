@@ -1,15 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { BridgeRepository } from "./bridge.repository";
 import { CreateBridgeDto } from "./dto/create-bridge.dto";
+import { InterfaceRepository } from "../../interface.repository";
 
 @Injectable()
 export class BridgeService {
-  constructor(private readonly bridgeRepository: BridgeRepository) {}
+  constructor(
+    private readonly bridgeRepository: BridgeRepository,
+    private readonly interfaceRepository: InterfaceRepository,
+  ) {}
 
   public async create(createBridgeDto: CreateBridgeDto) {
     const response = await this.bridgeRepository.create(createBridgeDto);
-    return {
-      message: "Bridge created successfully",
-    };
+    const bridge = await this.interfaceRepository.fetchById(response.ret);
+    return bridge;
   }
 }

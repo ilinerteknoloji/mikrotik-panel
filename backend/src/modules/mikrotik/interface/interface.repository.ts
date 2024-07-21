@@ -1,11 +1,5 @@
-import {
-  HttpException,
-  Injectable,
-  InternalServerErrorException,
-} from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { EnvService } from "src/shared/env/env.service";
-import { interfaceSchema } from "src/types/zod-schemas/mikrotik/interface/interface.schema";
-import { z } from "zod";
 
 @Injectable()
 export class InterfaceRepository {
@@ -19,6 +13,25 @@ export class InterfaceRepository {
     this.username = this.env.get("MIKROTIK_USERNAME");
     this.password = this.env.get("MIKROTIK_PASSWORD");
     this.auth = btoa(`${this.username}:${this.password}`);
+  }
+
+  public async fetchById(id: string) {
+    const interfacesResponse = await fetch(
+      `${this.host}/rest/interface/${id}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Basic ${this.auth}`,
+        },
+      },
+    );
+    const interfacesJson = await interfacesResponse.json();
+    if (!interfacesResponse.ok)
+      throw new HttpException(
+        interfacesJson?.detail ?? interfacesResponse.statusText,
+        interfacesResponse.status,
+      );
+    return interfacesJson;
   }
 
   public async fetchAll() {

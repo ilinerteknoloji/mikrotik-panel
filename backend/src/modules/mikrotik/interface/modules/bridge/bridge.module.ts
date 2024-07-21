@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { BridgeController } from "./bridge.controller";
-import { BridgeService } from "./bridge.service";
 import { BridgeRepository } from "./bridge.repository";
+import { BridgeService } from "./bridge.service";
 
 @Module({
   imports: [],

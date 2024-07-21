@@ -23,9 +23,9 @@ export const mdlVersionValues = ["1", "2"] as const;
 export const igmpVersionValues = ["2", "3"] as const;
 
 export const multicastRouterValues = [
+  "temporary-query",
   "disabled",
   "permanent",
-  "temporary-query",
 ] as const;
 
 export const bridgeFormSchema = z.object({
@@ -33,43 +33,57 @@ export const bridgeFormSchema = z.object({
   adminMac: z.string().optional(),
   ageingTime: z
     .string()
-    .regex(regexConstants.ageingTime[0], regexConstants.ageingTime[1])
+    .regex(regexConstants.time[0], regexConstants.time[1])
     .optional(),
   arp: z.enum(arpValues).optional(),
-  arpTimeout: z.number().int().optional(),
+  arpTimeout: z.coerce.number().int().optional(),
   autoMac: z.boolean().optional(),
   comment: z.string().optional(),
   dhcpSnooping: z.boolean().optional(),
   disabled: z.boolean().optional(),
   etherType: z.enum(etherTypeValues).optional(),
   fastForward: z.boolean().optional(),
-  forwardDelay: z.string().optional(),
+  forwardDelay: z
+    .string()
+    .regex(regexConstants.time[0], regexConstants.time[1])
+    .optional(),
   frameTypes: z.enum(frameTypesValues).optional(),
   igmpSnooping: z.boolean().optional(),
   igmpVersion: z.enum(igmpVersionValues).optional(),
   ingressFiltering: z.boolean().optional(),
   l2mtu: z.string().optional(),
-  lastMemberInterval: z.string().optional(),
-  lastMemberQueryCount: z.number().int().optional(),
-  maxHops: z.number().int().optional(),
-  maxMessageAge: z.string().optional(),
+  lastMemberInterval: z
+    .string()
+    .regex(regexConstants.second[0], regexConstants.second[1])
+    .optional(),
+  lastMemberQueryCount: z.coerce
+    .number()
+    .int()
+    .min(0)
+    .max(4294967295)
+    .optional(),
+  maxHops: z.coerce.number().int().optional(),
+  maxMessageAge: z
+    .string()
+    .regex(regexConstants.time[0], regexConstants.time[1])
+    .optional(),
   membershipInterval: z.string().optional(),
   mldVersion: z.enum(mdlVersionValues).optional(),
-  mtu: z.number().int().optional(),
+  mtu: z.coerce.number().int().optional(),
   multicastQuerier: z.boolean().optional(),
   multicastRouter: z.enum(multicastRouterValues).optional(),
   name: z.string().optional(),
-  priority: z.number().int().optional(),
+  priority: z.coerce.number().int().min(0).max(65535).optional(),
   protocolMode: z.enum(protocolModeValues).optional(),
-  pvid: z.number().int().optional(),
+  pvid: z.coerce.number().int().optional(),
   querierInterval: z.string().optional(),
   queryInterval: z.string().optional(),
   queryResponseInterval: z.string().optional(),
   regionName: z.string().optional(),
-  regionRevision: z.number().int().optional(),
-  startupQueryCount: z.number().int().optional(),
+  regionRevision: z.coerce.number().int().min(0).max(65535).optional(),
+  startupQueryCount: z.coerce.number().int().min(0).max(4294967295).optional(),
   startupQueryInterval: z.string().optional(),
-  transmitHoldCount: z.number().int().optional(),
+  transmitHoldCount: z.coerce.number().int().optional(),
   vlanFiltering: z.boolean().optional(),
 });
 

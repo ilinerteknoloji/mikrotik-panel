@@ -1,5 +1,6 @@
 import { DataTable } from "@/components/admin/data-table/table";
 import { ServerAlerts } from "@/components/general/server-alerts";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -40,7 +41,7 @@ export default async function InterfacesPage({}: Props) {
               headerData={[
                 {
                   label: "ID",
-                  data: (data) => data.id.slice(1),
+                  data: (data) => data[".id"].slice(1),
                   className: "text-right",
                 },
                 {
@@ -52,9 +53,21 @@ export default async function InterfacesPage({}: Props) {
                   data: (data) => data.type,
                 },
                 {
+                  label: "Disabled",
+                  data: (data) => (
+                    <Badge
+                      variant={
+                        data.disabled !== "true" ? "default" : "destructive"
+                      }
+                    >
+                      {data.disabled !== "true" ? "Enabled" : "Disabled"}
+                    </Badge>
+                  ),
+                },
+                {
                   label: "Open",
                   data: (data) => (
-                    <Link href={`/admin/interfaces/${data.id.slice(1)}`}>
+                    <Link href={`/admin/interfaces/${data[".id"].slice(1)}`}>
                       <ExternalLink />
                     </Link>
                   ),
