@@ -53,7 +53,6 @@ export function GreTunnelForm({}: Props) {
 
   const onSubmit = async (data: GreTunnelSchema) => {
     const response = await addGreTunnel(data);
-    console.log(response);
     if (!response.status)
       return toast({
         title: "Error",
