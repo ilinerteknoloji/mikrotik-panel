@@ -1,25 +1,25 @@
-import { IsIn, IsInt, IsIP, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsIn, IsInt, IsOptional, IsString } from "class-validator";
 
 export class CreateGreTunnelDto {
   @IsOptional()
-  @IsIn(["yes", "no"])
-  clampTcpMss?: string;
+  @IsBoolean()
+  clampTcpMss?: boolean;
 
   @IsOptional()
   @IsString()
   comment?: string;
 
   @IsOptional()
-  @IsIn(["yes", "no"])
-  disabled?: string;
+  @IsBoolean()
+  disabled?: boolean;
 
   @IsOptional()
   @IsIn(["inherit", "no"])
   dontFragment?: string;
 
   @IsOptional()
-  @IsInt()
-  dscp?: number;
+  @IsString()
+  dscp?: string;
 
   @IsOptional()
   @IsString()
@@ -45,6 +45,6 @@ export class CreateGreTunnelDto {
   @IsString()
   name?: string;
 
-  @IsIP()
+  @IsString()
   remoteAddress: string;
 }

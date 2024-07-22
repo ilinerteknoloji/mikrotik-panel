@@ -2,16 +2,19 @@ import { Injectable } from "@nestjs/common";
 import { CreateGreTunnelDto } from "./dto/create-gre-tunnel.dto";
 import { UpdateGreTunnelDto } from "./dto/update-gre-tunnel.dto";
 import { GreTunnelRepository } from "./gre-tunnel.repository";
+import { InterfaceRepository } from "../../interface.repository";
 
 @Injectable()
 export class GreTunnelService {
-  constructor(private readonly greTunnelRepository: GreTunnelRepository) {}
+  constructor(
+    private readonly greTunnelRepository: GreTunnelRepository,
+    private readonly interfaceRepository: InterfaceRepository,
+  ) {}
 
   public async create(createGreTunnelDto: CreateGreTunnelDto) {
     const response = await this.greTunnelRepository.create(createGreTunnelDto);
-    return {
-      message: "GRE Tunnel created successfully",
-    };
+    const greTunnel = await this.interfaceRepository.fetchById(response.ret);
+    return greTunnel;
   }
 
   public async findAll() {

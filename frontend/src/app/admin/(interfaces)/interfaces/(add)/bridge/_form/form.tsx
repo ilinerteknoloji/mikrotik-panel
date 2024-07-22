@@ -1197,7 +1197,11 @@ export function BridgeForm({}: Props) {
           </AccordionItem>
         </Accordion>
 
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={form.formState.isSubmitting}
+        >
           Submit
         </Button>
       </form>

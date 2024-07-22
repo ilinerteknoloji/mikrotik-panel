@@ -18,6 +18,7 @@ export async function fetchBackEnd(
       headers: {
         ...request.headers,
         Authorization: `Bearer ${session?.accessToken}`,
+        "Content-Type": "application/json",
       },
     });
     const json = await response.json();

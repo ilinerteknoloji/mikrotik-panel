@@ -17,6 +17,8 @@ export class GreTunnelRepository {
   }
 
   public async create(createGreTunnelDto: CreateGreTunnelDto) {
+    console.log("createGreTunnelDto", createGreTunnelDto);
+
     const createResponse = await fetch(`${this.host}/rest/interface/gre/add`, {
       method: "POST",
       headers: {
@@ -28,11 +30,14 @@ export class GreTunnelRepository {
       ),
     });
     const createJson = await createResponse.json();
-    if (!createResponse.ok)
+    if (!createResponse.ok) {
+      const message = createJson?.detail ?? createResponse.statusText;
+      const statusCode = createResponse?.status ?? 500;
       throw new HttpException(
-        createJson?.detail ?? createResponse.statusText,
-        createResponse.status,
+        { message, error: message, statusCode },
+        statusCode,
       );
+    }
     return createJson;
   }
 
