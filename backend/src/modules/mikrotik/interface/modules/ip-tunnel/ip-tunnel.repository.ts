@@ -39,6 +39,8 @@ export class IpTunnelRepository {
   private createIpTunnelToMikrotikJson(createIpTunnelDto: CreateIpTunnelDto) {
     return {
       "clamp-tcp-mss": createIpTunnelDto.clampTcpMss,
+      comment: createIpTunnelDto.comment,
+      disabled: createIpTunnelDto.disabled,
       "dont-fragment": createIpTunnelDto.dontFragment,
       dscp: createIpTunnelDto.dscp,
       "ipsec-secret": createIpTunnelDto.ipsecSecret,

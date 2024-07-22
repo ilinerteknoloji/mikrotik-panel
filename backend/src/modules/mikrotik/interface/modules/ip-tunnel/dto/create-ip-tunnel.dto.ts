@@ -16,6 +16,14 @@ export class CreateIpTunnelDto {
   @IsOptional()
   clampTcpMss?: boolean;
 
+  @IsOptional()
+  @IsString()
+  comment?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  disabled?: boolean;
+
   @IsEnum(DontFragment)
   @IsOptional()
   dontFragment?: DontFragment;

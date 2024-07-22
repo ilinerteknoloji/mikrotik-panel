@@ -1,19 +1,19 @@
 "use server";
 
-import { fetchBackEnd } from "@/lib/utils/fetch-requests";
-import { dontFragmentValues, GreTunnelSchema } from "./schema";
-import { interfaceResponseSchema } from "@/lib/schema/response/interfaces";
 import { FormAction } from "@/lib/types";
+import { IpIpTunnelFormSchema } from "./schema";
+import { fetchBackEnd } from "@/lib/utils/fetch-requests";
+import { interfaceResponseSchema } from "@/lib/schema/response/interfaces";
 
-export async function addGreTunnel(
-  values: GreTunnelSchema,
+export async function addIpIpTunnel(
+  values: IpIpTunnelFormSchema,
 ): Promise<FormAction<string>> {
   try {
     if (values.dscp === "inherit") delete values.dscp;
     if (values.localAddress === "") delete values.localAddress;
     if (values.ipsecSecret === "") delete values.ipsecSecret;
 
-    const response = await fetchBackEnd("interface/gre-tunnel", {
+    const response = await fetchBackEnd("interface/ip-tunnel", {
       method: "POST",
       body: JSON.stringify(values),
     });

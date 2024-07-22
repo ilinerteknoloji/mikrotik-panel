@@ -1,13 +1,13 @@
 "use client";
 
+import { useToast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
   dontFragmentValues,
-  greTunnelFormSchema,
-  GreTunnelSchema,
+  IpIpTunnelFormSchema,
+  ipIpTunnelFormSchema,
 } from "./schema";
-import { useToast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -17,9 +17,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   Select,
   SelectContent,
@@ -27,20 +33,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { addGreTunnel } from "./actions";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { AccordionContent } from "@radix-ui/react-accordion";
+import { addIpIpTunnel } from "./actions";
 
 type Props = Readonly<{}>;
 
-export function GreTunnelForm({}: Props) {
+export function IpUpTunnelForm({}: Props) {
   const { toast } = useToast();
-  const form = useForm<GreTunnelSchema>({
-    resolver: zodResolver(greTunnelFormSchema),
+  const form = useForm<IpIpTunnelFormSchema>({
+    resolver: zodResolver(ipIpTunnelFormSchema),
     defaultValues: {
       clampTcpMss: true,
       comment: "",
@@ -56,8 +56,8 @@ export function GreTunnelForm({}: Props) {
     },
   });
 
-  const onSubmit = async (data: GreTunnelSchema) => {
-    const response = await addGreTunnel(data);
+  const onSubmit = async (data: IpIpTunnelFormSchema) => {
+    const response = await addIpIpTunnel(data);
     if (!response.status)
       return toast({
         title: "Error",
@@ -81,12 +81,10 @@ export function GreTunnelForm({}: Props) {
               <div className="space-y-0.5">
                 <FormLabel className="capitalize">
                   {field.name.replace(/([A-Z])/g, " $1").trim()}
-                  {greTunnelFormSchema.shape[field.name].isOptional()
+                  {ipIpTunnelFormSchema.shape[field.name].isOptional()
                     ? "?"
                     : ""}
                 </FormLabel>
-                <FormDescription />
-                <FormMessage />
               </div>
               <FormControl>
                 <Switch
@@ -106,15 +104,13 @@ export function GreTunnelForm({}: Props) {
             <FormItem>
               <FormLabel className="capitalize">
                 {field.name.replace(/([A-Z])/g, " $1").trim()}
-                {greTunnelFormSchema.shape[field.name].isOptional() ? "?" : ""}
+                {ipIpTunnelFormSchema.shape[field.name].isOptional() ? "?" : ""}
               </FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder={field.name.replace(/([A-Z])/g, " $1").trim()}
-                  className="capitalize"
-                />
-              </FormControl>
+              <Input
+                {...field}
+                placeholder={field.name.replace(/([A-Z])/g, " $1").trim()}
+                className="capitalize"
+              />
               <FormDescription />
               <FormMessage />
             </FormItem>
@@ -132,7 +128,7 @@ export function GreTunnelForm({}: Props) {
                   <FormItem>
                     <FormLabel className="capitalize">
                       {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {greTunnelFormSchema.shape[field.name].isOptional()
+                      {ipIpTunnelFormSchema.shape[field.name].isOptional()
                         ? "?"
                         : ""}
                     </FormLabel>
@@ -159,7 +155,7 @@ export function GreTunnelForm({}: Props) {
                   <FormItem>
                     <FormLabel className="capitalize">
                       {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {greTunnelFormSchema.shape[field.name].isOptional()
+                      {ipIpTunnelFormSchema.shape[field.name].isOptional()
                         ? "?"
                         : ""}
                     </FormLabel>
@@ -186,7 +182,7 @@ export function GreTunnelForm({}: Props) {
                   <FormItem>
                     <FormLabel className="capitalize">
                       {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {greTunnelFormSchema.shape[field.name].isOptional()
+                      {ipIpTunnelFormSchema.shape[field.name].isOptional()
                         ? "?"
                         : ""}
                     </FormLabel>
@@ -213,7 +209,7 @@ export function GreTunnelForm({}: Props) {
                   <FormItem>
                     <FormLabel className="capitalize">
                       {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {greTunnelFormSchema.shape[field.name].isOptional()
+                      {ipIpTunnelFormSchema.shape[field.name].isOptional()
                         ? "?"
                         : ""}
                     </FormLabel>
@@ -240,7 +236,7 @@ export function GreTunnelForm({}: Props) {
                   <FormItem>
                     <FormLabel className="capitalize">
                       {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {greTunnelFormSchema.shape[field.name].isOptional()
+                      {ipIpTunnelFormSchema.shape[field.name].isOptional()
                         ? "?"
                         : ""}
                     </FormLabel>
@@ -266,7 +262,7 @@ export function GreTunnelForm({}: Props) {
                   <FormItem>
                     <FormLabel className="capitalize">
                       {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {greTunnelFormSchema.shape[field.name].isOptional()
+                      {ipIpTunnelFormSchema.shape[field.name].isOptional()
                         ? "?"
                         : ""}
                     </FormLabel>
@@ -292,7 +288,7 @@ export function GreTunnelForm({}: Props) {
                   <FormItem>
                     <FormLabel className="capitalize">
                       {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {greTunnelFormSchema.shape[field.name].isOptional()
+                      {ipIpTunnelFormSchema.shape[field.name].isOptional()
                         ? "?"
                         : ""}
                     </FormLabel>
@@ -319,7 +315,7 @@ export function GreTunnelForm({}: Props) {
                   <FormItem>
                     <FormLabel className="capitalize">
                       {field.name.replace(/([A-Z])/g, " $1").trim()}
-                      {greTunnelFormSchema.shape[field.name].isOptional()
+                      {ipIpTunnelFormSchema.shape[field.name].isOptional()
                         ? "?"
                         : ""}
                     </FormLabel>
@@ -354,6 +350,7 @@ export function GreTunnelForm({}: Props) {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="clampTcpMss"
@@ -362,7 +359,7 @@ export function GreTunnelForm({}: Props) {
                     <div className="space-y-0.5">
                       <FormLabel className="capitalize">
                         {field.name.replace(/([A-Z])/g, " $1").trim()}
-                        {greTunnelFormSchema.shape[field.name].isOptional()
+                        {ipIpTunnelFormSchema.shape[field.name].isOptional()
                           ? "?"
                           : ""}
                       </FormLabel>

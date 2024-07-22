@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const dontFragmentValues = ["no", "inherit"] as const;
 
-export const greTunnelFormSchema = z.object({
+export const ipIpTunnelFormSchema = z.object({
   clampTcpMss: z.boolean().optional(),
   comment: z.string().optional(),
   disabled: z.boolean().optional(),
@@ -22,6 +22,8 @@ export const greTunnelFormSchema = z.object({
     )
     .optional(),
   ipsecSecret: z.string().optional(),
+  localAddress: z.string().optional(),
+  mtu: z.coerce.number().int().min(0).max(65536).optional(),
   keepalive: z
     .string()
     .refine(
@@ -41,10 +43,8 @@ export const greTunnelFormSchema = z.object({
       },
     )
     .optional(),
-  localAddress: z.string().optional(),
-  mtu: z.coerce.number().int().min(0).max(65536).optional(),
   name: z.string().optional(),
   remoteAddress: z.string().ip(),
 });
 
-export type GreTunnelSchema = z.infer<typeof greTunnelFormSchema>;
+export type IpIpTunnelFormSchema = z.infer<typeof ipIpTunnelFormSchema>;
