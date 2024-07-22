@@ -17,8 +17,6 @@ export class GreTunnelRepository {
   }
 
   public async create(createGreTunnelDto: CreateGreTunnelDto) {
-    console.log("createGreTunnelDto", createGreTunnelDto);
-
     const createResponse = await fetch(`${this.host}/rest/interface/gre/add`, {
       method: "POST",
       headers: {
