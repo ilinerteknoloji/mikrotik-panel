@@ -19,7 +19,7 @@ export async function addGreTunnel(
     });
     if (!response.status) throw new Error(response.message);
     const parsedData = interfaceResponseSchema.parse(response.data);
-    if (!parsedData.status) throw new Error(parsedData.response.error);
+    if (!parsedData.status) throw new Error(parsedData.error);
     return {
       status: true,
       data: `${parsedData.response.name} added successfully.`,

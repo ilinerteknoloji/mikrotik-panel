@@ -33,6 +33,7 @@ export const queueItemSchema = z.object({
   "total-queued-packets": z.string(),
   "total-rate": z.string(),
 });
+export const queueItemResponseSchema = createResponseSchema(queueItemSchema);
 export type QueueItem = z.infer<typeof queueItemSchema>;
 export const queuesSchema = z.array(queueItemSchema);
 export type Queues = z.infer<typeof queuesSchema>;

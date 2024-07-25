@@ -16,9 +16,12 @@ const exceptionSchema = z.object({
   statusCode: z.number(),
   path: z.string(),
   error: z.string(),
-  response: z.object({
-    message: z.union([z.string(), z.array(z.string())]),
-    error: z.string(),
-    statusCode: z.number(),
-  }),
+  response: z.union([
+    z.object({
+      message: z.union([z.string(), z.array(z.string())]),
+      error: z.string(),
+      statusCode: z.number(),
+    }),
+    z.string(),
+  ]),
 });

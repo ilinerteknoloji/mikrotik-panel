@@ -1,6 +1,7 @@
 import { DataTablePagination } from "@/components/admin/data-table/pagination";
 import { DataTable } from "@/components/admin/data-table/table";
 import { ServerAlerts } from "@/components/general/server-alerts";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { fetchAllQueues } from "@/lib/utils/fetch-requests/queues/fetch-all";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Plus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -32,11 +33,18 @@ export default async function QueuesPage({}: Props) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div>
+            <Link href="/admin/queues/add">
+              <Button type="button" variant="default" size="icon">
+                <Plus />
+              </Button>
+            </Link>
+            {/* TODO: Filters and details pages */}
+          </div>
           <div className="flex flex-col items-center justify-center gap-4">
             {!response.status ? (
               <ServerAlerts title="Error" description={response.message} />
             ) : null}
-            {/* TODO: Filters and details pages */}
             <DataTable
               data={response.status ? response.data : []}
               headerData={[

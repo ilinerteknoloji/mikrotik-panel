@@ -1,20 +1,21 @@
 "use server";
 
-import { interfaceResponseSchema } from "@/lib/schema/response/interfaces";
+import { queueItemResponseSchema } from "@/lib/schema/response/queues";
 import { FormAction } from "@/lib/types";
 import { fetchBackEnd } from "@/lib/utils/fetch-requests";
-import { BridgeFormSchema } from "./schema";
+import { QueueFormSchema } from "./schema";
 
-export async function addBridge(
-  values: BridgeFormSchema,
+export async function addQueue(
+  values: QueueFormSchema,
 ): Promise<FormAction<string>> {
   try {
-    const response = await fetchBackEnd("interface/bridge", {
+    values.priority = values.priority - 1;
+    const response = await fetchBackEnd("queues", {
       method: "POST",
       body: JSON.stringify(values),
     });
-    if (!response.status) throw new Error(response.message);
-    const parsedData = interfaceResponseSchema.parse(response.data);
+    if (!response.status) return response;
+    const parsedData = queueItemResponseSchema.parse(response.data);
     if (!parsedData.status) throw new Error(parsedData.error);
     return {
       status: true,
