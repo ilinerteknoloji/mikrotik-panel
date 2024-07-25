@@ -19,7 +19,7 @@ export class TorchService {
       throw new NotFoundException("Interface does not exist");
     const torchData = await this.torchRepository.create(createTorchDto);
     return {
-      name: new Date().toLocaleString("tr"),
+      name: Date.now(),
       torchData,
     };
   }

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type State = {
-  labels: string[];
+  labels: number[];
   rxData: number[];
   rxPacketsData: number[];
   txData: number[];
@@ -10,13 +10,13 @@ type State = {
 };
 
 type Actions = {
-  setData: (data: [string, number, number, number, number]) => void;
+  setData: (data: [number, number, number, number, number]) => void;
 };
 
 export const useTorchStore = create(
   persist<State & Actions>(
     (set) => ({
-      labels: Array(100).fill(""),
+      labels: Array(100).fill(0),
       rxData: Array(100).fill(0),
       rxPacketsData: Array(100).fill(0),
       txData: Array(100).fill(0),

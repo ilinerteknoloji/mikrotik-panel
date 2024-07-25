@@ -10,17 +10,17 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { env } from "@/lib/schema/env";
 import { torchResponseSchema } from "@/lib/schema/response/tool/torch";
-import { useTorchStore } from "@/stores";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { TorchAreaChart } from "./torch-area-chart";
+import { useTorchStore } from "@/stores/torch-store";
 
 type Props = {};
 
 export function TorchChart({}: Props) {
   const { data: session, status } = useSession();
   const { toast } = useToast();
-  const setData = useTorchStore((state) => state.setData);
+  const setData = useTorchStore((state: { setData: any }) => state.setData);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 
   useEffect(() => {

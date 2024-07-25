@@ -12,7 +12,7 @@ export const torchDataItemSchema = z.object({
 export const torchDataSchema = z.array(torchDataItemSchema);
 
 export const torchSchema = z.object({
-  name: z.string(),
+  name: z.coerce.number(),
   torchData: torchDataSchema,
 });
 

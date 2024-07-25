@@ -3,7 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
 export type TorchTableData = {
-  labels: string;
+  labels: number;
   rxData: number;
   rxPacketsData: number;
   txData: number;
@@ -24,6 +24,9 @@ export const torchTableData: ColumnDef<TorchTableData>[] = [
       );
     },
     accessorKey: "labels",
+    cell: ({ row }) => {
+      return <>{new Date(row.original.labels).toLocaleTimeString("tr")}</>;
+    },
   },
   {
     header: ({ column }) => {

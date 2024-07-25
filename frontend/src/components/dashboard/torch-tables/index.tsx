@@ -1,6 +1,6 @@
 "use client";
 
-import { useTorchStore } from "@/stores";
+import { useTorchStore } from "@/stores/torch-store";
 import { torchTableData } from "./columns";
 import { TorchDataTable } from "./data-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

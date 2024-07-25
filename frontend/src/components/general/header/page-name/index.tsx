@@ -1,7 +1,7 @@
 "use client";
 
 import { allPages } from "@/lib/constant/navigation-items/all-pages";
-import { usePageStore } from "@/stores";
+import { usePageStore } from "@/stores/page";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 

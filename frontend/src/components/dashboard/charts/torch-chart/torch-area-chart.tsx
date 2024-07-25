@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useTorchStore } from "@/stores";
+import { useTorchStore } from "@/stores/torch-store";
 import { useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
@@ -52,7 +52,7 @@ export function TorchAreaChart({}: Props) {
   }[] = [];
   for (let i = 0; i < timeRange; i++) {
     data.unshift({
-      time: labels[i],
+      time: labels[i].toString(),
       rx: rxData[i],
       rxPackets: rxPacketsData[i],
       tx: txData[i],
@@ -71,7 +71,7 @@ export function TorchAreaChart({}: Props) {
             <stop offset="5%" stopColor="var(--color-rx)" stopOpacity={0.8} />
             <stop offset="95%" stopColor="var(--color-rx)" stopOpacity={0.1} />
           </linearGradient>
-          <linearGradient id="fillRxPackets" x1={0} y1={0} x2={0} y2={1}>
+          {/* <linearGradient id="fillRxPackets" x1={0} y1={0} x2={0} y2={1}>
             <stop
               offset="5%"
               stopColor="var(--color-rxPackets)"
@@ -82,12 +82,12 @@ export function TorchAreaChart({}: Props) {
               stopColor="var(--color-rxPackets)"
               stopOpacity={0.1}
             />
-          </linearGradient>
+          </linearGradient> */}
           <linearGradient id="fillTx" x1={0} y1={0} x2={0} y2={1}>
             <stop offset="5%" stopColor="var(--color-tx)" stopOpacity={0.8} />
             <stop offset="95%" stopColor="var(--color-tx)" stopOpacity={0.1} />
           </linearGradient>
-          <linearGradient id="fillTxPackets" x1={0} y1={0} x2={0} y2={1}>
+          {/* <linearGradient id="fillTxPackets" x1={0} y1={0} x2={0} y2={1}>
             <stop
               offset="5%"
               stopColor="var(--color-txPackets)"
@@ -98,7 +98,7 @@ export function TorchAreaChart({}: Props) {
               stopColor="var(--color-txPackets)"
               stopOpacity={0.1}
             />
-          </linearGradient>
+          </linearGradient> */}
         </defs>
         <CartesianGrid vertical={true} />
         <XAxis
@@ -108,26 +108,25 @@ export function TorchAreaChart({}: Props) {
           tickMargin={8}
           minTickGap={32}
           tickFormatter={(value) =>
-            new Date(value).toLocaleString(window.navigator.language, {
+            new Date(+value).toLocaleString(window.navigator.language, {
               hour: "numeric",
               minute: "numeric",
               second: "numeric",
             })
           }
         />
-        {/* <YAxis /> */}
         <ChartTooltip
           cursor={false}
           content={
             <ChartTooltipContent
               labelFormatter={(value) =>
-                new Date(value).toLocaleTimeString(window.navigator.language, {
+                new Date(+value).toLocaleString(window.navigator.language, {
                   hour: "numeric",
                   minute: "numeric",
                   second: "numeric",
                 })
               }
-              indicator="line"
+              indicator="dot"
             />
           }
         />
@@ -138,13 +137,13 @@ export function TorchAreaChart({}: Props) {
           stroke="var(--color-rx)"
           stackId={1}
         />
-        <Area
+        {/* <Area
           dataKey="rxPackets"
           type="natural"
           fill="url(#fillRxPackets)"
           stroke="var(--color-rxPackets)"
           stackId={1}
-        />
+        /> */}
         <Area
           dataKey="tx"
           type="natural"
@@ -152,13 +151,13 @@ export function TorchAreaChart({}: Props) {
           stroke="var(--color-tx)"
           stackId={1}
         />
-        <Area
+        {/* <Area
           dataKey="txPackets"
           type="natural"
           fill="url(#fillTxPackets)"
           stroke="var(--color-txPackets)"
           stackId={1}
-        />
+        /> */}
         <ChartLegend content={<ChartLegendContent />} />
       </AreaChart>
     </ChartContainer>
