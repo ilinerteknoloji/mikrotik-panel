@@ -1,4 +1,10 @@
-import { FileSlidersIcon, HomeIcon, NotebookTabs, Users } from "lucide-react";
+import {
+  FileSlidersIcon,
+  HomeIcon,
+  ListEnd,
+  NotebookTabs,
+  Users,
+} from "lucide-react";
 import { NavigationItem } from "./navigation-item.type";
 
 export const navigationItemsAdmin: NavigationItem[] = [
@@ -35,5 +41,10 @@ export const navigationItemsAdmin: NavigationItem[] = [
         title: "IpIp Tunnel",
       },
     ],
+  },
+  {
+    title: "Queues",
+    href: "/admin/queues",
+    icon: <ListEnd />,
   },
 ] as const;
