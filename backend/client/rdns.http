@@ -1,0 +1,3 @@
+### Get PTR records for IP address
+# @name getPTRRecords
+https://api.cloudns.net/dns/records.json?auth-id=23457&auth-password=oiAxpD_i_;s{^ZP8&domain-name=163.102.91.in-addr.arpa
