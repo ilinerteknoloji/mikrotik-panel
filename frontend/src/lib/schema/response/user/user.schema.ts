@@ -23,3 +23,11 @@ const usersSchema = z.array(userSchema);
 export type UsersSchema = z.infer<typeof usersSchema>;
 export const usersResponseSchema = createResponseSchema(usersSchema);
 export type UsersResponseSchema = z.infer<typeof usersResponseSchema>;
+
+export const usernameSchema = z.object({
+  id: z.coerce.number(),
+  username: z.string(),
+});
+export const usernamesSchema = z.array(usernameSchema);
+export type UsernamesSchema = z.infer<typeof usernamesSchema>;
+export const usernamesResponseSchema = createResponseSchema(usernamesSchema);

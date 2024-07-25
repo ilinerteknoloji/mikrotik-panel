@@ -63,6 +63,12 @@ export class UsersController {
     return this.usersService.allUsersCount();
   }
 
+  @Get("usernames")
+  @UseRoles(UserRole.ADMIN)
+  public findAllUsername() {
+    return this.usersService.findAllUsername();
+  }
+
   @Get(":identifier")
   public findById(
     @Param("identifier") identifier: string,

@@ -41,6 +41,11 @@ GET {{url}}?page=2&limit=100&search=a&role=user&status=true HTTP/1.1
 # Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
 
+### Get only usernames
+# @name getUsernames
+GET {{url}}/usernames HTTP/1.1
+Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
+
 ### Get User By Username
 # @name getUserByUsername
 GET {{url}}/johndoe1732 HTTP/1.1

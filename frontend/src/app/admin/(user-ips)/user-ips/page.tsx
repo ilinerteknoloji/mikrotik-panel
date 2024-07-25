@@ -15,6 +15,7 @@ import { fetchUserIps } from "@/lib/utils/fetch-requests/user-ips/all";
 import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AddUserIps } from "./_components/add-user-ips";
 
 type Props = {
   params: {
@@ -47,6 +48,9 @@ export default async function IpsPage({ searchParams }: Props) {
         </CardHeader>
 
         <CardContent className="space-y-4">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <AddUserIps />
+          </div>
           <div className="flex flex-col items-center justify-center gap-4">
             {!response.status ? (
               <ServerAlerts title="Error" description={response.message} />

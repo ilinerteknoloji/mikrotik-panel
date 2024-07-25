@@ -117,4 +117,13 @@ export class UsersRepository {
     if (!user.length) throw new NotFoundException("User not found");
     return user;
   }
+
+  public async findAllUsername() {
+    return this.drizzle
+      .select({
+        id: usersSchema.id,
+        username: usersSchema.username,
+      })
+      .from(usersSchema);
+  }
 }

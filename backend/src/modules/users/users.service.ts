@@ -50,6 +50,10 @@ export class UsersService {
     };
   }
 
+  public async findAllUsername() {
+    return this.usersRepository.findAllUsername();
+  }
+
   public async update(id: number, updateUserDto: UpdateUserDto) {
     console.log(updateUserDto);
 
