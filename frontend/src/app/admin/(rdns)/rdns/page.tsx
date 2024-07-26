@@ -15,6 +15,7 @@ import { fetchAllRDnsHosts } from "@/lib/utils/fetch-requests/rdns/all-hosts";
 import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AddRdns } from "./_components/add";
 
 type Props = Readonly<{
   searchParams: dataTableSearchParamType;
@@ -45,7 +46,7 @@ export default async function RDnsPage({ searchParams }: Props) {
 
         <CardContent>
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            {/* TODO: add RDns Hosts */}
+            <AddRdns />
             {/* TODO: Filters and details pages */}
           </div>
           <div className="flex flex-col items-center justify-center gap-4">
