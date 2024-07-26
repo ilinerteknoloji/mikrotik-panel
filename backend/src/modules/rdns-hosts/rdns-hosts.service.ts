@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { CreateRdnsHostDto } from "./dto/create-rdns-host.dto";
 import { UpdateRdnsHostDto } from "./dto/update-rdns-host.dto";
 import { RdnsHostsRepository } from "./rdns-hosts.repository";
+import { RdnsHostsSchemaType } from "src/shared/drizzle/schemas";
+import { OrderByPipeType } from "src/types";
 
 @Injectable()
 export class RdnsHostsService {
@@ -11,8 +13,20 @@ export class RdnsHostsService {
     return this.rdnsHostsRepository.create(createRdnsHostDto);
   }
 
-  findAll() {
-    return this.rdnsHostsRepository.findAll();
+  findAll(
+    page: number,
+    limit: number,
+    search: string,
+    status: boolean | undefined,
+    orderBy: OrderByPipeType<RdnsHostsSchemaType>,
+  ) {
+    return this.rdnsHostsRepository.findAll(
+      page,
+      limit,
+      search,
+      status,
+      orderBy,
+    );
   }
 
   findOne(id: number) {

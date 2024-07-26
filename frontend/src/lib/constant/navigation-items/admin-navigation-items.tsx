@@ -1,8 +1,10 @@
 import {
   FileSlidersIcon,
   HomeIcon,
+  ListCollapse,
   ListEnd,
   NotebookTabs,
+  Server,
   Users,
 } from "lucide-react";
 import { NavigationItem } from "./navigation-item.type";
@@ -46,5 +48,17 @@ export const navigationItemsAdmin: NavigationItem[] = [
     title: "Queues",
     href: "/admin/queues",
     icon: <ListEnd />,
+  },
+  {
+    title: "RDns Hosts",
+    href: "/admin/rdns",
+    icon: <Server />,
+    children: [
+      {
+        title: "Records",
+        href: "/admin/rdns/records",
+        icon: <ListCollapse />,
+      },
+    ],
   },
 ] as const;

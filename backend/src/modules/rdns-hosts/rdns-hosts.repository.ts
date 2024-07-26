@@ -1,8 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
-import { Drizzle } from "src/types";
+import { Drizzle, OrderByPipeType } from "src/types";
 import { CreateRdnsHostDto } from "./dto/create-rdns-host.dto";
-import { rdnsHostsSchema } from "src/shared/drizzle/schemas";
+import {
+  rdnsHostsSchema,
+  RdnsHostsSchemaType,
+} from "src/shared/drizzle/schemas";
 import { eq } from "drizzle-orm";
 import { UpdateRdnsHostDto } from "./dto/update-rdns-host.dto";
 
@@ -17,8 +20,27 @@ export class RdnsHostsRepository {
     return this.findOne(response[0].insertId);
   }
 
-  public async findAll() {
-    return this.drizzle.select().from(rdnsHostsSchema);
+  public async findAll(
+    page: number,
+    limit: number,
+    search: string,
+    status: boolean | undefined,
+    orderBy: OrderByPipeType<RdnsHostsSchemaType>,
+  ) {
+    const offset = (page - 1) * limit;
+    const conditions = [];
+    if (search.length > 0)
+      conditions.push(eq(rdnsHostsSchema.hostname, search));
+    if (status !== undefined)
+      conditions.push(eq(rdnsHostsSchema.status, status));
+    return this.drizzle.query.rdnsHostsSchema.findMany({
+      where: (fields, { and }) => and(...conditions),
+      limit,
+      offset,
+      orderBy(fields, operators) {
+        return operators[orderBy.order](fields[orderBy.key]);
+      },
+    });
   }
 
   public async findOne(id: number) {

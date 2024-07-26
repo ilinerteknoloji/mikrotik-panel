@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import { UseRoles } from "src/lib/decorators/roles.decorator";
@@ -14,6 +15,13 @@ import { RolesGuard } from "../auth/guards/roles.guard";
 import { CreateRdnsHostDto } from "./dto/create-rdns-host.dto";
 import { UpdateRdnsHostDto } from "./dto/update-rdns-host.dto";
 import { RdnsHostsService } from "./rdns-hosts.service";
+import { LimitPipe, PagePipe, StatusPipe } from "src/lib/pipes";
+import { OrderByPipe } from "src/lib/pipes/order-by.pipe";
+import {
+  rdnsHostsSchema,
+  RdnsHostsSchemaType,
+} from "src/shared/drizzle/schemas";
+import { OrderByPipeType } from "src/types";
 
 @Controller("rdns-hosts")
 @UseGuards(AuthGuard, RolesGuard)
@@ -27,8 +35,21 @@ export class RdnsHostsController {
   }
 
   @Get()
-  findAll() {
-    return this.rdnsHostsService.findAll();
+  findAll(
+    @Query("page", PagePipe) page: number,
+    @Query("limit", LimitPipe) limit: number,
+    @Query("search") search: string = "",
+    @Query("status", StatusPipe) status: boolean | undefined,
+    @Query(
+      "order-by",
+      new OrderByPipe<RdnsHostsSchemaType>(
+        { key: "id", order: "asc" },
+        rdnsHostsSchema,
+      ),
+    )
+    orderBy: OrderByPipeType<RdnsHostsSchemaType>,
+  ) {
+    return this.rdnsHostsService.findAll(page, limit, search, status, orderBy);
   }
 
   @Get(":id")
