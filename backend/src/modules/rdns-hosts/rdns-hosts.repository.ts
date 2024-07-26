@@ -1,12 +1,12 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { eq, like } from "drizzle-orm";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
-import { Drizzle, OrderByPipeType } from "src/types";
-import { CreateRdnsHostDto } from "./dto/create-rdns-host.dto";
 import {
   rdnsHostsSchema,
   RdnsHostsSchemaType,
 } from "src/shared/drizzle/schemas";
-import { eq } from "drizzle-orm";
+import { Drizzle, OrderByPipeType } from "src/types";
+import { CreateRdnsHostDto } from "./dto/create-rdns-host.dto";
 import { UpdateRdnsHostDto } from "./dto/update-rdns-host.dto";
 
 @Injectable()
@@ -30,7 +30,7 @@ export class RdnsHostsRepository {
     const offset = (page - 1) * limit;
     const conditions = [];
     if (search.length > 0)
-      conditions.push(eq(rdnsHostsSchema.hostname, search));
+      conditions.push(like(rdnsHostsSchema.hostname, `%${search}%`));
     if (status !== undefined)
       conditions.push(eq(rdnsHostsSchema.status, status));
     return this.drizzle.query.rdnsHostsSchema.findMany({

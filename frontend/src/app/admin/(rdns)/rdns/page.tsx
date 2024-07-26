@@ -16,6 +16,10 @@ import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AddRdns } from "./_components/add";
+import { DataTableSearchFilter } from "@/components/admin/data-table/filters/search";
+import { ClearFilters } from "@/components/admin/data-table/filters/clear-filters";
+import { PageItemCount } from "@/components/admin/data-table/filters/page-item-count";
+import { StatusFilter } from "@/components/admin/data-table/filters/status-filter";
 
 type Props = Readonly<{
   searchParams: dataTableSearchParamType;
@@ -44,10 +48,17 @@ export default async function RDnsPage({ searchParams }: Props) {
           </CardDescription>
         </CardHeader>
 
-        <CardContent>
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+        <CardContent className="space-y-4">
+          <div className="flex flex-col items-stretch justify-center gap-4 md:flex-row md:items-center md:justify-between">
             <AddRdns />
-            {/* TODO: Filters and details pages */}
+            <div className="flex flex-col items-center justify-end gap-4 md:flex-row md:items-end">
+              <DataTableSearchFilter searchParams={searchParams} />
+              <div className="flex w-full items-center gap-4 md:w-fit">
+                <StatusFilter searchParams={searchParams} />
+                <PageItemCount searchParams={searchParams} />
+              </div>
+              <ClearFilters href="/admin/rdns" />
+            </div>
           </div>
           <div className="flex flex-col items-center justify-center gap-4">
             {!response.status ? (

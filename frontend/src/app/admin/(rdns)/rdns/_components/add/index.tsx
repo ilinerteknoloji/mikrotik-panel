@@ -15,7 +15,12 @@ export function AddRdns({}: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" variant="default" size="icon">
+        <Button
+          type="button"
+          variant="default"
+          size="icon"
+          className="w-full px-2 md:w-fit"
+        >
           <Plus />
         </Button>
       </DialogTrigger>
