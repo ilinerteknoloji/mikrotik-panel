@@ -21,13 +21,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "refresh_token_id": {
-          "autoincrement": false,
-          "name": "refresh_token_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true
-        },
         "token": {
           "autoincrement": false,
           "name": "token",
@@ -66,6 +59,13 @@
           "primaryKey": false,
           "notNull": false,
           "onUpdate": true
+        },
+        "r_token_id": {
+          "autoincrement": false,
+          "name": "r_token_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "compositePrimaryKeys": {
@@ -76,35 +76,23 @@
           ]
         }
       },
-      "indexes": {},
-      "foreignKeys": {
-        "access_token_refresh_token_id_refresh_token_id_fk": {
-          "name": "access_token_refresh_token_id_refresh_token_id_fk",
-          "tableFrom": "access_token",
-          "tableTo": "refresh_token",
-          "columnsFrom": [
-            "refresh_token_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
+      "indexes": {
         "access_token_user_id_users_id_fk": {
           "name": "access_token_user_id_users_id_fk",
-          "tableFrom": "access_token",
-          "tableTo": "users",
-          "columnsFrom": [
+          "columns": [
             "user_id"
           ],
-          "columnsTo": [
-            "id"
+          "isUnique": false
+        },
+        "access_token_r_token_id_refresh_token_id_fk": {
+          "name": "access_token_r_token_id_refresh_token_id_fk",
+          "columns": [
+            "r_token_id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "isUnique": false
         }
       },
+      "foreignKeys": {},
       "uniqueConstraints": {}
     },
     "complains": {
@@ -352,8 +340,8 @@
       },
       "uniqueConstraints": {}
     },
-    "firewall_address_list": {
-      "name": "firewall_address_list",
+    "firewall_addresses": {
+      "name": "firewall_addresses",
       "columns": {
         "id": {
           "autoincrement": true,
@@ -385,8 +373,8 @@
         }
       },
       "compositePrimaryKeys": {
-        "firewall_address_list_id": {
-          "name": "firewall_address_list_id",
+        "firewall_addresses_id": {
+          "name": "firewall_addresses_id",
           "columns": [
             "id"
           ]
@@ -394,12 +382,25 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "firewall_address_list_ip_categories_id_ip_categories_id_fk": {
-          "name": "firewall_address_list_ip_categories_id_ip_categories_id_fk",
-          "tableFrom": "firewall_address_list",
+        "firewall_addresses_ip_categories_id_ip_categories_id_fk": {
+          "name": "firewall_addresses_ip_categories_id_ip_categories_id_fk",
+          "tableFrom": "firewall_addresses",
           "tableTo": "ip_categories",
           "columnsFrom": [
             "ip_categories_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "firewall_addresses_mikrotik_user_ips_id_mikrotik_user_ips_id_fk": {
+          "name": "firewall_addresses_mikrotik_user_ips_id_mikrotik_user_ips_id_fk",
+          "tableFrom": "firewall_addresses",
+          "tableTo": "mikrotik_user_ips",
+          "columnsFrom": [
+            "mikrotik_user_ips_id"
           ],
           "columnsTo": [
             "id"
@@ -573,7 +574,34 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "logs_ip_id_ips_id_fk": {
+          "name": "logs_ip_id_ips_id_fk",
+          "tableFrom": "logs",
+          "tableTo": "ips",
+          "columnsFrom": [
+            "ip_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "logs_user_device_id_user_device_id_fk": {
+          "name": "logs_user_device_id_user_device_id_fk",
+          "tableFrom": "logs",
+          "tableTo": "user_device",
+          "columnsFrom": [
+            "user_device_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "uniqueConstraints": {}
     },
     "mikrotik_user_ips": {
@@ -629,6 +657,67 @@
       "compositePrimaryKeys": {
         "mikrotik_user_ips_id": {
           "name": "mikrotik_user_ips_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mikrotik_user_ips_user_id_users_id_fk": {
+          "name": "mikrotik_user_ips_user_id_users_id_fk",
+          "tableFrom": "mikrotik_user_ips",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "rdns_hosts": {
+      "name": "rdns_hosts",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hostname": {
+          "autoincrement": false,
+          "name": "hostname",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "onUpdate": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "rdns_hosts_id": {
+          "name": "rdns_hosts_id",
           "columns": [
             "id"
           ]
@@ -704,7 +793,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "refresh_token_user_id_users_id_fk": {
+          "name": "refresh_token_user_id_users_id_fk",
+          "tableFrom": "refresh_token",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "uniqueConstraints": {}
     },
     "user_details": {
@@ -802,7 +905,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_details_user_id_users_id_fk": {
+          "name": "user_details_user_id_users_id_fk",
+          "tableFrom": "user_details",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "uniqueConstraints": {
         "user_details_user_id_unique": {
           "name": "user_details_user_id_unique",
@@ -861,7 +978,47 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_device_device_id_devices_id_fk": {
+          "name": "user_device_device_id_devices_id_fk",
+          "tableFrom": "user_device",
+          "tableTo": "devices",
+          "columnsFrom": [
+            "device_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_device_ip_id_ips_id_fk": {
+          "name": "user_device_ip_id_ips_id_fk",
+          "tableFrom": "user_device",
+          "tableTo": "ips",
+          "columnsFrom": [
+            "ip_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_device_user_id_users_id_fk": {
+          "name": "user_device_user_id_users_id_fk",
+          "tableFrom": "user_device",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "uniqueConstraints": {}
     },
     "user_devices_refresh_tokens": {
@@ -906,7 +1063,34 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_devices_refresh_tokens_refresh_token_id_refresh_token_id_fk": {
+          "name": "user_devices_refresh_tokens_refresh_token_id_refresh_token_id_fk",
+          "tableFrom": "user_devices_refresh_tokens",
+          "tableTo": "refresh_token",
+          "columnsFrom": [
+            "refresh_token_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_devices_refresh_tokens_user_devices_id_user_device_id_fk": {
+          "name": "user_devices_refresh_tokens_user_devices_id_user_device_id_fk",
+          "tableFrom": "user_devices_refresh_tokens",
+          "tableTo": "user_device",
+          "columnsFrom": [
+            "user_devices_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "uniqueConstraints": {}
     },
     "users": {
@@ -1006,6 +1190,12 @@
       "indexes": {},
       "foreignKeys": {},
       "uniqueConstraints": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "columns": [
+            "username"
+          ]
+        },
         "users_email_unique": {
           "name": "users_email_unique",
           "columns": [
@@ -1016,12 +1206,6 @@
           "name": "users_phone_number_unique",
           "columns": [
             "phone_number"
-          ]
-        },
-        "users_username_unique": {
-          "name": "users_username_unique",
-          "columns": [
-            "username"
           ]
         }
       }
@@ -1106,6 +1290,16 @@
         }
       },
       "mikrotik_user_ips": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "rdns_hosts": {
         "columns": {
           "created_at": {
             "isDefaultAnExpression": true

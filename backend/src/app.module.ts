@@ -15,6 +15,7 @@ import { JwtModule } from "./shared/jwt/jwt.module";
 import { GenerateKeysModule } from "./shared/keys/generate-keys.module";
 import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
 import { QueuesModule } from "./modules/mikrotik/queues/queues.module";
+import { RdnsHostsModule } from "./modules/rdns-hosts/rdns-hosts.module";
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { QueuesModule } from "./modules/mikrotik/queues/queues.module";
     TorchModule,
     InterfaceModule,
     QueuesModule,
+    RdnsHostsModule,
   ],
   controllers: [],
   providers: [],

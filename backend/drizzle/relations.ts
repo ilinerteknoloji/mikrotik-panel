@@ -1,40 +1,20 @@
 import { relations } from "drizzle-orm/relations";
-import { refresh_token, access_token, users, complains, feedbacks, ip_categories, firewall_address_list, user_details, devices, user_device, ips, user_devices_refresh_tokens } from "./schema";
-
-export const access_tokenRelations = relations(access_token, ({one}) => ({
-	refresh_token: one(refresh_token, {
-		fields: [access_token.refresh_token_id],
-		references: [refresh_token.id]
-	}),
-	user: one(users, {
-		fields: [access_token.user_id],
-		references: [users.id]
-	}),
-}));
-
-export const refresh_tokenRelations = relations(refresh_token, ({one, many}) => ({
-	access_tokens: many(access_token),
-	user: one(users, {
-		fields: [refresh_token.user_id],
-		references: [users.id]
-	}),
-	user_devices_refresh_tokens: many(user_devices_refresh_tokens),
-}));
-
-export const usersRelations = relations(users, ({many}) => ({
-	access_tokens: many(access_token),
-	complains: many(complains),
-	feedbacks: many(feedbacks),
-	refresh_tokens: many(refresh_token),
-	user_details: many(user_details),
-	user_devices: many(user_device),
-}));
+import { users, complains, feedbacks, ip_categories, firewall_addresses, mikrotik_user_ips, ips, logs, user_device, refresh_token, user_details, devices, user_devices_refresh_tokens } from "./schema";
 
 export const complainsRelations = relations(complains, ({one}) => ({
 	user: one(users, {
 		fields: [complains.user_id],
 		references: [users.id]
 	}),
+}));
+
+export const usersRelations = relations(users, ({many}) => ({
+	complains: many(complains),
+	feedbacks: many(feedbacks),
+	mikrotik_user_ips: many(mikrotik_user_ips),
+	refresh_tokens: many(refresh_token),
+	user_details: many(user_details),
+	user_devices: many(user_device),
 }));
 
 export const feedbacksRelations = relations(feedbacks, ({one}) => ({
@@ -44,25 +24,47 @@ export const feedbacksRelations = relations(feedbacks, ({one}) => ({
 	}),
 }));
 
-export const firewall_address_listRelations = relations(firewall_address_list, ({one}) => ({
+export const firewall_addressesRelations = relations(firewall_addresses, ({one}) => ({
 	ip_category: one(ip_categories, {
-		fields: [firewall_address_list.ip_categories_id],
+		fields: [firewall_addresses.ip_categories_id],
 		references: [ip_categories.id]
+	}),
+	mikrotik_user_ip: one(mikrotik_user_ips, {
+		fields: [firewall_addresses.mikrotik_user_ips_id],
+		references: [mikrotik_user_ips.id]
 	}),
 }));
 
 export const ip_categoriesRelations = relations(ip_categories, ({many}) => ({
-	firewall_address_lists: many(firewall_address_list),
+	firewall_addresses: many(firewall_addresses),
 }));
 
-export const user_detailsRelations = relations(user_details, ({one}) => ({
+export const mikrotik_user_ipsRelations = relations(mikrotik_user_ips, ({one, many}) => ({
+	firewall_addresses: many(firewall_addresses),
 	user: one(users, {
-		fields: [user_details.user_id],
+		fields: [mikrotik_user_ips.user_id],
 		references: [users.id]
 	}),
 }));
 
+export const logsRelations = relations(logs, ({one}) => ({
+	ip: one(ips, {
+		fields: [logs.ip_id],
+		references: [ips.id]
+	}),
+	user_device: one(user_device, {
+		fields: [logs.user_device_id],
+		references: [user_device.id]
+	}),
+}));
+
+export const ipsRelations = relations(ips, ({many}) => ({
+	logs: many(logs),
+	user_devices: many(user_device),
+}));
+
 export const user_deviceRelations = relations(user_device, ({one, many}) => ({
+	logs: many(logs),
 	device: one(devices, {
 		fields: [user_device.device_id],
 		references: [devices.id]
@@ -78,11 +80,22 @@ export const user_deviceRelations = relations(user_device, ({one, many}) => ({
 	user_devices_refresh_tokens: many(user_devices_refresh_tokens),
 }));
 
-export const devicesRelations = relations(devices, ({many}) => ({
-	user_devices: many(user_device),
+export const refresh_tokenRelations = relations(refresh_token, ({one, many}) => ({
+	user: one(users, {
+		fields: [refresh_token.user_id],
+		references: [users.id]
+	}),
+	user_devices_refresh_tokens: many(user_devices_refresh_tokens),
 }));
 
-export const ipsRelations = relations(ips, ({many}) => ({
+export const user_detailsRelations = relations(user_details, ({one}) => ({
+	user: one(users, {
+		fields: [user_details.user_id],
+		references: [users.id]
+	}),
+}));
+
+export const devicesRelations = relations(devices, ({many}) => ({
 	user_devices: many(user_device),
 }));
 

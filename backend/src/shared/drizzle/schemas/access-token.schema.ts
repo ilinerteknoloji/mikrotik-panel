@@ -10,12 +10,8 @@ import { refreshTokenSchema, usersSchema } from ".";
 
 export const accessTokenSchema = mysqlTable("access_token", {
   id: int("id").primaryKey().autoincrement(),
-  userId: int("user_id")
-    .notNull()
-    .references(() => usersSchema.id),
-  refreshTokenId: int("refresh_token_id")
-    .notNull()
-    .references(() => refreshTokenSchema.id),
+  userId: int("user_id").notNull(),
+  refreshTokenId: int("r_token_id").notNull(),
   token: text("token").notNull(),
   status: boolean("status").default(true),
   expiresAt: timestamp("expires_at").notNull(),

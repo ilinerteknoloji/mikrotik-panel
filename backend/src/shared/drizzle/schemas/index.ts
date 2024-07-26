@@ -13,3 +13,4 @@ export * from "./user-details.schema";
 export * from "./user-devices-refresh-tokens.schema";
 export * from "./user-devices.schema";
 export * from "./users.schema";
+export * from "./rdns-hosts.schema";

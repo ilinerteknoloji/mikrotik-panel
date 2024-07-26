@@ -32,7 +32,10 @@ export const refreshTokenRelations = relations(
       references: [usersSchema.id],
     }),
     userDevicesRefreshToken: many(userDevicesRefreshTokensSchema),
-    accessToken: many(accessTokenSchema),
+    accessToken: one(accessTokenSchema, {
+      fields: [refreshTokenSchema.id],
+      references: [accessTokenSchema.refreshTokenId],
+    }),
   }),
 );
 

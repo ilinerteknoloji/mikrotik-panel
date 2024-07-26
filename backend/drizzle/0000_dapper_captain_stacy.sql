@@ -4,12 +4,12 @@
 CREATE TABLE `access_token` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`user_id` int NOT NULL,
-	`refresh_token_id` int NOT NULL,
 	`token` text NOT NULL,
 	`status` tinyint DEFAULT 1,
 	`expires_at` timestamp NOT NULL,
 	`created_at` timestamp DEFAULT (now()),
 	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	`r_token_id` int NOT NULL,
 	CONSTRAINT `access_token_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -49,12 +49,12 @@ CREATE TABLE `feedbacks` (
 	CONSTRAINT `feedbacks_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-CREATE TABLE `firewall_address_list` (
+CREATE TABLE `firewall_addresses` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`ip_categories_id` int NOT NULL,
 	`mikrotik_user_ips_id` int NOT NULL,
 	`mikrotik_id` varchar(255) NOT NULL,
-	CONSTRAINT `firewall_address_list_id` PRIMARY KEY(`id`)
+	CONSTRAINT `firewall_addresses_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `ip_categories` (
@@ -93,6 +93,14 @@ CREATE TABLE `mikrotik_user_ips` (
 	`created_at` timestamp DEFAULT (now()),
 	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `mikrotik_user_ips_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `rdns_hosts` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`hostname` text NOT NULL,
+	`created_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `rdns_hosts_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `refresh_token` (
@@ -152,14 +160,25 @@ CREATE TABLE `users` (
 	`created_at` timestamp DEFAULT (now()),
 	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `users_id` PRIMARY KEY(`id`),
+	CONSTRAINT `users_username_unique` UNIQUE(`username`),
 	CONSTRAINT `users_email_unique` UNIQUE(`email`),
-	CONSTRAINT `users_phone_number_unique` UNIQUE(`phone_number`),
-	CONSTRAINT `users_username_unique` UNIQUE(`username`)
+	CONSTRAINT `users_phone_number_unique` UNIQUE(`phone_number`)
 );
 --> statement-breakpoint
-ALTER TABLE `access_token` ADD CONSTRAINT `access_token_refresh_token_id_refresh_token_id_fk` FOREIGN KEY (`refresh_token_id`) REFERENCES `refresh_token`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `access_token` ADD CONSTRAINT `access_token_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `complains` ADD CONSTRAINT `complains_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `feedbacks` ADD CONSTRAINT `feedbacks_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `firewall_address_list` ADD CONSTRAINT `firewall_address_list_ip_categories_id_ip_categories_id_fk` FOREIGN KEY (`ip_categories_id`) REFERENCES `ip_categories`(`id`) ON DELETE no action ON UPDATE no action;
+ALTER TABLE `firewall_addresses` ADD CONSTRAINT `firewall_addresses_ip_categories_id_ip_categories_id_fk` FOREIGN KEY (`ip_categories_id`) REFERENCES `ip_categories`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `firewall_addresses` ADD CONSTRAINT `firewall_addresses_mikrotik_user_ips_id_mikrotik_user_ips_id_fk` FOREIGN KEY (`mikrotik_user_ips_id`) REFERENCES `mikrotik_user_ips`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `logs` ADD CONSTRAINT `logs_ip_id_ips_id_fk` FOREIGN KEY (`ip_id`) REFERENCES `ips`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `logs` ADD CONSTRAINT `logs_user_device_id_user_device_id_fk` FOREIGN KEY (`user_device_id`) REFERENCES `user_device`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `mikrotik_user_ips` ADD CONSTRAINT `mikrotik_user_ips_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `refresh_token` ADD CONSTRAINT `refresh_token_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `user_details` ADD CONSTRAINT `user_details_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `user_device` ADD CONSTRAINT `user_device_device_id_devices_id_fk` FOREIGN KEY (`device_id`) REFERENCES `devices`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `user_device` ADD CONSTRAINT `user_device_ip_id_ips_id_fk` FOREIGN KEY (`ip_id`) REFERENCES `ips`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `user_device` ADD CONSTRAINT `user_device_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `user_devices_refresh_tokens` ADD CONSTRAINT `user_devices_refresh_tokens_refresh_token_id_refresh_token_id_fk` FOREIGN KEY (`refresh_token_id`) REFERENCES `refresh_token`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `user_devices_refresh_tokens` ADD CONSTRAINT `user_devices_refresh_tokens_user_devices_id_user_device_id_fk` FOREIGN KEY (`user_devices_id`) REFERENCES `user_device`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX `access_token_user_id_users_id_fk` ON `access_token` (`user_id`);--> statement-breakpoint
+CREATE INDEX `access_token_r_token_id_refresh_token_id_fk` ON `access_token` (`r_token_id`);
 */

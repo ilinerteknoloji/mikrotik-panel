@@ -1,10 +1,10 @@
-import { mysqlTable, mysqlSchema, AnyMySqlColumn, foreignKey, primaryKey, int, text, tinyint, timestamp, varchar, unique, mysqlEnum } from "drizzle-orm/mysql-core"
+import { mysqlTable, mysqlSchema, AnyMySqlColumn, primaryKey, int, text, tinyint, timestamp, foreignKey, varchar, unique, mysqlEnum } from "drizzle-orm/mysql-core"
 import { sql } from "drizzle-orm"
 
 export const access_token = mysqlTable("access_token", {
 	id: int("id").autoincrement().notNull(),
-	user_id: int("user_id").notNull().references(() => users.id),
-	refresh_token_id: int("refresh_token_id").notNull().references(() => refresh_token.id),
+	user_id: int("user_id").notNull(),
+	r_token_id: int("r_token_id").notNull(),
 	token: text("token").notNull(),
 	status: tinyint("status").default(1),
 	expires_at: timestamp("expires_at", { mode: 'string' }).notNull(),
@@ -69,15 +69,15 @@ export const feedbacks = mysqlTable("feedbacks", {
 	}
 });
 
-export const firewall_address_list = mysqlTable("firewall_address_list", {
+export const firewall_addresses = mysqlTable("firewall_addresses", {
 	id: int("id").autoincrement().notNull(),
 	ip_categories_id: int("ip_categories_id").notNull().references(() => ip_categories.id),
-	mikrotik_user_ips_id: int("mikrotik_user_ips_id").notNull(),
+	mikrotik_user_ips_id: int("mikrotik_user_ips_id").notNull().references(() => mikrotik_user_ips.id),
 	mikrotik_id: varchar("mikrotik_id", { length: 255 }).notNull(),
 },
 (table) => {
 	return {
-		firewall_address_list_id: primaryKey({ columns: [table.id], name: "firewall_address_list_id"}),
+		firewall_addresses_id: primaryKey({ columns: [table.id], name: "firewall_addresses_id"}),
 	}
 });
 
@@ -110,8 +110,8 @@ export const ips = mysqlTable("ips", {
 
 export const logs = mysqlTable("logs", {
 	id: int("id").autoincrement().notNull(),
-	user_device_id: int("user_device_id"),
-	ip_id: int("ip_id").notNull(),
+	user_device_id: int("user_device_id").references(() => user_device.id),
+	ip_id: int("ip_id").notNull().references(() => ips.id),
 	message: text("message").notNull(),
 	time: timestamp("time", { mode: 'string' }).default(sql`(now())`),
 },
@@ -123,7 +123,7 @@ export const logs = mysqlTable("logs", {
 
 export const mikrotik_user_ips = mysqlTable("mikrotik_user_ips", {
 	id: int("id").autoincrement().notNull(),
-	user_id: int("user_id").notNull(),
+	user_id: int("user_id").notNull().references(() => users.id),
 	ip: text("ip").notNull(),
 	status: tinyint("status").default(1),
 	created_at: timestamp("created_at", { mode: 'string' }).default(sql`(now())`),
@@ -132,6 +132,19 @@ export const mikrotik_user_ips = mysqlTable("mikrotik_user_ips", {
 (table) => {
 	return {
 		mikrotik_user_ips_id: primaryKey({ columns: [table.id], name: "mikrotik_user_ips_id"}),
+	}
+});
+
+export const rdns_hosts = mysqlTable("rdns_hosts", {
+	id: int("id").autoincrement().notNull(),
+	hostname: varchar("hostname", { length: 255 }).notNull(),
+	created_at: timestamp("created_at", { mode: 'string' }).default(sql`(now())`),
+	updated_at: timestamp("updated_at", { mode: 'string' }).default(sql`(now())`).onUpdateNow(),
+},
+(table) => {
+	return {
+		rdns_hosts_id: primaryKey({ columns: [table.id], name: "rdns_hosts_id"}),
+		rdns_hosts_hostname_unique: unique("rdns_hosts_hostname_unique").on(table.hostname),
 	}
 });
 
