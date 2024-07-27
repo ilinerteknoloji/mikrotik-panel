@@ -21,6 +21,8 @@ export const envSchema = z.object({
   MIKROTIK_HOST: z.string(),
   MIKROTIK_USERNAME: z.string(),
   MIKROTIK_PASSWORD: z.string(),
+  CLOUDNS_AUTH_ID: z.string(),
+  CLOUDNS_AUTH_PASSWORD: z.string(),
   MAIL_USERNAME: z.string(),
   MAIL_EMAIL: z.string(),
   MAIL_PASSWORD: z.string(),

@@ -16,6 +16,7 @@ import { GenerateKeysModule } from "./shared/keys/generate-keys.module";
 import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
 import { QueuesModule } from "./modules/mikrotik/queues/queues.module";
 import { RdnsHostsModule } from "./modules/rdns-hosts/rdns-hosts.module";
+import { RdnsRecordsModule } from "./modules/rdns-records/rdns-records.module";
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { RdnsHostsModule } from "./modules/rdns-hosts/rdns-hosts.module";
     InterfaceModule,
     QueuesModule,
     RdnsHostsModule,
+    RdnsRecordsModule,
   ],
   controllers: [],
   providers: [],

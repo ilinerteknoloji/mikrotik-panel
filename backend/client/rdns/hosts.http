@@ -1,11 +1,6 @@
 @auth=http://localhost:4000/auth
 @url=http://localhost:4000/rdns-hosts
 
-### Get PTR records for IP address
-# @name getPTRRecords
-https://api.cloudns.net/dns/records.json?auth-id=23457&auth-password=oiAxpD_i_;s{^ZP8&domain-name=163.102.91.in-addr.arpa
-
-
 ### Sign In as Admin
 # @name signInAdmin
 POST {{auth}}/sign-in HTTP/1.1
