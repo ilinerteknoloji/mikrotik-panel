@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
 import { EnvService } from "src/shared/env/env.service";
-import { Drizzle } from "src/types";
+import { Drizzle, RequestUserType } from "src/types";
 
 @Injectable()
 export class RdnsRecordsRepository {
@@ -80,5 +80,43 @@ export class RdnsRecordsRepository {
     });
     const response = await Promise.all(records);
     return response.filter((item) => (item !== null ? item : undefined)).flat();
+  }
+
+  public async findOne(id: string, domainName: string) {
+    let url = "https://api.cloudns.net/dns/get-record.json?";
+    url += `auth-id=${this.env.get("CLOUDNS_AUTH_ID")}`;
+    url += `&auth-password=${this.env.get("CLOUDNS_AUTH_PASSWORD")}`;
+    url += `&domain-name=${domainName}`;
+    url += `&record-id=${id}`;
+    const record = await fetch(url);
+    const json = await record.json();
+    return { ...json, domainName };
+  }
+
+  public async update(
+    id: string,
+    domainName: string,
+    host: string,
+    record: string,
+  ) {
+    let url = "https://api.cloudns.net/dns/mod-record.json?";
+    url += `auth-id=${this.env.get("CLOUDNS_AUTH_ID")}`;
+    url += `&auth-password=${this.env.get("CLOUDNS_AUTH_PASSWORD")}`;
+    url += `&domain-name=${domainName}&record-id=${id}&host=${host}&record=${record}&ttl=3600`;
+    const response = await fetch(url);
+    const json = await response.json();
+    return json;
+  }
+
+  public async updateForUser(
+    id: string,
+    domainName: string,
+    host: string,
+    record: string,
+    user: RequestUserType,
+  ) {
+    // TODO: Implement this method
+    const response = await this.update(id, domainName, host, record);
+    return response;
   }
 }

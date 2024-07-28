@@ -9,7 +9,6 @@ export async function addUserIps(values: AddUserIpsSchema) {
       userId: +values.userId,
       ips: values.ips.split(",").map((ip) => ip.trim()),
     };
-    console.log(bodyData);
     const response = await fetchBackEnd("user-ips", {
       method: "POST",
       body: JSON.stringify(bodyData),

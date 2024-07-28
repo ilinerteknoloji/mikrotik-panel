@@ -18,6 +18,7 @@ import { fetchAllRDnsRecords } from "@/lib/utils/fetch-requests/rdns/all-records
 import type { Metadata } from "next";
 import { DomainFilter } from "./_components/domain-filter";
 import { Prettify } from "@/lib/types/pretiffy.type";
+import { UpdateDialog } from "./_components/update-dialog";
 
 type Props = Readonly<{
   searchParams: Prettify<dataTableSearchParamType & { host?: string }>;
@@ -102,6 +103,10 @@ export default async function RDnsRecordsPage({ searchParams }: Props) {
                 {
                   label: "Domain Name",
                   data: (data) => data.domainName,
+                },
+                {
+                  label: "Update",
+                  data: (data) => <UpdateDialog record={data} />,
                 },
               ]}
             />

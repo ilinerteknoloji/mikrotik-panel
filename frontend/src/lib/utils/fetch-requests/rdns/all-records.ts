@@ -14,8 +14,6 @@ export async function fetchAllRDnsRecords(
     const response = await fetchBackEnd(
       `/rdns-records?${searchParamsToText(searchParams)}`,
     );
-    console.log(`/rdns-records?${searchParamsToText(searchParams)}`);
-
     if (!response.status) return response;
     const parsed = rDnsRecordsResponseSchema.parse(response.data);
     if (!parsed.status) throw new Error(parsed.error);

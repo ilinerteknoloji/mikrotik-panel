@@ -1,32 +1,27 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
-  Delete,
+  Patch,
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { RdnsRecordsService } from "./rdns-records.service";
-import { CreateRdnsRecordDto } from "./dto/create-rdns-record.dto";
-import { UpdateRdnsRecordDto } from "./dto/update-rdns-record.dto";
+import { User } from "src/lib/decorators/user.decorator";
 import { LimitPipe, PagePipe } from "src/lib/pipes";
+import { RequestUserType } from "src/types";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import { User } from "src/lib/decorators/user.decorator";
-import { RequestUserType } from "src/types";
+import { RdnsRecordsService } from "./rdns-records.service";
 
 @Controller("rdns-records")
 @UseGuards(AuthGuard, RolesGuard)
 export class RdnsRecordsController {
   constructor(private readonly rdnsRecordsService: RdnsRecordsService) {}
 
-  @Post()
-  create(@Body() createRdnsRecordDto: CreateRdnsRecordDto) {
-    return this.rdnsRecordsService.create(createRdnsRecordDto);
-  }
+  // @Post()
+  // create(@Body() createRdnsRecordDto: CreateRdnsRecordDto) {
+  //   return this.rdnsRecordsService.create(createRdnsRecordDto);
+  // }
 
   @Get()
   findAll(
@@ -39,20 +34,23 @@ export class RdnsRecordsController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.rdnsRecordsService.findOne(+id);
+  findOne(@Param("id") id: string, @Query("domainName") domainName: string) {
+    return this.rdnsRecordsService.findOne(id, domainName);
   }
 
   @Patch(":id")
   update(
     @Param("id") id: string,
-    @Body() updateRdnsRecordDto: UpdateRdnsRecordDto,
+    @Query("domainName") domainName: string,
+    @Query("host") host: string,
+    @Query("record") record: string,
+    @User() user: RequestUserType,
   ) {
-    return this.rdnsRecordsService.update(+id, updateRdnsRecordDto);
+    return this.rdnsRecordsService.update(id, domainName, host, record, user);
   }
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.rdnsRecordsService.remove(+id);
-  }
+  // @Delete(":id")
+  // remove(@Param("id") id: string) {
+  //   return this.rdnsRecordsService.remove(+id);
+  // }
 }

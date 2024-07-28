@@ -11,6 +11,9 @@ export const rDnsRecord = z.object({
   status: z.number(),
   domainName: z.string(),
 });
+export type RDnsRecord = z.infer<typeof rDnsRecord>;
+
 export const rDnsRecords = z.array(rDnsRecord);
-export const rDnsRecordsResponseSchema = createResponseSchema(rDnsRecords);
 export type RDnsRecords = z.infer<typeof rDnsRecords>;
+
+export const rDnsRecordsResponseSchema = createResponseSchema(rDnsRecords);

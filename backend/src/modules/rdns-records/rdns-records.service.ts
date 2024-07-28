@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { RequestUserType } from "src/types";
 import { CreateRdnsRecordDto } from "./dto/create-rdns-record.dto";
-import { UpdateRdnsRecordDto } from "./dto/update-rdns-record.dto";
 import { RdnsRecordsRepository } from "./rdns-records.repository";
 
 @Injectable()
@@ -24,13 +23,26 @@ export class RdnsRecordsService {
     return this.rdnsRecordsRepository.findAll(page, limit, search);
   }
 
-  public async findOne(id: number) {
-    return `This action returns a #${id} rdnsRecord`;
+  public async findOne(id: string, domainName: string) {
+    return this.rdnsRecordsRepository.findOne(id, domainName);
   }
 
-  public async update(id: number, updateRdnsRecordDto: UpdateRdnsRecordDto) {
-    console.log(updateRdnsRecordDto);
-    return `This action updates a #${id} rdnsRecord`;
+  public async update(
+    id: string,
+    domainName: string,
+    host: string,
+    record: string,
+    user: RequestUserType,
+  ) {
+    if (user.role === "user")
+      return this.rdnsRecordsRepository.update(id, domainName, host, record);
+    return this.rdnsRecordsRepository.updateForUser(
+      id,
+      domainName,
+      host,
+      record,
+      user,
+    );
   }
 
   public async remove(id: number) {
