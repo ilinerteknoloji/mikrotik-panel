@@ -14,9 +14,10 @@ export class RdnsHostsRepository {
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly drizzle: Drizzle) {}
 
   public async create(createRdnsHostDto: CreateRdnsHostDto) {
+    const { host, hostnameMain } = createRdnsHostDto;
     const response = await this.drizzle
       .insert(rdnsHostsSchema)
-      .values({ hostname: createRdnsHostDto.host });
+      .values({ hostname: host, hostnameMain });
     return this.findOne(response[0].insertId);
   }
 

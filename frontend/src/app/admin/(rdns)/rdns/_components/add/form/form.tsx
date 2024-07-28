@@ -25,6 +25,7 @@ export function RDnsHostForm({}: Props) {
     resolver: zodResolver(rDnsHostForm),
     defaultValues: {
       host: "",
+      hostnameMain: "",
     },
   });
   const onSubmit = async (data: RDnsHostForm) => {
@@ -54,6 +55,31 @@ export function RDnsHostForm({}: Props) {
               </FormLabel>
               <FormControl>
                 <Input {...field} placeholder="RDns Host" />
+              </FormControl>
+              <FormDescription />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="hostnameMain"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="capitalize">
+                {field.name.replace(/([A-Z])/g, " $1").trim()}
+                {rDnsHostForm.shape[field.name].isOptional() ? "?" : ""}
+              </FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={
+                    form.getValues("host")
+                      ? `${form.getValues("host").split(".")[2]}.${form.getValues("host").split(".")[1]}.${form.getValues("host").split(".")[0]}`
+                      : "RDns Hostname Main"
+                  }
+                />
               </FormControl>
               <FormDescription />
               <FormMessage />

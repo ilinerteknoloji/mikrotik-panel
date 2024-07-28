@@ -4,6 +4,7 @@ import { createResponseSchema } from "..";
 export const rDnsHostSchema = z.object({
   id: z.number(),
   hostname: z.string(),
+  hostnameMain: z.string(),
   status: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),

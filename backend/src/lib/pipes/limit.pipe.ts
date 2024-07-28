@@ -18,7 +18,6 @@ export class LimitPipe implements PipeTransform<string, number> {
     if (!value) return 10;
     const limit = parseInt(value, 10);
     if (isNaN(limit) || limit < 1) return 10;
-    if (limit > 50) return 50;
     return limit;
   }
 }

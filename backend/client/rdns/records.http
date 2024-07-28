@@ -1,9 +1,9 @@
-@auth=http://localhost:4000/auth
+@auth=http://localhost:4000/auth/sign-in
 @url=http://localhost:4000/rdns-records
 
 ### Sign In as Admin
 # @name signInAdmin
-POST {{auth}}/sign-in HTTP/1.1
+POST {{auth}} HTTP/1.1
 Content-Type: application/json
 
 {
@@ -11,7 +11,23 @@ Content-Type: application/json
     "password": "Password1111*!"
 }
 
-### Create PTR Host
-# @name createPTRHost
-GET {{url}} HTTP/1.1
+
+### Sign In as User
+# @name signInUser
+POST {{auth}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johndoe1732",
+    "password": "Password1732*!"
+}
+
+### get PTR Host
+# @name getPTRHost
+GET {{url}}?limit=100 HTTP/1.1
 Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.token}}
+
+### Get PTR Host
+# @name getPTRHostforUser
+GET {{url}}?limit=100 HTTP/1.1
+Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}

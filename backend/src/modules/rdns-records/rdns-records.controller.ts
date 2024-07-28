@@ -7,13 +7,19 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from "@nestjs/common";
 import { RdnsRecordsService } from "./rdns-records.service";
 import { CreateRdnsRecordDto } from "./dto/create-rdns-record.dto";
 import { UpdateRdnsRecordDto } from "./dto/update-rdns-record.dto";
 import { LimitPipe, PagePipe } from "src/lib/pipes";
+import { AuthGuard } from "../auth/guards/auth.guard";
+import { RolesGuard } from "../auth/guards/roles.guard";
+import { User } from "src/lib/decorators/user.decorator";
+import { RequestUserType } from "src/types";
 
 @Controller("rdns-records")
+@UseGuards(AuthGuard, RolesGuard)
 export class RdnsRecordsController {
   constructor(private readonly rdnsRecordsService: RdnsRecordsService) {}
 
@@ -26,8 +32,9 @@ export class RdnsRecordsController {
   findAll(
     @Query("page", PagePipe) page: number,
     @Query("limit", LimitPipe) limit: number,
+    @User() user: RequestUserType,
   ) {
-    return this.rdnsRecordsService.findAll(page, limit);
+    return this.rdnsRecordsService.findAll(page, limit, user);
   }
 
   @Get(":id")

@@ -79,6 +79,11 @@ export default async function RDnsPage({ searchParams }: Props) {
                   data: (data) => data.hostname,
                 },
                 {
+                  label: "Hostname Main",
+                  key: "hostnameMain",
+                  data: (data) => data.hostnameMain,
+                },
+                {
                   label: "Status",
                   key: "status",
                   data: (data) => (
