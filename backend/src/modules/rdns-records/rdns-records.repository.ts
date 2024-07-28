@@ -10,7 +10,7 @@ export class RdnsRecordsRepository {
     private readonly env: EnvService,
   ) {}
 
-  public async findAll(page: number, limit: number) {
+  public async findAll(page: number, limit: number, search: string) {
     const allHosts = await this.drizzle.query.rdnsHostsSchema.findMany({
       columns: { hostname: true },
       where: (fields, { eq }) => eq(fields.status, true),
@@ -20,23 +20,32 @@ export class RdnsRecordsRepository {
     url += `&auth-password=${this.env.get("CLOUDNS_AUTH_PASSWORD")}`;
     url += `&page=${page}`;
     url += `&rows-per-page=${limit}`;
+    if (search) url += `&host-like=${search}`;
     url += `&domain-name=`;
-    const records = allHosts.map(async ({ hostname }) => {
-      const recordList = await fetch(`${url}${hostname}`);
-      const json = await recordList.json();
-      if (!recordList.ok || json.status === "Failed") return;
-      return Object.values(json).map((record: any) => {
-        return {
-          id: record.id,
-          type: record.type,
-          host: record.host,
-          record: record.record,
-          failover: record.failover,
-          ttl: record.ttl,
-          status: record.status,
-          domainName: hostname,
-        };
-      });
+    const records = allHosts.map(
+      async ({ hostname }) => await this.getRecords(url, hostname),
+    );
+    const response = await Promise.all(records);
+    return response.filter((item) => (item !== null ? item : undefined)).flat();
+  }
+
+  private async getRecords(url: string, hostname: string, optional?: string) {
+    const recordList = await fetch(
+      `${url}${hostname}${optional ? optional : ""}`,
+    );
+    const json = await recordList.json();
+    if (!recordList.ok || json.status === "Failed") return;
+    const records = Object.values(json).map((record: any) => {
+      return {
+        id: record.id,
+        type: record.type,
+        host: record.host,
+        record: record.record,
+        failover: record.failover,
+        ttl: record.ttl,
+        status: record.status,
+        domainName: hostname,
+      };
     });
     const response = await Promise.all(records);
     return response.filter((item) => (item !== null ? item : undefined)).flat();
@@ -58,27 +67,12 @@ export class RdnsRecordsRepository {
     url += `&rows-per-page=${limit}`;
     url += `&domain-name=`;
     const records = allHosts.map(async ({ hostname, hostnameMain }) => {
-      const isExist = userIps.filter((ip) => ip.ip.includes(hostnameMain));
+      const isExist = userIps.filter(({ ip }) => ip.includes(hostnameMain));
       if (isExist.length === 0) return;
-      const records = isExist.map(async ({ ip }) => {
-        const recordList = await fetch(
-          `${url}${hostname}&host=${ip.split(".").at(-1)}`,
-        );
-        const json = await recordList.json();
-        if (!recordList.ok || json.status === "Failed") return;
-        return Object.values(json).map((record: any) => {
-          return {
-            id: record.id,
-            type: record.type,
-            host: record.host,
-            record: record.record,
-            failover: record.failover,
-            ttl: record.ttl,
-            status: record.status,
-            domainName: hostname,
-          };
-        });
-      });
+      const records = isExist.map(
+        async ({ ip }) =>
+          await this.getRecords(url, hostname, `&host=${ip.split(".").at(-1)}`),
+      );
       const response = await Promise.all(records);
       return response
         .filter((item) => (item !== null ? item : undefined))

@@ -13,10 +13,15 @@ export class RdnsRecordsService {
     return "This action adds a new rdnsRecord";
   }
 
-  public async findAll(page: number, limit: number, user: RequestUserType) {
+  public async findAll(
+    page: number,
+    limit: number,
+    search: string,
+    user: RequestUserType,
+  ) {
     if (user.role === "user")
       return this.rdnsRecordsRepository.findUsersRecords(page, limit, user.id);
-    return this.rdnsRecordsRepository.findAll(page, limit);
+    return this.rdnsRecordsRepository.findAll(page, limit, search);
   }
 
   public async findOne(id: number) {

@@ -32,9 +32,10 @@ export class RdnsRecordsController {
   findAll(
     @Query("page", PagePipe) page: number,
     @Query("limit", LimitPipe) limit: number,
+    @Query("search") search: string = "",
     @User() user: RequestUserType,
   ) {
-    return this.rdnsRecordsService.findAll(page, limit, user);
+    return this.rdnsRecordsService.findAll(page, limit, search, user);
   }
 
   @Get(":id")
