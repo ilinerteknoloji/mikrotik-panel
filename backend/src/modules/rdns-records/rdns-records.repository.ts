@@ -1,5 +1,7 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { and, eq } from "drizzle-orm";
 import { DRIZZLE_PROVIDER } from "src/lib/constants";
+import { mikrotikUserIpsSchema } from "src/shared/drizzle/schemas";
 import { EnvService } from "src/shared/env/env.service";
 import { Drizzle, RequestUserType } from "src/types";
 
@@ -115,7 +117,23 @@ export class RdnsRecordsRepository {
     record: string,
     user: RequestUserType,
   ) {
-    // TODO: Implement this method
+    const data = await this.findOne(id, domainName);
+    const { host: hostName, domainName: domain } = data;
+    const [v3, v2, v1] = domain.split(".");
+    const isExist = await this.drizzle
+      .select()
+      .from(mikrotikUserIpsSchema)
+      .where(
+        and(
+          eq(mikrotikUserIpsSchema.userId, user.id),
+          eq(mikrotikUserIpsSchema.ip, `${v1}.${v2}.${v3}.${hostName}`),
+        ),
+      );
+    if (!isExist.length)
+      return new UnauthorizedException(
+        "You are not allowed to update this record",
+      );
+
     const response = await this.update(id, domainName, host, record);
     return response;
   }

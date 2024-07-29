@@ -1,4 +1,4 @@
-import { FileSlidersIcon, HomeIcon } from "lucide-react";
+import { FileSlidersIcon, HomeIcon, Server } from "lucide-react";
 import { NavigationItem } from "./navigation-item.type";
 
 export const navigationItemsDashboard: NavigationItem[] = [
@@ -11,5 +11,10 @@ export const navigationItemsDashboard: NavigationItem[] = [
     title: "Firewall",
     href: "/dashboard/firewall",
     icon: <FileSlidersIcon />,
+  },
+  {
+    title: "RDns",
+    href: "/dashboard/rdns",
+    icon: <Server />,
   },
 ] as const;

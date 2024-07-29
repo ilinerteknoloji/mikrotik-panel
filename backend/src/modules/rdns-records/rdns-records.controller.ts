@@ -10,11 +10,14 @@ import { User } from "src/lib/decorators/user.decorator";
 import { LimitPipe, PagePipe } from "src/lib/pipes";
 import { RequestUserType } from "src/types";
 import { AuthGuard } from "../auth/guards/auth.guard";
-import { RolesGuard } from "../auth/guards/roles.guard";
 import { RdnsRecordsService } from "./rdns-records.service";
+import { RolesGuard } from "../auth/guards/roles.guard";
+import { UseRoles } from "src/lib/decorators/roles.decorator";
+import { UserRole } from "src/lib/enums/user-role.enum";
 
 @Controller("rdns-records")
 @UseGuards(AuthGuard, RolesGuard)
+@UseRoles(UserRole.ADMIN, UserRole.USER)
 export class RdnsRecordsController {
   constructor(private readonly rdnsRecordsService: RdnsRecordsService) {}
 

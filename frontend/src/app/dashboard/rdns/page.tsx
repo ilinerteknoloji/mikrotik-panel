@@ -1,7 +1,6 @@
+import { DomainFilter } from "@/app/admin/(rdns)/rdns/records/_components/domain-filter";
+import { UpdateDialog } from "@/app/admin/(rdns)/rdns/records/_components/update-dialog";
 import { ClearFilters } from "@/components/admin/data-table/filters/clear-filters";
-import { PageItemCount } from "@/components/admin/data-table/filters/page-item-count";
-import { DataTableSearchFilter } from "@/components/admin/data-table/filters/search";
-import { DataTablePagination } from "@/components/admin/data-table/pagination";
 import { dataTableSearchParamType } from "@/components/admin/data-table/search-params.type";
 import { DataTable } from "@/components/admin/data-table/table";
 import { ServerAlerts } from "@/components/general/server-alerts";
@@ -13,22 +12,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Prettify } from "@/lib/types/pretiffy.type";
 import { fetchAllRDnsHosts } from "@/lib/utils/fetch-requests/rdns/all-hosts";
 import { fetchAllRDnsRecords } from "@/lib/utils/fetch-requests/rdns/all-records";
-import type { Metadata } from "next";
-import { DomainFilter } from "./_components/domain-filter";
-import { Prettify } from "@/lib/types/pretiffy.type";
-import { UpdateDialog } from "./_components/update-dialog";
+import { Metadata } from "next/types";
 
 type Props = Readonly<{
-  searchParams: Prettify<dataTableSearchParamType & { host?: string }>;
+  searchParams: Prettify<dataTableSearchParamType & { host: string }>;
 }>;
 
 export const metadata: Metadata = {
-  // TODO: Add metadata RecordsPage
+  // TODO: Add metadata RdnsPage
 };
 
-export default async function RDnsRecordsPage({ searchParams }: Props) {
+export const dynamic = "no-store";
+
+export default async function RdnsPage({ searchParams }: Props) {
   const rDnsHosts = await fetchAllRDnsHosts({ page: 1, limit: 100 });
   if (searchParams.page < 1 || !searchParams?.page) searchParams.page = 1;
   if ((searchParams.limit && searchParams?.limit < 10) || !searchParams?.limit)
@@ -40,6 +39,7 @@ export default async function RDnsRecordsPage({ searchParams }: Props) {
   const filteredRecords = (response.status ? response.data : []).filter(
     (record) => record.domainName === searchParams.host,
   );
+
   return (
     <section>
       <Card>
@@ -52,15 +52,13 @@ export default async function RDnsRecordsPage({ searchParams }: Props) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col items-stretch justify-center gap-4 md:flex-row md:items-center md:justify-between">
-            {/* <AddRdns /> */}
-            <div></div>
+            <div />
             <div className="flex flex-col items-center justify-end gap-4 md:flex-row md:items-end">
-              <DataTableSearchFilter searchParams={searchParams} />
               <DomainFilter
                 searchParams={searchParams}
                 hosts={rDnsHosts.status ? rDnsHosts.data : []}
               />
-              <ClearFilters href="/admin/rdns/records" />
+              <ClearFilters href="/dashboard/rdns" />
             </div>
           </div>
 
@@ -110,11 +108,6 @@ export default async function RDnsRecordsPage({ searchParams }: Props) {
               ]}
             />
           </div>
-
-          <DataTablePagination
-            searchParams={searchParams}
-            fetchData={fetchAllRDnsRecords}
-          />
         </CardContent>
         <CardFooter></CardFooter>
       </Card>

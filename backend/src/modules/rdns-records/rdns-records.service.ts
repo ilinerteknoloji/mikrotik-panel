@@ -34,7 +34,7 @@ export class RdnsRecordsService {
     record: string,
     user: RequestUserType,
   ) {
-    if (user.role === "user")
+    if (user.role === "admin")
       return this.rdnsRecordsRepository.update(id, domainName, host, record);
     return this.rdnsRecordsRepository.updateForUser(
       id,

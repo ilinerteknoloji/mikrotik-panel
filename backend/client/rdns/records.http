@@ -31,3 +31,8 @@ Authorization: Bearer {{signInAdmin.response.body.response.tokens.accessToken.to
 # @name getPTRHostforUser
 GET {{url}}?limit=100 HTTP/1.1
 Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}
+
+### Update PTR Record
+# @name updatePTRRecord
+PATCH {{url}}/515283400?domainName=73.143.185.in-addr.arpa&host=2&record=21webhostingdunyasi.com HTTP/1.1
+Authorization: Bearer {{signInUser.response.body.response.tokens.accessToken.token}}

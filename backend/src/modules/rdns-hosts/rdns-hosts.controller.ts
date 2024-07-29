@@ -35,6 +35,7 @@ export class RdnsHostsController {
   }
 
   @Get()
+  @UseRoles(UserRole.ADMIN, UserRole.USER)
   findAll(
     @Query("page", PagePipe) page: number,
     @Query("limit", LimitPipe) limit: number,

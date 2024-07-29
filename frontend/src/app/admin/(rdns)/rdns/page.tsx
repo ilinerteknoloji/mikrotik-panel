@@ -53,10 +53,7 @@ export default async function RDnsPage({ searchParams }: Props) {
             <AddRdns />
             <div className="flex flex-col items-center justify-end gap-4 md:flex-row md:items-end">
               <DataTableSearchFilter searchParams={searchParams} />
-              <div className="flex w-full items-center gap-4 md:w-fit">
-                <StatusFilter searchParams={searchParams} />
-                <PageItemCount searchParams={searchParams} />
-              </div>
+              <StatusFilter searchParams={searchParams} />
               <ClearFilters href="/admin/rdns" />
             </div>
           </div>
