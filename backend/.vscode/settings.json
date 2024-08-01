@@ -8,8 +8,10 @@
         "libphonenumber",
         "mikrotik",
         "nestjs",
+        "nexthop",
         "Paramtype",
-        "rdns"
+        "rdns",
+        "vpnv"
     ],
     "explorer.fileNesting.patterns": {
         "*.ts": "${capture}.js",
