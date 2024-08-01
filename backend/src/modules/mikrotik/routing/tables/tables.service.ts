@@ -7,27 +7,27 @@ import { TablesRepository } from "./tables.repository";
 export class TablesService {
   constructor(private readonly tablesRepository: TablesRepository) {}
 
-  create(createTableDto: CreateTableDto) {
-    console.log(createTableDto);
-
-    return "This action adds a new table";
+  async create(createTableDto: CreateTableDto) {
+    const response = await this.tablesRepository.create(createTableDto);
+    const data = await this.tablesRepository.findOne(response.ret);
+    return data;
   }
 
   findAll() {
-    return `This action returns all tables`;
+    return this.tablesRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} table`;
+  findOne(id: string) {
+    return this.tablesRepository.findOne(id);
   }
 
-  update(id: number, updateTableDto: UpdateTableDto) {
+  update(id: string, updateTableDto: UpdateTableDto) {
     console.log(updateTableDto);
 
     return `This action updates a #${id} table`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} table`;
   }
 }
