@@ -4,8 +4,12 @@ import {
   ListCollapse,
   ListEnd,
   NotebookTabs,
+  NotepadText,
+  NotepadTextDashed,
   Server,
+  Table,
   Users,
+  Waypoints,
 } from "lucide-react";
 import { NavigationItem } from "./navigation-item.type";
 
@@ -58,6 +62,29 @@ export const navigationItemsAdmin: NavigationItem[] = [
         title: "Records",
         href: "/admin/rdns/records",
         icon: <ListCollapse />,
+      },
+    ],
+  },
+  {
+    title: "Routing",
+    icon: <Waypoints />,
+    children: [
+      {
+        title: "BGP",
+        href: "/admin/routing/bgp",
+        icon: <NotepadText />,
+        children: [
+          {
+            title: "Templates",
+            href: "/admin/routing/bgp/templates",
+            icon: <NotepadTextDashed />,
+          },
+        ],
+      },
+      {
+        title: "Tables",
+        href: "/admin/routing/tables",
+        icon: <Table />,
       },
     ],
   },

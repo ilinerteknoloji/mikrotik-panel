@@ -21,10 +21,18 @@ export function SidebarItem({ item }: Props) {
   // const setPage = usePageStore((state) => state.setPage);
 
   return (
-    <Collapsible>
+    <Collapsible
+      defaultOpen={isExpanded}
+      open={isExpanded}
+      onOpenChange={setIsExpanded}
+    >
       <div className="flex h-9 w-full items-center justify-between">
-        <SidebarItemLink item={item} />
-        {item.children ? (
+        <SidebarItemLink
+          item={item}
+          isExpanded={isExpanded}
+          onClick={() => setIsExpanded((prev) => !prev)}
+        />
+        {item.children && item.href ? (
           <CollapsibleTrigger className="group/trigger" asChild>
             <Button
               type="button"
