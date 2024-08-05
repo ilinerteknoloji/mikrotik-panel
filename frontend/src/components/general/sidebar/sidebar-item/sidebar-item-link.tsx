@@ -29,20 +29,20 @@ export function SidebarItemLink({
       ) : (
         <button
           type="button"
-          className="flex h-full flex-1 items-center justify-between gap-2 rounded-md hover:bg-accent hover:text-accent-foreground"
+          className="group/trigger flex h-full flex-1 items-center justify-between gap-2 rounded-md hover:bg-accent hover:text-accent-foreground"
           onClick={onClick}
         >
           <div className="flex items-center gap-2">
             {icon ? icon : <File />}
             <p>{title}</p>
           </div>
-          <Button type="button" variant="ghost" size="icon">
+          <div className="grid h-full w-9 place-items-center">
             {isExpanded ? (
               <ChevronDown />
             ) : (
               <ChevronRight className="transition-transform duration-300 group-hover/trigger:rotate-90" />
             )}
-          </Button>
+          </div>
         </button>
       )}
     </>
