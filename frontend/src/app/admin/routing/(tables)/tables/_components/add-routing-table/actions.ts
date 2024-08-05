@@ -17,8 +17,6 @@ export async function addRoutingTable(
     if (!response.status) throw new Error(response.message);
     const parsedData = routingTableResponseSchema.parse(response.data);
     if (!parsedData.status) throw new Error(parsedData.error);
-    console.log(values, parsedData.response);
-
     return {
       status: true,
       data: `${parsedData.response.name} added successfully.`,
