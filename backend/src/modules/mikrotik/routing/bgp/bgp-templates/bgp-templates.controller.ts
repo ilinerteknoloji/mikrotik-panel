@@ -1,17 +1,14 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { UseRoles } from "src/lib/decorators/roles.decorator";
+import { UserRole } from "src/lib/enums/user-role.enum";
+import { AuthGuard } from "src/modules/auth/guards/auth.guard";
+import { RolesGuard } from "src/modules/auth/guards/roles.guard";
 import { BgpTemplatesService } from "./bgp-templates.service";
 import { CreateBgpTemplateDto } from "./dto/create-bgp-template.dto";
-import { UpdateBgpTemplateDto } from "./dto/update-bgp-template.dto";
 
 @Controller("routing/bgp/templates")
+@UseGuards(AuthGuard, RolesGuard)
+@UseRoles(UserRole.ADMIN)
 export class BgpTemplatesController {
   constructor(private readonly bgpTemplatesService: BgpTemplatesService) {}
 
@@ -27,19 +24,22 @@ export class BgpTemplatesController {
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.bgpTemplatesService.findOne(+id);
+    if (!id.startsWith("*")) id = `*${id}`;
+    return this.bgpTemplatesService.findOne(id);
   }
 
-  @Patch(":id")
-  update(
-    @Param("id") id: string,
-    @Body() updateBgpTemplateDto: UpdateBgpTemplateDto,
-  ) {
-    return this.bgpTemplatesService.update(+id, updateBgpTemplateDto);
-  }
+  // @Patch(":id")
+  // update(
+  //   @Param("id") id: string,
+  //   @Body() updateBgpTemplateDto: UpdateBgpTemplateDto,
+  // ) {
+  //   if (!id.startsWith("*")) id = `*${id}`;
+  //   return this.bgpTemplatesService.update(id, updateBgpTemplateDto);
+  // }
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.bgpTemplatesService.remove(+id);
-  }
+  // @Delete(":id")
+  // remove(@Param("id") id: string) {
+  //   if (!id.startsWith("*")) id = `*${id}`;
+  //   return this.bgpTemplatesService.remove(id);
+  // }
 }
