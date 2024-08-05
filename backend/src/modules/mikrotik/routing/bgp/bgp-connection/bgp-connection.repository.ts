@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { EnvService } from "src/shared/env/env.service";
 import { CreateBgpConnectionDto } from "./dto/create-bgp-connection.dto";
+import { UpdateBgpConnectionDto } from "./dto/update-bgp-connection.dto";
 
 @Injectable()
 export class BgpConnectionRepository {
@@ -34,15 +35,58 @@ export class BgpConnectionRepository {
         json?.detail ?? response.statusText,
         response.status,
       );
-    return `This action adds a new bgp`;
+    return json;
   }
 
-  private dtoToMikrotikKeys(createBgpDto: CreateBgpConnectionDto) {
-    const mikrotikKeys = {};
-    Object.keys(createBgpDto).forEach((key) => {
-      const mikrotikKey = key.replace(/([A-Z])/g, "-$1").toLowerCase();
-      mikrotikKeys[mikrotikKey] = createBgpDto[key];
+  public async findAll() {
+    const response = await fetch(`${this.host}/rest/routing/bgp/connection`, {
+      headers: {
+        Authorization: `Basic ${this.auth}`,
+      },
     });
-    return mikrotikKeys;
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return json;
+  }
+
+  public async findOne(id: string) {
+    const response = await fetch(
+      `${this.host}/rest/routing/bgp/connection/${id}`,
+      {
+        headers: {
+          Authorization: `Basic ${this.auth}`,
+        },
+      },
+    );
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return json;
+  }
+
+  private dtoToMikrotikKeys(dto: UpdateBgpConnectionDto) {
+    return {
+      name: dto.name,
+      listen: dto.listen,
+      connect: dto.connect,
+      "local.address": dto.localAddress,
+      "local.port": dto.localPort,
+      "local.role": dto.localRole,
+      "local.ttl": dto.localTtl,
+      "remote.address": dto.remoteAddress,
+      "remote.port": dto.remotePort,
+      "remote.as": dto.remoteAs,
+      "remote.allow-as": dto.allowedAs,
+      "remote.ttl": dto.remoteTtl,
+      "tcp-md5-key": dto.tcpMd5Key,
+      templates: dto.templates,
+    };
   }
 }

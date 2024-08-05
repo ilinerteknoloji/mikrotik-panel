@@ -1,7 +1,10 @@
 import {
-  IsBoolean,
+  IsAlphanumeric,
+  IsArray,
   IsEnum,
-  IsNumber,
+  IsInt,
+  IsIP,
+  IsNotEmpty,
   IsOptional,
   IsString,
   Max,
@@ -13,142 +16,235 @@ import {
 // Filter > İnput Filter, Output Filter, Output Network
 
 export class CreateBgpConnectionDto {
-  // Enabled
-  @IsBoolean()
-  @IsOptional()
-  disabled: boolean;
-
   @IsString()
-  @IsOptional()
-  comment?: string;
+  @IsNotEmpty()
+  name: string;
 
+  @IsOptional()
+  @IsEnum({ yes: "yes", no: "no" })
   @IsString()
+  connect: "yes" | "no" = "yes";
+
   @IsOptional()
-  name?: string;
-
-  // TODO: Template bulunamadı
-
-  @IsNumber()
-  @IsOptional()
-  @Min(0)
-  @Max(4294967295)
-  as?: number;
-
-  // AFI
-  @IsEnum(["ip", "ipv6", "l2vpn", "l2vpn-cisco", "vpnv4"])
-  @IsOptional()
-  addressFamilies?: "ip" | "ipv6" | "l2vpn" | "l2vpn-cisco" | "vpnv4";
-
+  @IsEnum({ yes: "yes", no: "no" })
   @IsString()
-  @IsOptional()
-  routerId?: string;
+  listen: "yes" | "no" = "yes";
 
+  // Local parameters
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  remoteAddress?: string;
+  @IsIP()
+  localAddress: string = "::";
 
-  @IsNumber()
   @IsOptional()
-  @Min(0)
-  @Max(4294967295)
-  remoteAs?: number;
-
-  @IsNumber()
-  @IsOptional()
+  @IsInt()
   @Min(0)
   @Max(65535)
-  remotePort?: number;
+  localPort: number = 179;
 
-  // TODO: Remote Allow AS
+  @IsNotEmpty()
+  @IsEnum([
+    "ebgp",
+    "ebgp-customer",
+    "ebgp-peer",
+    "ebgp-provider",
+    "ebgp-rs",
+    "ebgp-rs-client",
+    "ibgp",
+    "ibgp-rr",
+    "ibgp-rr-client",
+  ])
+  localRole:
+    | "ebgp"
+    | "ebgp-customer"
+    | "ebgp-peer"
+    | "ebgp-provider"
+    | "ebgp-rs"
+    | "ebgp-rs-client"
+    | "ibgp"
+    | "ibgp-rr"
+    | "ibgp-rr-client";
 
-  //? Read Only
-  // @IsString()
-  // @IsOptional()
-  // localAddress?: string;
-
-  // TODO: localPort
-  // TODO: localRole
-
-  @IsString()
   @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(255)
+  localTtl?: number;
+
+  // Remote parameters
+  @IsOptional()
+  @IsString()
+  @IsIP()
+  remoteAddress: string = "::";
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(65535)
+  remotePort: number = 179;
+
+  @IsOptional()
+  @IsInt()
+  remoteAs?: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsInt({ each: true })
+  allowedAs?: number[];
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(255)
+  remoteTtl?: number;
+
+  @IsOptional()
+  @IsString()
   tcpMd5Key?: string;
 
-  @IsBoolean()
   @IsOptional()
-  multihop?: boolean;
-
-  // TODO: tx ttl
-  // TODO: Rx Min ttl
-  // TODO: connect: boolean;
-  // TODO: listen: boolean;
-
   @IsString()
-  @IsOptional()
-  holdTime?: string;
-
-  @IsString()
-  @IsOptional()
-  keepaliveTime?: string;
-
-  @IsBoolean()
-  @IsOptional()
-  useBfd?: boolean;
-
-  // TODO: routing table
-  // TODO: vrf
-
-  @IsString()
-  @IsOptional()
-  clusterId?: string;
-
-  // TODO: No Client To Client Reflection
-  // TODO: Output Redistribute
-
-  @IsEnum(["always", "if-installed", "never"])
-  @IsOptional()
-  defaultOriginate?: "always" | "if-installed" | "never";
-
-  // TODO: No Early Cut
-  // TODO: Keep Sent Attributes
-  // TODO: Input Affinity
-  // TODO: Output Affinity
-
-  @IsEnum(["default", "force-self", "propagate"])
-  @IsOptional()
-  nexthopChoice?: "default" | "force-self" | "propagate";
-
-  @IsBoolean()
-  @IsOptional()
-  asOverride?: boolean;
-
-  // TODO: Default Prepend
-  // TODO: Add Path Out
-
-  @IsNumber()
-  @IsOptional()
-  @Min(0)
-  @Max(10)
-  allowAsIn?: number;
-
-  @IsBoolean()
-  @IsOptional()
-  ignoreAsPathLen?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  removePrivateAs?: boolean;
-
-  @IsEnum(["auto-bits", "auto-bytes", "bits", "bytes"])
-  @IsOptional()
-  ciscoVplsNlriLenFmt?: "auto-bits" | "auto-bytes" | "bits" | "bytes";
-
-  // TODO: Input Filter
-  // TODO: Input Accept NLRI
-  // TODO: Input Accept Communities
-  // TODO: Input Accept Ext Communities
-  // TODO: Input Accept Large Communities
-  // TODO: Input Accept Unknown
-  // TODO: Output Filter
-  // TODO: Output Selection Policy
-  // TODO: Output Network
+  @IsAlphanumeric("en-US", { each: true })
+  templates: string = "default";
 }
+
+// export class CreateBgpConnectionDto {
+//   // Enabled
+//   @IsBoolean()
+//   @IsOptional()
+//   disabled: boolean;
+
+//   @IsString()
+//   @IsOptional()
+//   comment?: string;
+
+//   @IsString()
+//   @IsOptional()
+//   name?: string;
+
+//   // TODO: Template bulunamadı
+
+//   @IsNumber()
+//   @IsOptional()
+//   @Min(0)
+//   @Max(4294967295)
+//   as?: number;
+
+//   // AFI
+//   @IsEnum(["ip", "ipv6", "l2vpn", "l2vpn-cisco", "vpnv4"])
+//   @IsOptional()
+//   addressFamilies?: "ip" | "ipv6" | "l2vpn" | "l2vpn-cisco" | "vpnv4";
+
+//   @IsString()
+//   @IsOptional()
+//   routerId?: string;
+
+//   @IsString()
+//   @IsOptional()
+//   remoteAddress?: string;
+
+//   @IsNumber()
+//   @IsOptional()
+//   @Min(0)
+//   @Max(4294967295)
+//   remoteAs?: number;
+
+//   @IsNumber()
+//   @IsOptional()
+//   @Min(0)
+//   @Max(65535)
+//   remotePort?: number;
+
+//   // TODO: Remote Allow AS
+
+//   //? Read Only
+//   // @IsString()
+//   // @IsOptional()
+//   // localAddress?: string;
+
+//   // TODO: localPort
+//   // TODO: localRole
+
+//   @IsString()
+//   @IsOptional()
+//   tcpMd5Key?: string;
+
+//   @IsBoolean()
+//   @IsOptional()
+//   multihop?: boolean;
+
+//   // TODO: tx ttl
+//   // TODO: Rx Min ttl
+//   // TODO: connect: boolean;
+//   // TODO: listen: boolean;
+
+//   @IsString()
+//   @IsOptional()
+//   holdTime?: string;
+
+//   @IsString()
+//   @IsOptional()
+//   keepaliveTime?: string;
+
+//   @IsBoolean()
+//   @IsOptional()
+//   useBfd?: boolean;
+
+//   // TODO: routing table
+//   // TODO: vrf
+
+//   @IsString()
+//   @IsOptional()
+//   clusterId?: string;
+
+//   // TODO: No Client To Client Reflection
+//   // TODO: Output Redistribute
+
+//   @IsEnum(["always", "if-installed", "never"])
+//   @IsOptional()
+//   defaultOriginate?: "always" | "if-installed" | "never";
+
+//   // TODO: No Early Cut
+//   // TODO: Keep Sent Attributes
+//   // TODO: Input Affinity
+//   // TODO: Output Affinity
+
+//   @IsEnum(["default", "force-self", "propagate"])
+//   @IsOptional()
+//   nexthopChoice?: "default" | "force-self" | "propagate";
+
+//   @IsBoolean()
+//   @IsOptional()
+//   asOverride?: boolean;
+
+//   // TODO: Default Prepend
+//   // TODO: Add Path Out
+
+//   @IsNumber()
+//   @IsOptional()
+//   @Min(0)
+//   @Max(10)
+//   allowAsIn?: number;
+
+//   @IsBoolean()
+//   @IsOptional()
+//   ignoreAsPathLen?: boolean;
+
+//   @IsBoolean()
+//   @IsOptional()
+//   removePrivateAs?: boolean;
+
+//   @IsEnum(["auto-bits", "auto-bytes", "bits", "bytes"])
+//   @IsOptional()
+//   ciscoVplsNlriLenFmt?: "auto-bits" | "auto-bytes" | "bits" | "bytes";
+
+//   // TODO: Input Filter
+//   // TODO: Input Accept NLRI
+//   // TODO: Input Accept Communities
+//   // TODO: Input Accept Ext Communities
+//   // TODO: Input Accept Large Communities
+//   // TODO: Input Accept Unknown
+//   // TODO: Output Filter
+//   // TODO: Output Selection Policy
+//   // TODO: Output Network
+// }

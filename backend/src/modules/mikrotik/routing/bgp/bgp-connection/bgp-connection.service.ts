@@ -9,25 +9,29 @@ export class BgpConnectionService {
     private readonly bgpConnectionRepository: BgpConnectionRepository,
   ) {}
 
-  create(createBgpConnectionDto: CreateBgpConnectionDto) {
-    return this.bgpConnectionRepository.create(createBgpConnectionDto);
+  async create(createBgpConnectionDto: CreateBgpConnectionDto) {
+    const response = await this.bgpConnectionRepository.create(
+      createBgpConnectionDto,
+    );
+    const data = await this.bgpConnectionRepository.findOne(response.ret);
+    return data;
   }
 
   findAll() {
-    return `This action returns all bgpConnection`;
+    return this.bgpConnectionRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bgpConnection`;
+  findOne(id: string) {
+    return this.bgpConnectionRepository.findOne(id);
   }
 
-  update(id: number, updateBgpConnectionDto: UpdateBgpConnectionDto) {
+  update(id: string, updateBgpConnectionDto: UpdateBgpConnectionDto) {
     console.log(updateBgpConnectionDto);
 
     return `This action updates a #${id} bgpConnection`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} bgpConnection`;
   }
 }

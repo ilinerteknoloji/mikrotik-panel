@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { BgpConnectionService } from "./bgp-connection.service";
 import { CreateBgpConnectionDto } from "./dto/create-bgp-connection.dto";
-import { UpdateBgpConnectionDto } from "./dto/update-bgp-connection.dto";
 
 @Controller("routing/bgp/connection")
 export class BgpConnectionController {
@@ -27,19 +18,9 @@ export class BgpConnectionController {
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.bgpConnectionService.findOne(+id);
+    if (!id.startsWith("*")) id = `*${id}`;
+    return this.bgpConnectionService.findOne(id);
   }
 
-  @Patch(":id")
-  update(
-    @Param("id") id: string,
-    @Body() updateBgpConnectionDto: UpdateBgpConnectionDto,
-  ) {
-    return this.bgpConnectionService.update(+id, updateBgpConnectionDto);
-  }
-
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.bgpConnectionService.remove(+id);
-  }
+  // @Patch(":iø
 }
