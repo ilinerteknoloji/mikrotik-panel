@@ -30,7 +30,6 @@ export class BgpTemplatesRepository {
     // console.log(this.dtoToMikrotik(createBgpTemplateDto));
     // console.log(JSON.stringify(this.dtoToMikrotik(createBgpTemplateDto)));
     // console.log(json);
-
     if (!response.ok)
       throw new HttpException(
         json?.detail ?? response.statusText,
@@ -73,11 +72,14 @@ export class BgpTemplatesRepository {
   }
 
   dtoToMikrotik(dto: UpdateBgpTemplateDto) {
+    Object.keys(dto).forEach((key) =>
+      dto[key] === undefined || dto[key] === "" ? (dto[key] = undefined) : {},
+    );
     return {
       "add-path-out": dto.addPathOut,
       "address-families": dto.addressFamilies,
       as: dto.as,
-      "as-override": dto.asOverride,
+      // "as-override": dto.asOverride,
       "cisco-vpls-nlri-len-fmt": dto.ciscoVplsNlriLenFmt,
       "cluster-id": dto.clusterId,
       disabled: dto.disabled,
@@ -108,7 +110,7 @@ export class BgpTemplatesRepository {
       "output.no-client-to-client-reflection": dto.noClientToClientReflection,
       "output.no-early-cut": dto.noEarlyCut,
       "output.redistribute": dto.redistribute,
-      "remove-private-as": dto.removePrivateAs,
+      // "remove-private-as": dto.removePrivateAs,
       "router-id": dto.routerId,
       "routing-table": dto.routingTable,
       "save-to": dto.saveTo,
