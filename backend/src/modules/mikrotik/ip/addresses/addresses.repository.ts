@@ -26,6 +26,10 @@ export class AddressesRepository {
       body: JSON.stringify(this.dtoToMikrotik(createAddressDto)),
     });
     const json = await response.json();
+    console.log(this.dtoToMikrotik(createAddressDto));
+    console.log(JSON.stringify(this.dtoToMikrotik(createAddressDto)));
+    console.log(json);
+
     if (!response.ok)
       throw new HttpException(
         json?.detail ?? response.statusText,
@@ -66,10 +70,14 @@ export class AddressesRepository {
 
   private dtoToMikrotik(dto: CreateAddressDto) {
     return {
-      ...dto,
-      "eui-64": dto.eui64,
-      "from-pool": dto.fromPool,
-      "no-dad": dto.noDad,
+      address: dto.address,
+      //   advertise: dto.advertise,
+      comment: dto.comment,
+      disabled: dto.disabled,
+      //   "eui-64": dto.eui64,
+      //   "from-pool": dto.fromPool,
+      interface: dto.interface,
+      //   "no-dad": dto.noDad,
     };
   }
 }

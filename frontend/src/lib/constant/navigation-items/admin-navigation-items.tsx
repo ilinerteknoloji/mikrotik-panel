@@ -88,4 +88,15 @@ export const navigationItemsAdmin: NavigationItem[] = [
       },
     ],
   },
+  {
+    title: "Ip",
+    icon: <Server />,
+    children: [
+      {
+        title: "Addresses",
+        href: "/admin/ip/addresses",
+        icon: <ListCollapse />,
+      },
+    ],
+  },
 ] as const;

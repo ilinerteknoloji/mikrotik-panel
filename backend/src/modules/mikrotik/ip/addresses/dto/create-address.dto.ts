@@ -4,9 +4,9 @@ export class CreateAddressDto {
   @IsString()
   address: string;
 
-  @IsBoolean()
-  @IsOptional()
-  advertise?: boolean;
+  //   @IsBoolean()
+  //   @IsOptional()
+  //   advertise?: boolean;
 
   @IsString()
   @IsOptional()
@@ -16,17 +16,17 @@ export class CreateAddressDto {
   @IsOptional()
   disabled?: boolean;
 
-  @IsBoolean()
-  @IsOptional()
-  eui64?: boolean;
+  //   @IsBoolean()
+  //   @IsOptional()
+  //   eui64?: boolean;
 
-  @IsString()
-  @IsOptional()
-  fromPool?: string;
+  //   @IsString()
+  //   @IsOptional()
+  //   fromPool?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  noDad?: boolean;
+  //   @IsBoolean()
+  //   @IsOptional()
+  //   noDad?: boolean;
 
   @IsString()
   interface: string;
