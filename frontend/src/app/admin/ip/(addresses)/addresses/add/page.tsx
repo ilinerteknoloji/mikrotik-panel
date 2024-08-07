@@ -17,7 +17,7 @@ export default async function IpAddressesAddPage({}: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create BGP Connection</CardTitle>
+        <CardTitle>Create Ip Addresses</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mx-auto w-[500px] max-w-full">
