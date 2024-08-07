@@ -1,6 +1,7 @@
 import {
   IsAlphanumeric,
   IsArray,
+  IsBoolean,
   IsEnum,
   IsInt,
   IsIP,
@@ -21,14 +22,12 @@ export class CreateBgpConnectionDto {
   name: string;
 
   @IsOptional()
-  @IsEnum({ yes: "yes", no: "no" })
-  @IsString()
-  connect: "yes" | "no" = "yes";
+  @IsBoolean()
+  connect: boolean = true;
 
   @IsOptional()
-  @IsEnum({ yes: "yes", no: "no" })
-  @IsString()
-  listen: "yes" | "no" = "yes";
+  @IsBoolean()
+  listen: boolean = true;
 
   // Local parameters
   @IsOptional()

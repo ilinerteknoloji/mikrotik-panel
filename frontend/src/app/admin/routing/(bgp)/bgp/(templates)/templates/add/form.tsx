@@ -157,7 +157,7 @@ export function RoutingBGPTemplateAddForm({}: Props) {
               <FormMessage />
             </FormItem>
           )}
-        />{" "}
+        />
         <FormField
           control={form.control}
           name="addPathOut"

@@ -15,12 +15,11 @@ export const metadata: Metadata = {
 
 export default async function BGPTemplatesPage({}: Props) {
   const response = await fetchAllBGPTemplates();
-
   return (
     <section>
       <Card>
         <CardHeader>
-          <CardTitle>Tables</CardTitle>
+          <CardTitle>BGP Templates</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col items-stretch justify-center gap-4 md:flex-row md:items-center md:justify-between">
