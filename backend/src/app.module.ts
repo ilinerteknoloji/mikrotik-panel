@@ -21,6 +21,7 @@ import { JwtModule } from "./shared/jwt/jwt.module";
 import { GenerateKeysModule } from "./shared/keys/generate-keys.module";
 import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
 import { AddressesModule } from "./modules/mikrotik/ip/addresses/addresses.module";
+import { ArpModule } from "./modules/mikrotik/ip/arp/arp.module";
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AddressesModule } from "./modules/mikrotik/ip/addresses/addresses.modul
     BgpConnectionModule,
     BgpTemplatesModule,
     AddressesModule,
+    ArpModule,
   ],
   controllers: [],
   providers: [],
