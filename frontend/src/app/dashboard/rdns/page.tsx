@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   // TODO: Add metadata RdnsPage
 };
 
-export const dynamic = "no-store";
+export const dynamic = "force-dynamic";
 
 export default async function RdnsPage({ searchParams }: Props) {
   const rDnsHosts = await fetchAllRDnsHosts({ page: 1, limit: 100 });
