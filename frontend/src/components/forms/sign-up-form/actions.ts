@@ -21,8 +21,8 @@ export async function signUpFormSubmitAction(
     if (!parsedResponse.success) {
       throw new Error("An error occurred while parsing the response");
     } else if (!parsedResponse.data.status) {
-      const message = parsedResponse.data.response.message;
-      throw new Error(Array.isArray(message) ? message.join(", ") : message);
+      const message = parsedResponse.data.response;
+      throw new Error(JSON.stringify(message));
     }
 
     return {

@@ -8,19 +8,19 @@ import { useEffect } from "react";
 type Props = {};
 
 export function PageName({}: Props) {
-  const { pageName, href, setPage } = usePageStore((state) => state);
-  const path = usePathname();
+  // const { pageName, href, setPage } = usePageStore((state) => state);
+  // const path = usePathname();
 
-  useEffect(() => {
-    if (path !== href) {
-      const page = allPages.find((item) =>
-        item.href === "/" ? path === "/" : path.startsWith(item.href),
-      );
-      if (page) {
-        setPage(page.title, page.href);
-      }
-    }
-  }, [path, href, setPage, pageName]);
+  // useEffect(() => {
+  //   if (path !== href) {
+  //     const page = allPages.find((item) =>
+  //       item.href === "/" ? path === "/" : path.startsWith(item.href),
+  //     );
+  //     if (page) {
+  //       setPage(page.title, page.href);
+  //     }
+  //   }
+  // }, [path, href, setPage, pageName]);
   return <span />;
   // BUG: yanlış sayfa adı gözükmüyor
 
