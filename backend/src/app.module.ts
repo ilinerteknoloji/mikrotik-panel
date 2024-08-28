@@ -22,6 +22,7 @@ import { GenerateKeysModule } from "./shared/keys/generate-keys.module";
 import { LifecycleModule } from "./shared/lifecycle/lifecycle.module";
 import { AddressesModule } from "./modules/mikrotik/ip/addresses/addresses.module";
 import { ArpModule } from "./modules/mikrotik/ip/arp/arp.module";
+import { HealthModule } from "./modules/health/health.module";
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ArpModule } from "./modules/mikrotik/ip/arp/arp.module";
     BgpTemplatesModule,
     AddressesModule,
     ArpModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],
