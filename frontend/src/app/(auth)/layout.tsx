@@ -3,6 +3,7 @@ import { World } from "@/components/general/world";
 import Logo from "@/images/logo.svg";
 import { headers } from "next/headers";
 import Image from "next/image";
+import { APP_NAME } from "@/lib/constant/app.constant";
 
 export default function RootLayout({
   children,
@@ -19,7 +20,7 @@ export default function RootLayout({
             <div className="flex items-center justify-center gap-4">
               <Image
                 src={Logo}
-                alt="MikroTik Logo"
+                alt={`${APP_NAME} Logo`}
                 width={100}
                 height={100}
                 className="drop-shadow"
@@ -27,7 +28,7 @@ export default function RootLayout({
               />
               <div>
                 <h1 className="text-xl font-semibold leading-none tracking-tight">
-                  MikroTik Panel
+                  {APP_NAME}
                 </h1>
                 <p className="text-sm text-gray-500">
                   A simple panel to manage MikroTik devices.

@@ -6,6 +6,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { APP_NAME } from "@/lib/constant/app.constant";
 import { navigationItemsAdmin } from "@/lib/constant/navigation-items/admin-navigation-items";
 import { navigationItemsDashboard } from "@/lib/constant/navigation-items/dashboard-navigation-items";
 import { Menu } from "lucide-react";
@@ -25,7 +26,7 @@ export function MobileMenu({ type }: Props) {
         </SheetTrigger>
         <SheetContent side="left">
           <SheetHeader>
-            <SheetTitle>Mikrotik Panel</SheetTitle>
+            <SheetTitle>{APP_NAME}</SheetTitle>
           </SheetHeader>
 
           {navigationItems.map((item, index) => (
