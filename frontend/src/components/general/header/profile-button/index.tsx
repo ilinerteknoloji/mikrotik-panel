@@ -40,9 +40,6 @@ export async function ProfileButton({}: Props) {
         >
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </Link>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
         <DropdownMenuSeparator />
         <SignOutButton />
       </DropdownMenuContent>
