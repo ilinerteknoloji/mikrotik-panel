@@ -29,7 +29,7 @@ export const columns: ColumnDef<UserIps>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          index
+          Index
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -68,7 +68,7 @@ export const columns: ColumnDef<UserIps>[] = [
   },
   {
     accessorKey: "categories",
-    header: "Category",
+    header: "Kategori",
     cell: ({ row }) => {
       const ip: string = row.getValue("ip");
       return <CategoryForm ip={ip} />;
@@ -76,9 +76,9 @@ export const columns: ColumnDef<UserIps>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: "Durum",
     cell: ({ row }) => {
-      return row.original.status ? "Active" : "Passive";
+      return row.original.status ? "Aktif" : "Pasif";
     },
   },
 ];

@@ -43,7 +43,7 @@ export async function InterfacesChart({}: Props) {
       <CardHeader>
         <CardTitle>Interfaces</CardTitle>
         <CardDescription>
-          Total number of interfaces grouped by type
+          Interface türlerine göre dağılımı gösterir.
         </CardDescription>
       </CardHeader>
       <CardContent>

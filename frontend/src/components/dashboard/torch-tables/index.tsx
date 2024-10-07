@@ -3,7 +3,13 @@
 import { useTorchStore } from "@/stores/torch-store";
 import { torchTableData } from "./columns";
 import { TorchDataTable } from "./data-table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 type Props = {
   className?: string;
@@ -27,7 +33,10 @@ export function TorchTables({ className }: Props) {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Torch Data</CardTitle>
+        <CardTitle>Torch Verisi</CardTitle>
+        <CardDescription>
+          İzlediğiniz trafiğin son 1 saatlik verilerini görüntüleyebilirsiniz.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <TorchDataTable columns={torchTableData} data={data} />

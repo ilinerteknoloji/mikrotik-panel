@@ -16,17 +16,17 @@ import { NavigationItem } from "./navigation-item.type";
 
 export const navigationItemsAdmin: NavigationItem[] = [
   {
-    title: "Admin Home",
+    title: "Admin Dashboard",
     href: "/admin",
     icon: <HomeIcon />,
   },
   {
-    title: "Users",
+    title: "Kullanıcılar",
     href: "/admin/users",
     icon: <Users />,
   },
   {
-    title: "User Ips",
+    title: "Kullanıcı Ipleri",
     href: "/admin/user-ips",
     icon: <NotebookTabs />,
   },
@@ -94,7 +94,7 @@ export const navigationItemsAdmin: NavigationItem[] = [
     icon: <Server />,
     children: [
       {
-        title: "Addresses",
+        title: "Ip Adresleri",
         href: "/admin/ip/addresses",
         icon: <ListCollapse />,
       },

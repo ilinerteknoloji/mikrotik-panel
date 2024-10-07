@@ -16,14 +16,14 @@ type Actions = {
 export const useTorchStore = create(
   persist<State & Actions>(
     (set) => ({
-      labels: Array(100).fill(0),
-      rxData: Array(100).fill(0),
-      rxPacketsData: Array(100).fill(0),
-      txData: Array(100).fill(0),
-      txPacketsData: Array(100).fill(0),
+      labels: Array(120).fill(0),
+      rxData: Array(120).fill(0),
+      rxPacketsData: Array(120).fill(0),
+      txData: Array(120).fill(0),
+      txPacketsData: Array(120).fill(0),
       setData: (data) => {
         set((state) => {
-          const MAX_DATA_POINTS = 100;
+          const MAX_DATA_POINTS = 120;
 
           return {
             labels: [data[0], ...state.labels].slice(0, MAX_DATA_POINTS),

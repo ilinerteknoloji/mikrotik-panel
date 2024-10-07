@@ -73,7 +73,7 @@ export function CategoryForm({ ip }: Props) {
               <Select onValueChange={onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={"Select Category"} />
+                    <SelectValue placeholder="Kategori" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

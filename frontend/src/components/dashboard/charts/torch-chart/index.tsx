@@ -70,8 +70,11 @@ export function TorchChart({}: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Torch Chart</CardTitle>
-        <CardDescription>Real-time traffic monitoring tool</CardDescription>
+        <CardTitle>Sunucu Trafiği</CardTitle>
+        <CardDescription>
+          Sunucunun trafik durumunu gösteren grafik. 30 saniyede bir
+          güncellenir.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <TorchAreaChart />

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -57,7 +58,10 @@ export function DataTable<TData, TValue>({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>User Ips</CardTitle>
+        <CardTitle>Ipler</CardTitle>
+        <CardDescription>
+          Ip kategorilerinizi düzenleyebilirsiniz.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
