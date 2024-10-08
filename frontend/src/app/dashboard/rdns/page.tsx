@@ -44,10 +44,10 @@ export default async function RdnsPage({ searchParams }: Props) {
     <section>
       <Card>
         <CardHeader>
-          <CardTitle>RDns Records</CardTitle>
+          <CardTitle>RDns Kayıtları</CardTitle>
           <CardDescription>
-            Reverse DNS (RDns) is a system that enables the resolution of an IP
-            address to a domain name.
+            Reverse DNS (RDNS), bir IP adresini alan adına çözümleyen bir
+            sistemdir.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -98,7 +98,7 @@ export default async function RdnsPage({ searchParams }: Props) {
                   data: (data) => data.status,
                 },
                 {
-                  label: "Domain Name",
+                  label: "Alan Adı",
                   data: (data) => data.domainName,
                 },
                 {

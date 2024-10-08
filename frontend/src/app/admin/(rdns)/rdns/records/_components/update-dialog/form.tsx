@@ -46,7 +46,7 @@ export function UpdateRdnsForm({ record }: Props) {
           name="record"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Record</FormLabel>
+              <FormLabel>RDns</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Record" />
               </FormControl>

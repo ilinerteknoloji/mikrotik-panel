@@ -21,7 +21,7 @@ export async function UpdateDialog({ record }: Props) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Update RDns Record</DialogTitle>
+          <DialogTitle>RDns Kaydını Güncelle</DialogTitle>
         </DialogHeader>
         <UpdateRdnsForm record={record} />
       </DialogContent>
