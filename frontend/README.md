@@ -35,6 +35,8 @@ Kullanıcılara atanan IP adresleri burada listelenir. Kullanıcı, önceden adm
 
 ### RDns
 
+Admin tarafından kullanıcıya atanan IP adresleri ClouDNS üzerindeki kayıtlar ile eşlenerek listelenir ve kullanıcı kendi RDns kayıtlarını buradan düzenleyebilir.
+
 ## Admin
 
 ### Kullanıcılar
