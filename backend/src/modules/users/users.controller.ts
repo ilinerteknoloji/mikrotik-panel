@@ -23,6 +23,7 @@ import { User } from "src/lib/decorators/user.decorator";
 import { OrderByPipeType, RequestUserType } from "src/types";
 import { OrderByPipe } from "src/lib/pipes/order-by.pipe";
 import { usersSchema, UsersSchemaType } from "src/shared/drizzle/schemas";
+import { UpdatePasswordDto } from "./dto/update-password.dto";
 
 @Controller("users")
 @UseGuards(AuthGuard, RolesGuard)
@@ -93,8 +94,35 @@ export class UsersController {
   // }
 
   @Patch(":id")
-  public update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
+  public update(
+    @Param("id") id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @User() user: RequestUserType,
+  ) {
+    console.log("updateUserDto", updateUserDto);
+
+    if (user.id !== +id && user.role !== UserRole.ADMIN) {
+      throw new UnauthorizedException(
+        "You don't have permission to access this resource",
+      );
+    }
     return this.usersService.update(+id, updateUserDto);
+  }
+
+  @Patch(":id")
+  public updatePassword(
+    @Param("id") id: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @User() user: RequestUserType,
+  ) {
+    console.log("updatePasswordDto", updatePasswordDto);
+
+    if (user.id !== +id && user.role !== UserRole.ADMIN) {
+      throw new UnauthorizedException(
+        "You don't have permission to access this resource",
+      );
+    }
+    return this.usersService.updatePassword(+id, updatePasswordDto);
   }
 
   @Delete(":id")

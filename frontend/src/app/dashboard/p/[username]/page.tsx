@@ -1,4 +1,5 @@
 import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
+import { UpdatePassword } from "@/components/forms/update-password";
 import { UpdateProfileForm } from "@/components/forms/update-profile";
 import { ServerAlerts } from "@/components/general/server-alerts";
 import {
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { env } from "@/lib/schema/env";
 import { userResponseSchema } from "@/lib/schema/response/user/user.schema";
+import { LoaderCircle } from "lucide-react";
 import { getServerSession } from "next-auth";
 
 type Props = {
@@ -30,7 +32,7 @@ export default async function ProfilePage({ params: { username } }: Props) {
   const parsedResponse = userResponseSchema.safeParse(responseJson);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full flex-col">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {!parsedResponse.success
           ? parsedResponse.error.errors.map((error, index) => (
@@ -45,28 +47,36 @@ export default async function ProfilePage({ params: { username } }: Props) {
           <ServerAlerts title="Error" description={parsedResponse.data.error} />
         ) : null}
       </div>
+      <div className="flex w-full min-w-max flex-1 flex-col gap-4 lg:flex-row">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Profilinizi Güncelleyin</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {parsedResponse.success && parsedResponse.data.status ? (
+              <UpdateProfileForm
+                id={parsedResponse.data.response.id}
+                user={parsedResponse.data.response}
+              />
+            ) : (
+              <LoaderCircle className="animate-spin" />
+            )}
+          </CardContent>
+        </Card>
 
-      <ServerAlerts
-        title="Error"
-        description={session?.expiresAt.toString() ?? ""}
-      />
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{username} Profile</CardTitle>
-          <CardDescription>
-            This is the profile page for {username}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          Profile Page
-          <h1>{username}</h1>
-          <div className="max-w-[500px] hyphens-auto break-words">
-            <pre>{JSON.stringify(session, null, 2)}</pre>
-          </div>
-          <UpdateProfileForm />
-        </CardContent>
-      </Card>
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Şifrenizi Değiştirin</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {parsedResponse.success && parsedResponse.data.status ? (
+              <UpdatePassword id={parsedResponse.data.response.id} />
+            ) : (
+              <LoaderCircle className="animate-spin" />
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

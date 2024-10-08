@@ -1,14 +1,19 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import { filterUsersPublicInformations } from "src/lib/utils";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersRepository } from "./users.repository";
 import { UsersSchemaType } from "src/shared/drizzle/schemas";
 import { OrderByPipeType } from "src/types";
+import { UpdatePasswordDto } from "./dto/update-password.dto";
+import { EncryptionService } from "src/shared/encryption/encryption.service";
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly encryptionService: EncryptionService,
+  ) {}
 
   public findAll(
     page: number,
@@ -55,9 +60,44 @@ export class UsersService {
   }
 
   public async update(id: number, updateUserDto: UpdateUserDto) {
-    console.log(updateUserDto);
+    const response = await this.usersRepository.updateUser(
+      "id",
+      id,
+      updateUserDto,
+    );
+    if (response[0].affectedRows === 0) {
+      throw new NotFoundException("User not found");
+    }
+    const newData = await this.usersRepository.findUserByKey("id", id);
+    return filterUsersPublicInformations(newData[0]);
+  }
 
-    return `This action updates a #${id} user`;
+  public async updatePassword(
+    id: number,
+    updatePasswordDto: UpdatePasswordDto,
+  ) {
+    const [user] = await this.usersRepository.findUserByKey("id", id);
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+    const isMatch = await this.encryptionService.compare(
+      updatePasswordDto.oldPassword,
+      user.password,
+    );
+    if (!isMatch) {
+      throw new NotFoundException("Password not match");
+    }
+    const encryptedPassword = await this.encryptionService.encrypt(
+      updatePasswordDto.newPassword,
+    );
+    const response = await this.usersRepository.updateUser("id", id, {
+      password: encryptedPassword,
+    });
+    if (response[0].affectedRows === 0) {
+      throw new NotFoundException("User not found");
+    }
+    const newData = await this.usersRepository.findUserByKey("id", id);
+    return filterUsersPublicInformations(newData[0]);
   }
 
   public async remove(id: number) {

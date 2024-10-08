@@ -126,4 +126,15 @@ export class UsersRepository {
       })
       .from(usersSchema);
   }
+
+  public async updateUser<K extends keyof UsersSchemaType>(
+    keyName: K,
+    value: UsersSchemaType[K],
+    data: Partial<UsersSchemaType>,
+  ) {
+    return await this.drizzle
+      .update(usersSchema)
+      .set(data)
+      .where(eq(usersSchema[keyName], value));
+  }
 }
