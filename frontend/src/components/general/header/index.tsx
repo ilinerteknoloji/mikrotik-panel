@@ -54,16 +54,6 @@ export async function Header({ type }: Props) {
               </Link>
             ) : null}
 
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              className="rounded-full p-2"
-            >
-              <Bell className="size-6" />
-              {/* <BellDot className="size-6" /> */}
-            </Button>
-
             <ThemeButton />
 
             <ProfileButton />

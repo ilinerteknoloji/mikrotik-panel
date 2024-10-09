@@ -7,6 +7,6 @@ type Props = {};
 
 export function SignOutButton({}: Props) {
   return (
-    <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
+    <DropdownMenuItem onClick={() => signOut()}>Çıkış yap</DropdownMenuItem>
   );
 }

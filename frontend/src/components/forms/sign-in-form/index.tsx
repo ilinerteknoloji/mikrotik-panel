@@ -64,16 +64,16 @@ export function SignInForm({}: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Kullanıcı Adı</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Username"
+                  placeholder="Kullanıcı adı"
                   autoComplete="username"
                 />
               </FormControl>
               <FormDescription>
-                Your username, email, or phone number.
+                Kullanıcı adınız, e-posta adresiniz veya telefon numaranız.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -85,11 +85,11 @@ export function SignInForm({}: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Şifre</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Password"
+                  placeholder="Şifre"
                   type="password"
                   autoComplete="current-password"
                 />
@@ -104,7 +104,7 @@ export function SignInForm({}: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Sign In
+          Giriş Yap
         </Button>
       </form>
     </Form>

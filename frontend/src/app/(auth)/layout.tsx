@@ -31,7 +31,8 @@ export default function RootLayout({
                   {APP_NAME}
                 </h1>
                 <p className="text-sm text-gray-500">
-                  A simple panel to manage MikroTik devices.
+                  MikroTik cihazlarını kolayca yönetmek için basit ve kullanıcı
+                  dostu bir panel
                 </p>
               </div>
             </div>

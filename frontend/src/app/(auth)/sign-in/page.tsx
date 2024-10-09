@@ -16,11 +16,11 @@ export default async function SignInPage({}: Props) {
     <div className="flex w-full items-center justify-center">
       <Card className="w-96 border-none shadow-none">
         <CardHeader>
-          <CardTitle>Sign In</CardTitle>
+          <CardTitle>Giriş Yap</CardTitle>
           <CardDescription>
-            Don&apos;t have an account?{" "}
+            Hesabınız yok mu?{" "}
             <Link href="/sign-up" className="link">
-              Sign up
+              Kayıt olun
             </Link>
           </CardDescription>
         </CardHeader>
@@ -30,7 +30,7 @@ export default async function SignInPage({}: Props) {
         <CardFooter className="flex flex-col items-start gap-4">
           <CardDescription>
             <Link href="/forgot-password" className="link">
-              Forgot your password?
+              Şifrenizi mi unuttunuz?
             </Link>
           </CardDescription>
         </CardFooter>

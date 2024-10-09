@@ -15,11 +15,11 @@ export default async function SignUpPage({}: Props) {
     <div className="flex w-full items-center justify-center">
       <Card className="w-96 border-none shadow-none">
         <CardHeader>
-          <CardTitle>Sign Up</CardTitle>
+          <CardTitle>Kayıt ol</CardTitle>
           <CardDescription>
-            Already have an account?{" "}
+            Hesabınız var mı?{" "}
             <Link href="/sign-in" className="link">
-              Sign in
+              Giriş yapın
             </Link>
           </CardDescription>
         </CardHeader>

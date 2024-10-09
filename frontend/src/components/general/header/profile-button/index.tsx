@@ -32,13 +32,13 @@ export async function ProfileButton({}: Props) {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>Hesabım</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link
           href="/dashboard/p/[username]"
           as={`/dashboard/p/${session?.user.username}`}
         >
-          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Profil</DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
         <SignOutButton />

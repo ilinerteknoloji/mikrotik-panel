@@ -9,7 +9,7 @@ export function SearchInput({}: Props) {
       <SearchIcon className="size-6" />
       <Input
         name="search"
-        placeholder="Search"
+        placeholder="Ara"
         className="rounded-full border-none shadow-none outline-none focus-visible:ring-0"
       />
     </div>

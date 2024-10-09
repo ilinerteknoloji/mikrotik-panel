@@ -58,11 +58,11 @@ export function SignUpForm({}: Props) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>First Name</FormLabel>
+                <FormLabel>Ad</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="First Name"
+                    placeholder="Ad"
                     autoComplete="given-name"
                   />
                 </FormControl>
@@ -76,11 +76,11 @@ export function SignUpForm({}: Props) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Last Name</FormLabel>
+                <FormLabel>Soyad</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="Last Name"
+                    placeholder="Soyad"
                     autoComplete="family-name"
                   />
                 </FormControl>
@@ -95,11 +95,11 @@ export function SignUpForm({}: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Kullanıcı Adı</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Username"
+                  placeholder="Kullanıcı Adı"
                   autoComplete="username"
                 />
               </FormControl>
@@ -132,11 +132,11 @@ export function SignUpForm({}: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone Number</FormLabel>
+              <FormLabel>Telefon Numarası</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Phone Number"
+                  placeholder="Telefon Numarası"
                   autoComplete="tel"
                 />
               </FormControl>
@@ -150,11 +150,11 @@ export function SignUpForm({}: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Şifre</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Password"
+                  placeholder="Şifre"
                   type="password"
                   autoComplete="new-password"
                 />
@@ -162,31 +162,23 @@ export function SignUpForm({}: Props) {
               {field.value.length > 0 ? (
                 <FormMessage>
                   {!field.value.match(/(?=.*[a-z])/) ? (
-                    <span>
-                      Password must contain at least one lowercase letter.
-                    </span>
+                    <span>Şifre en az bir küçük harf içermelidir.</span>
                   ) : null}
 
                   {!field.value.match(/(?=.*[A-Z])/) ? (
-                    <span>
-                      Password must contain at least one uppercase letter.
-                    </span>
+                    <span>Şifre en az bir büyük harf içermelidir.</span>
                   ) : null}
 
                   {!field.value.match(/(?=.*\d)/) ? (
-                    <span>Password must contain at least one number.</span>
+                    <span>Şifre en az bir rakam içermelidir.</span>
                   ) : null}
 
                   {!field.value.match(/(?=.*[@$!%*?&])/) ? (
-                    <span>
-                      Password must contain at least one special character.
-                    </span>
+                    <span>Şifre en az bir özel karakter içermelidir.</span>
                   ) : null}
 
                   {!field.value.match(/^.{8,30}$/) ? (
-                    <span>
-                      Password must be between 8 and 30 characters long.
-                    </span>
+                    <span>Şifre 8 ila 30 karakter uzunluğunda olmalıdır.</span>
                   ) : null}
                 </FormMessage>
               ) : null}
@@ -199,7 +191,7 @@ export function SignUpForm({}: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Sign Up
+          Kayıt Ol
         </Button>
       </form>
     </Form>
