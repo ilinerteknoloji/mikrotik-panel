@@ -34,7 +34,7 @@ export async function DataTablePagination<
           className="flex items-center gap-2"
           disabled
         >
-          <ArrowLeft className="size-4" /> Prev
+          <ArrowLeft className="size-4" /> Önceki
         </Button>
       ) : (
         <Link
@@ -45,7 +45,7 @@ export async function DataTablePagination<
             variant="ghost"
             className="flex items-center gap-2"
           >
-            <ArrowLeft className="size-4" /> Prev
+            <ArrowLeft className="size-4" /> Önceki
           </Button>
         </Link>
       )}
@@ -59,7 +59,7 @@ export async function DataTablePagination<
             variant="ghost"
             className="flex items-center gap-2"
           >
-            Next <ArrowRight className="size-4" />
+            Sonraki <ArrowRight className="size-4" />
           </Button>
         </Link>
       ) : (
@@ -69,7 +69,7 @@ export async function DataTablePagination<
           className="flex items-center gap-2"
           disabled
         >
-          Next <ArrowRight className="size-4" />
+          Sonraki <ArrowRight className="size-4" />
         </Button>
       )}
     </div>

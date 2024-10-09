@@ -18,9 +18,9 @@ type Props = {
 export function StatusSelector({ searchParams }: Props) {
   const router = useRouter();
   const selectItems = [
-    { value: "all", title: "All" },
-    { value: "true", title: "Active" },
-    { value: "false", title: "Passive" },
+    { value: "all", title: "Tümü" },
+    { value: "true", title: "Aktif" },
+    { value: "false", title: "Pasif" },
   ];
   let status = "all";
   if (searchParams?.status && searchParams.status !== undefined)

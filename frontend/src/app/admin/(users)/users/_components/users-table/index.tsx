@@ -17,10 +17,6 @@ type Props = {
 export function UsersTable({ users }: Props) {
   return (
     <Table>
-      <TableCaption>
-        A table of users. Click on the &quot;Open&quot; button to open the user
-        details.
-      </TableCaption>
       <TableHeader>
         <TableRow>
           <UsersTableHead
@@ -31,35 +27,35 @@ export function UsersTable({ users }: Props) {
             ID
           </UsersTableHead>
           <UsersTableHead typeofValue="string" keyofValue="firstName">
-            First Name
+            Ad
           </UsersTableHead>
           <UsersTableHead typeofValue="string" keyofValue="lastName">
-            Last Name
+            Soyad
           </UsersTableHead>
           <UsersTableHead typeofValue="string" keyofValue="username">
-            Username
+            Kullanıcı Adı
           </UsersTableHead>
           <UsersTableHead typeofValue="string" keyofValue="email">
             E-Mail
           </UsersTableHead>
           <UsersTableHead typeofValue="string" keyofValue="phoneNumber">
-            Phone Number
+            Telefon Numarası
           </UsersTableHead>
           <UsersTableHead
             className="text-center"
             typeofValue="string"
             keyofValue="role"
           >
-            Role
+            Rol
           </UsersTableHead>
           <UsersTableHead
             className="text-center"
             typeofValue="string"
             keyofValue="status"
           >
-            Status
+            Durum
           </UsersTableHead>
-          <TableHead className="text-center">Open</TableHead>
+          <TableHead className="text-center">Aç</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

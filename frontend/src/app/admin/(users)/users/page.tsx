@@ -37,7 +37,8 @@ export default async function UsersPage({ searchParams }: Props) {
         <CardHeader>
           <CardTitle>Users</CardTitle>
           <CardDescription>
-            Manage users. Click on the &quot;Open&quot; button to open the user
+            Kullanıcıları yönetin. Kullanıcıyı açmak için &quot;Aç&quot;
+            düğmesine tıklayın
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

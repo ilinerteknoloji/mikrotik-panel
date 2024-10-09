@@ -1,5 +1,7 @@
 "use client";
 
+import { UpdateUserDetailsForm } from "@/components/forms/admin/update-user-details";
+import { UpdateProfileForm } from "@/components/forms/update-profile";
 import {
   Sheet,
   SheetContent,
@@ -39,27 +41,6 @@ export default function InterceptedUserDetailPage({
   }, [username, toast]);
 
   const handleOpenChange = () => router.back();
-  const objectToString = (obj: object): React.ReactNode => {
-    return (
-      <ul className="ml-4 list-disc">
-        {Object.entries(obj).map(([key, value]) => (
-          <li key={key}>
-            <strong>{key}: </strong>
-            {typeof value === "object" &&
-            typeof value !== null &&
-            typeof value !== undefined
-              ? Array.isArray(value)
-                ? value.join(", ")
-                : objectToString(value ?? {})
-              : value
-                ? value
-                : "N/A"}
-          </li>
-        ))}
-      </ul>
-    );
-  };
-  // TODO: Make prettier and add more details
   return (
     <Sheet defaultOpen open onOpenChange={handleOpenChange}>
       <SheetContent className="lg:min-w-[750px]">
@@ -67,9 +48,19 @@ export default function InterceptedUserDetailPage({
           <SheetTitle>{username}</SheetTitle>
         </SheetHeader>
 
-        {user ? objectToString(user) : null}
-
-        <SheetFooter>Footer</SheetFooter>
+        {user ? (
+          <div className="flex flex-col gap-4">
+            <UpdateProfileForm id={user?.id} user={user} />
+            <hr />
+            <UpdateUserDetailsForm
+              id={user.id}
+              role={user.role}
+              status={user?.status ?? false}
+            />
+          </div>
+        ) : (
+          <div>loading...</div>
+        )}
       </SheetContent>
     </Sheet>
   );

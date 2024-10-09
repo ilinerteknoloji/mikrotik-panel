@@ -1,4 +1,7 @@
+import { UpdateUserDetailsForm } from "@/components/forms/admin/update-user-details";
+import { UpdateProfileForm } from "@/components/forms/update-profile";
 import { ServerAlerts } from "@/components/general/server-alerts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserByUsernameOrId } from "@/lib/utils/fetch-requests/user/get-user";
 import type { Metadata } from "next";
 
@@ -18,27 +21,31 @@ export default async function UserDetailPage({ params: { username } }: Props) {
     return <ServerAlerts title="Error" description={response.message} />;
   const { data } = response;
 
-  const objectToString = (obj: object): React.ReactNode => {
-    return (
-      <ul className="ml-4 list-disc">
-        {Object.entries(obj).map(([key, value]) => (
-          <li key={key}>
-            <strong>{key}: </strong>
-            {typeof value === "object" &&
-            typeof value !== null &&
-            typeof value !== undefined
-              ? Array.isArray(value)
-                ? value.join(", ")
-                : objectToString(value ?? {})
-              : value
-                ? value
-                : "N/A"}
-          </li>
-        ))}
-      </ul>
-    );
-  };
-  // TODO: Make prettier and add more details
+  return (
+    <div>
+      <div className="flex flex-col gap-4 lg:flex-row">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>{data.username}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <UpdateProfileForm id={data.id} user={data} />
+          </CardContent>
+        </Card>
 
-  return <div>{objectToString(data)}</div>;
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Detaylar</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <UpdateUserDetailsForm
+              id={data.id}
+              role={data.role}
+              status={data?.status ?? false}
+            />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

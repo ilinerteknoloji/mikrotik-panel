@@ -20,15 +20,15 @@ export function RoleSelector({ searchParams }: Props) {
   const roles = [
     {
       value: "all",
-      title: "All",
+      title: "Tümü",
     },
     {
       value: "user",
-      title: "Only User",
+      title: "Kullanıcı",
     },
     {
       value: "admin",
-      title: "Only Admin",
+      title: "Admin",
     },
   ];
   const role = searchParams?.role ?? "all";

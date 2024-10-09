@@ -19,12 +19,12 @@ export function UsersTableItem({ user }: Props) {
       <TableCell>{user.phoneNumber}</TableCell>
       <TableCell>
         <Badge variant={user.role === "admin" ? "outline" : "secondary"}>
-          {user.role}
+          {user.role === "admin" ? "Admin" : "Kullanıcı"}
         </Badge>
       </TableCell>
       <TableCell>
         <Badge variant={user.status ? "default" : "destructive"}>
-          {user.status ? "Active" : "Passive"}
+          {user.status ? "Aktif" : "Pasif"}
         </Badge>
       </TableCell>
       <TableCell className="text-center">

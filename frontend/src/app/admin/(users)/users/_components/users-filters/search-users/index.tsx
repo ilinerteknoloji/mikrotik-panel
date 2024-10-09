@@ -37,7 +37,7 @@ export function SearchUsers({ searchParams }: Props) {
       </div>
       <Input
         type="search"
-        placeholder="Search users"
+        placeholder="Kullanıcı Ara"
         className="border-0 pl-0 focus-visible:ring-0"
         onChange={handleSearch}
       />

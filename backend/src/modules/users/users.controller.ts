@@ -24,6 +24,7 @@ import { OrderByPipeType, RequestUserType } from "src/types";
 import { OrderByPipe } from "src/lib/pipes/order-by.pipe";
 import { usersSchema, UsersSchemaType } from "src/shared/drizzle/schemas";
 import { UpdatePasswordDto } from "./dto/update-password.dto";
+import { UpdateUserFromAdmin } from "./dto/update-user-from-admin.dto";
 
 @Controller("users")
 @UseGuards(AuthGuard, RolesGuard)
@@ -79,9 +80,9 @@ export class UsersController {
       !isNaN(+identifier) &&
       (user.id === +identifier || user.role === UserRole.ADMIN)
     ) {
-      return this.usersService.findById(+identifier);
+      return this.usersService.findById(+identifier, user);
     } else if (user.username === identifier || user.role === UserRole.ADMIN) {
-      return this.usersService.findByUsername(identifier);
+      return this.usersService.findByUsername(identifier, user);
     }
     throw new UnauthorizedException(
       "You don't have permission to access this resource",
@@ -99,9 +100,7 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
     @User() user: RequestUserType,
   ) {
-    console.log("updateUserDto", updateUserDto);
-
-    if (user.id !== +id && user.role !== UserRole.ADMIN) {
+    if (user.id !== +id) {
       throw new UnauthorizedException(
         "You don't have permission to access this resource",
       );
@@ -115,14 +114,26 @@ export class UsersController {
     @Body() updatePasswordDto: UpdatePasswordDto,
     @User() user: RequestUserType,
   ) {
-    console.log("updatePasswordDto", updatePasswordDto);
-
-    if (user.id !== +id && user.role !== UserRole.ADMIN) {
+    if (user.id !== +id) {
       throw new UnauthorizedException(
         "You don't have permission to access this resource",
       );
     }
     return this.usersService.updatePassword(+id, updatePasswordDto);
+  }
+
+  @Patch("admin/:id")
+  public updateUserFromAdmin(
+    @Param("id") id: string,
+    @Body() newData: UpdateUserFromAdmin,
+    @User() user: RequestUserType,
+  ) {
+    if (user.role !== UserRole.ADMIN) {
+      throw new UnauthorizedException(
+        "You don't have permission to access this resource",
+      );
+    }
+    return this.usersService.updateUserFromAdmin(+id, newData);
   }
 
   @Delete(":id")
