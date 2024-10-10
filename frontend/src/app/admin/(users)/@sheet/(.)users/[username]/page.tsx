@@ -5,7 +5,6 @@ import { UpdateProfileForm } from "@/components/forms/update-profile";
 import {
   Sheet,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";

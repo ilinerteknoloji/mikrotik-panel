@@ -22,12 +22,14 @@ import { useForm } from "react-hook-form";
 import { getCategories, updateCategory } from "./actions";
 import { CategoryFormSchema, categoryFormSchema } from "./schema";
 import { IpCategoriesSchema } from "@/lib/schema/response/firewall/ip-categories.schema";
+import { cn } from "@/lib/utils";
 
 type Props = {
   ip: string;
+  className?: string;
 };
 
-export function CategoryForm({ ip }: Props) {
+export function CategoryForm({ ip, className }: Props) {
   const { toast } = useToast();
   const [categories, setCategories] = useState<IpCategoriesSchema>([]);
   const form = useForm<CategoryFormSchema>({
@@ -64,7 +66,7 @@ export function CategoryForm({ ip }: Props) {
 
   return (
     <Form {...form}>
-      <form className="w-40">
+      <form className={cn("w-40", className)}>
         <FormField
           control={form.control}
           name="category"

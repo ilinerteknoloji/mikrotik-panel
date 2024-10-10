@@ -108,6 +108,16 @@ export class UserIpsRepository {
       where(fields, { eq }) {
         return eq(fields.id, id);
       },
+      with: {
+        user: { columns: { password: false } },
+        addressList: {
+          columns: { id: false, list: false, address: false },
+          with: {
+            address: { columns: { userId: false, ip: false } },
+            ipCategory: true,
+          },
+        },
+      },
     });
     return ip;
   }

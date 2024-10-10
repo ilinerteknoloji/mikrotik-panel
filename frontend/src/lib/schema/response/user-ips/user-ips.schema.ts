@@ -25,6 +25,8 @@ export const userIpSchema = z.object({
 });
 export type UserIpSchema = z.infer<typeof userIpSchema>;
 
+export const userIpResponseSchema = createResponseSchema(userIpSchema);
+
 const userIpsSchema = z.array(userIpSchema);
 export type UserIpsSchema = z.infer<typeof userIpsSchema>;
 export const userIpsResponseSchema = createResponseSchema(userIpsSchema);

@@ -1,9 +1,9 @@
-type Props = {
+type Props = Readonly<{
   children: React.ReactNode;
   sheet: React.ReactNode;
-};
+}>;
 
-export default function UsersLayout({ children, sheet }: Props) {
+export default function Layout({ children, sheet }: Props) {
   return (
     <>
       {sheet}

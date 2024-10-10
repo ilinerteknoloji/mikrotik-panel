@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -42,8 +41,8 @@ export default async function IpsPage({ searchParams }: Props) {
         <CardHeader>
           <CardTitle>User Ips</CardTitle>
           <CardDescription>
-            Manage user ips. Click on the &quot;Open&quot; button to open the
-            user ip
+            Kullanıcı Iplerini yönetin. Detayları açmak için &quot;Aç&quot;
+            düğmesine tıklayın.
           </CardDescription>
         </CardHeader>
 
@@ -71,35 +70,33 @@ export default async function IpsPage({ searchParams }: Props) {
                   data: (data) => data.ip,
                 },
                 {
-                  label: "Ip Category",
+                  label: "Kategori",
                   data: (data) => data.addressList[0].ipCategory.title,
                 },
                 {
-                  label: "User",
+                  label: "Kullanıcı",
                   key: "userId",
                   data: (data) => data.user.username,
                   className: "capitalize",
                 },
                 {
-                  label: "Status",
+                  label: "Durum",
                   key: "status",
                   data: (data) => (
                     <Badge variant={data.status ? "default" : "destructive"}>
-                      {data.status ? "Active" : "Passive"}
+                      {data.status ? "Aktif" : "Pasif"}
                     </Badge>
                   ),
                 },
                 {
-                  label: "Created At",
+                  label: "Oluşturulduğu Tarih",
                   key: "createdAt",
                   data: (data) => new Date(data.createdAt).toLocaleString("tr"),
                 },
                 {
-                  label: "Open",
+                  label: "Aç",
                   data: (data) => (
-                    <Link
-                      href={`/admin/user-ips/${data.user.username}/${data.ip}`}
-                    >
+                    <Link href={`/admin/user-ips/${data.id}`}>
                       <ExternalLink />
                     </Link>
                   ),
@@ -113,8 +110,6 @@ export default async function IpsPage({ searchParams }: Props) {
             fetchData={fetchUserIps}
           />
         </CardContent>
-
-        <CardFooter></CardFooter>
       </Card>
     </section>
   );
