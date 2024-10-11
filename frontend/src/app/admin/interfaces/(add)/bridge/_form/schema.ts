@@ -29,7 +29,7 @@ export const multicastRouterValues = [
 ] as const;
 
 export const bridgeFormSchema = z.object({
-  addDhcpOption82: z.boolean().optional(),
+  addDhcpOption82: z.coerce.boolean().optional(),
   adminMac: z.string().optional(),
   ageingTime: z
     .string()
@@ -37,20 +37,20 @@ export const bridgeFormSchema = z.object({
     .optional(),
   arp: z.enum(arpValues).optional(),
   arpTimeout: z.coerce.number().int().optional(),
-  autoMac: z.boolean().optional(),
+  autoMac: z.coerce.boolean().optional(),
   comment: z.string().optional(),
-  dhcpSnooping: z.boolean().optional(),
-  disabled: z.boolean().optional(),
+  dhcpSnooping: z.coerce.boolean().optional(),
+  disabled: z.coerce.boolean().optional(),
   etherType: z.enum(etherTypeValues).optional(),
-  fastForward: z.boolean().optional(),
+  fastForward: z.coerce.boolean().optional(),
   forwardDelay: z
     .string()
     .regex(regexConstants.time[0], regexConstants.time[1])
     .optional(),
   frameTypes: z.enum(frameTypesValues).optional(),
-  igmpSnooping: z.boolean().optional(),
+  igmpSnooping: z.coerce.boolean().optional(),
   igmpVersion: z.enum(igmpVersionValues).optional(),
-  ingressFiltering: z.boolean().optional(),
+  ingressFiltering: z.coerce.boolean().optional(),
   l2mtu: z.string().optional(),
   lastMemberInterval: z
     .string()
@@ -70,7 +70,7 @@ export const bridgeFormSchema = z.object({
   membershipInterval: z.string().optional(),
   mldVersion: z.enum(mdlVersionValues).optional(),
   mtu: z.coerce.number().int().optional(),
-  multicastQuerier: z.boolean().optional(),
+  multicastQuerier: z.coerce.boolean().optional(),
   multicastRouter: z.enum(multicastRouterValues).optional(),
   name: z.string().optional(),
   priority: z.coerce.number().int().min(0).max(65535).optional(),
@@ -84,7 +84,7 @@ export const bridgeFormSchema = z.object({
   startupQueryCount: z.coerce.number().int().min(0).max(4294967295).optional(),
   startupQueryInterval: z.string().optional(),
   transmitHoldCount: z.coerce.number().int().optional(),
-  vlanFiltering: z.boolean().optional(),
+  vlanFiltering: z.coerce.boolean().optional(),
 });
 
 export type BridgeFormSchema = z.infer<typeof bridgeFormSchema>;

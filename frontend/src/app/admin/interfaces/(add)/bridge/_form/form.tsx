@@ -38,60 +38,83 @@ import {
   multicastRouterValues,
   protocolModeValues,
 } from "./schema";
-import { addBridge } from "./actions";
+import { addBridge, updateBridge } from "./actions";
 import { useToast } from "@/components/ui/use-toast";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{}>;
+type Props = Readonly<
+  | {
+      type?: "create";
+      id?: string;
+      formData?: BridgeFormSchema;
+    }
+  | {
+      type: "update";
+      id: string;
+      formData: BridgeFormSchema;
+    }
+>;
 
-export function BridgeForm({}: Props) {
+export function BridgeForm({ type = "create", id, formData }: Props) {
   const { toast } = useToast();
+
   const form = useForm<BridgeFormSchema>({
     resolver: zodResolver(bridgeFormSchema),
     defaultValues: {
-      addDhcpOption82: false,
-      adminMac: "",
-      ageingTime: "00:05:00",
-      arp: arpValues[0],
-      arpTimeout: 30,
-      autoMac: true,
-      comment: "",
-      dhcpSnooping: false,
-      disabled: false,
-      etherType: etherTypeValues[0],
-      fastForward: true,
-      forwardDelay: "00:00:15",
-      frameTypes: frameTypesValues[0],
-      igmpSnooping: false,
-      igmpVersion: igmpVersionValues[0],
-      ingressFiltering: true,
-      l2mtu: "",
-      lastMemberInterval: "1.00",
-      lastMemberQueryCount: 2,
-      maxHops: 20,
-      maxMessageAge: "00:00:20",
-      membershipInterval: "260.00",
-      mldVersion: mdlVersionValues[0],
-      mtu: 1500,
-      multicastQuerier: false,
-      multicastRouter: multicastRouterValues[0],
-      name: "",
-      priority: 32768,
-      protocolMode: protocolModeValues[0],
-      pvid: 1,
-      querierInterval: "255.00",
-      queryInterval: "125.00",
-      queryResponseInterval: "10.00",
-      regionName: "",
-      regionRevision: 0,
-      startupQueryCount: 2,
-      startupQueryInterval: "31.25",
-      transmitHoldCount: 6,
-      vlanFiltering: false,
+      addDhcpOption82: formData?.addDhcpOption82 ?? false,
+      adminMac: formData?.adminMac ?? "",
+      ageingTime: formData?.ageingTime ?? "00:05:00",
+      arp: formData?.arp ?? arpValues[0],
+      arpTimeout: formData?.arpTimeout ?? 30,
+      autoMac: formData?.autoMac ?? true,
+      comment: formData?.comment ?? "",
+      dhcpSnooping: formData?.dhcpSnooping ?? false,
+      disabled: formData?.disabled ?? false,
+      etherType: formData?.etherType ?? etherTypeValues[0],
+      fastForward: formData?.fastForward ?? true,
+      forwardDelay: formData?.forwardDelay ?? "00:00:15",
+      frameTypes: formData?.frameTypes ?? frameTypesValues[0],
+      igmpSnooping: formData?.igmpSnooping ?? false,
+      igmpVersion: formData?.igmpVersion ?? igmpVersionValues[0],
+      ingressFiltering: formData?.ingressFiltering ?? true,
+      l2mtu: formData?.l2mtu ?? "",
+      lastMemberInterval: formData?.lastMemberInterval ?? "1.00",
+      lastMemberQueryCount: formData?.lastMemberQueryCount ?? 2,
+      maxHops: formData?.maxHops ?? 20,
+      maxMessageAge: formData?.maxMessageAge ?? "00:00:20",
+      membershipInterval: formData?.membershipInterval ?? "260.00",
+      mldVersion: formData?.mldVersion ?? mdlVersionValues[0],
+      mtu: formData?.mtu ?? 1500,
+      multicastQuerier: formData?.multicastQuerier ?? false,
+      multicastRouter: formData?.multicastRouter ?? multicastRouterValues[0],
+      name: formData?.name ?? "",
+      priority: formData?.priority ?? 32768,
+      protocolMode: formData?.protocolMode ?? protocolModeValues[0],
+      pvid: formData?.pvid ?? 1,
+      querierInterval: formData?.querierInterval ?? "255.00",
+      queryInterval: formData?.queryInterval ?? "125.00",
+      queryResponseInterval: formData?.queryResponseInterval ?? "10.00",
+      regionName: formData?.regionName ?? "",
+      regionRevision: formData?.regionRevision ?? 0,
+      startupQueryCount: formData?.startupQueryCount ?? 2,
+      startupQueryInterval: formData?.startupQueryInterval ?? "31.25",
+      transmitHoldCount: formData?.transmitHoldCount ?? 6,
+      vlanFiltering: formData?.vlanFiltering ?? false,
     },
   });
 
   const onSubmit = async (data: BridgeFormSchema) => {
-    const response = await addBridge(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await addBridge(data);
+        break;
+      case "update":
+        response = await updateBridge(id!, data);
+        break;
+    }
+    console.log("response.status: " + response.status);
+
     if (!response.status)
       return toast({
         title: "Error",
@@ -103,8 +126,6 @@ export function BridgeForm({}: Props) {
       description: response.data,
     });
   };
-
-  // TODO: add description for each field
 
   return (
     <Form {...form}>
@@ -1202,7 +1223,7 @@ export function BridgeForm({}: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Submit
+          {type === "create" ? "Oluştur" : "Güncelle"}
         </Button>
       </form>
     </Form>

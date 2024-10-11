@@ -67,7 +67,9 @@ export default async function InterfacesPage({}: Props) {
                 {
                   label: "Open",
                   data: (data) => (
-                    <Link href={`/admin/interfaces/${data[".id"].slice(1)}`}>
+                    <Link
+                      href={`/admin/interfaces/${data.type}/${data[".id"].slice(1)}`}
+                    >
                       <ExternalLink />
                     </Link>
                   ),

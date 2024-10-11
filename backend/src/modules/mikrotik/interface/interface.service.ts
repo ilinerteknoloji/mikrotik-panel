@@ -17,8 +17,9 @@ export class InterfaceService {
     return interfaces;
   }
 
-  public async findOne(id: number) {
-    return `This action returns a #${id} interface`;
+  public async findOne(id: string) {
+    if (!id.startsWith("*")) id = `*${id}`;
+    return await this.interfaceRepository.fetchById(id);
   }
 
   public async update(id: number, updateInterfaceDto: UpdateInterfaceDto) {

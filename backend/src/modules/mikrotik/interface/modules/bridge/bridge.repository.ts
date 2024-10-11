@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { EnvService } from "src/shared/env/env.service";
 import { CreateBridgeDto } from "./dto/create-bridge.dto";
+import { UpdateBridgeDto } from "./dto/update-bridge.dto";
 
 @Injectable()
 export class BridgeRepository {
@@ -39,47 +40,65 @@ export class BridgeRepository {
     return createJson;
   }
 
-  private createBridgeToToMikrotikJson(createBridgeDto: CreateBridgeDto) {
+  public async update(id: string, updateBridgeDto: UpdateBridgeDto) {
+    const response = await fetch(`${this.host}/rest/interface/bridge/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Basic ${this.auth}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(this.createBridgeToToMikrotikJson(updateBridgeDto)),
+    });
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return json;
+  }
+
+  private createBridgeToToMikrotikJson(bridgeDto: UpdateBridgeDto) {
     return {
-      "add-dhcp-option82": createBridgeDto.addDhcpOption82,
-      "admin-mac": createBridgeDto.adminMac,
-      "ageing-time": createBridgeDto.ageingTime,
-      arp: createBridgeDto.arp,
-      "arp-timeout": createBridgeDto.arpTimeout,
-      "auto-mac": createBridgeDto.autoMac,
-      comment: createBridgeDto.comment,
-      "dhcp-snooping": createBridgeDto.dhcpSnooping,
-      disabled: createBridgeDto.disabled,
-      "ether-type": createBridgeDto.etherType,
-      "fast-forward": createBridgeDto.fastForward,
-      "forward-delay": createBridgeDto.forwardDelay,
-      "frame-types": createBridgeDto.frameTypes,
-      "igmp-snooping": createBridgeDto.igmpSnooping,
-      "igmp-version": createBridgeDto.igmpVersion,
-      "ingress-filtering": createBridgeDto.ingressFiltering,
+      "add-dhcp-option82": bridgeDto.addDhcpOption82,
+      "admin-mac": bridgeDto.adminMac,
+      "ageing-time": bridgeDto.ageingTime,
+      arp: bridgeDto.arp,
+      "arp-timeout": bridgeDto.arpTimeout,
+      "auto-mac": bridgeDto.autoMac,
+      comment: bridgeDto.comment,
+      "dhcp-snooping": bridgeDto.dhcpSnooping,
+      disabled: bridgeDto.disabled,
+      "ether-type": bridgeDto.etherType,
+      "fast-forward": bridgeDto.fastForward,
+      "forward-delay": bridgeDto.forwardDelay,
+      "frame-types": bridgeDto.frameTypes,
+      "igmp-snooping": bridgeDto.igmpSnooping,
+      "igmp-version": bridgeDto.igmpVersion,
+      "ingress-filtering": bridgeDto.ingressFiltering,
       // l2mtu: "", // string (read-only)
-      "last-member-interval": createBridgeDto.lastMemberInterval,
-      "last-member-query-count": createBridgeDto.lastMemberQueryCount,
-      "max-hops": createBridgeDto.maxHops,
-      "max-message-age": createBridgeDto.maxMessageAge,
-      "membership-interval": createBridgeDto.membershipInterval,
-      "mld-version": createBridgeDto.mldVersion,
-      mtu: createBridgeDto.mtu,
-      "multicast-querier": createBridgeDto.multicastQuerier,
-      "multicast-router": createBridgeDto.multicastRouter,
-      name: createBridgeDto.name,
-      priority: createBridgeDto.priority,
-      "protocol-mode": createBridgeDto.protocolMode,
-      pvid: createBridgeDto.pvid,
-      "querier-interval": createBridgeDto.querierInterval,
-      "query-interval": createBridgeDto.queryInterval,
-      "query-response-interval": createBridgeDto.queryResponseInterval,
-      "region-name": createBridgeDto.regionName,
-      "region-revision": createBridgeDto.regionRevision,
-      "startup-query-count": createBridgeDto.startupQueryCount,
-      "startup-query-interval": createBridgeDto.startupQueryInterval,
-      "transmit-hold-count": createBridgeDto.transmitHoldCount,
-      "vlan-filtering": createBridgeDto.vlanFiltering,
+      "last-member-interval": bridgeDto.lastMemberInterval,
+      "last-member-query-count": bridgeDto.lastMemberQueryCount,
+      "max-hops": bridgeDto.maxHops,
+      "max-message-age": bridgeDto.maxMessageAge,
+      "membership-interval": bridgeDto.membershipInterval,
+      "mld-version": bridgeDto.mldVersion,
+      mtu: bridgeDto.mtu,
+      "multicast-querier": bridgeDto.multicastQuerier,
+      "multicast-router": bridgeDto.multicastRouter,
+      name: bridgeDto.name,
+      priority: bridgeDto.priority,
+      "protocol-mode": bridgeDto.protocolMode,
+      pvid: bridgeDto.pvid,
+      "querier-interval": bridgeDto.querierInterval,
+      "query-interval": bridgeDto.queryInterval,
+      "query-response-interval": bridgeDto.queryResponseInterval,
+      "region-name": bridgeDto.regionName,
+      "region-revision": bridgeDto.regionRevision,
+      "startup-query-count": bridgeDto.startupQueryCount,
+      "startup-query-interval": bridgeDto.startupQueryInterval,
+      "transmit-hold-count": bridgeDto.transmitHoldCount,
+      "vlan-filtering": bridgeDto.vlanFiltering,
     };
   }
 }

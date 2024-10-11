@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { UseRoles } from "src/lib/decorators/roles.decorator";
 import { UserRole } from "src/lib/enums/user-role.enum";
 import { AuthGuard } from "src/modules/auth/guards/auth.guard";
@@ -21,10 +21,11 @@ export class InterfaceController {
     return this.interfaceService.findAll();
   }
 
-  // @Get(":id")
-  // public findOne(@Param("id") id: string) {
-  //   return this.interfaceService.findOne(+id);
-  // }
+  @Get(":id")
+  @UseRoles(UserRole.ADMIN, UserRole.USER)
+  public findOne(@Param("id") id: string) {
+    return this.interfaceService.findOne(id);
+  }
 
   // @Patch(":id")
   // public update(
