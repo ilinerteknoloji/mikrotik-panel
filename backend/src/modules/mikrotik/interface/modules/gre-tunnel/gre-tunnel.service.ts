@@ -21,14 +21,17 @@ export class GreTunnelService {
     return `This action returns all greTunnel`;
   }
 
-  public async findOne(id: number) {
-    return `This action returns a #${id} greTunnel`;
+  public async findOne(id: string) {
+    return await this.greTunnelRepository.findOne(id);
   }
 
-  public async update(id: number, updateGreTunnelDto: UpdateGreTunnelDto) {
-    console.log(updateGreTunnelDto);
-
-    return `This action updates a #${id} greTunnel`;
+  public async update(id: string, updateGreTunnelDto: UpdateGreTunnelDto) {
+    const response = await this.greTunnelRepository.update(
+      id,
+      updateGreTunnelDto,
+    );
+    const greTunnel = await this.interfaceRepository.fetchById(response[".id"]);
+    return greTunnel;
   }
 
   public async remove(id: number) {

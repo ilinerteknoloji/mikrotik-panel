@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Metadata } from "next";
-import { BridgeForm } from "../_form/form";
 import { fetchInterfaceById } from "@/lib/utils/fetch-requests/interfaces/fetch-interface";
-import { bridgeFormSchema } from "../_form/schema";
+import { greTunnelFormSchema } from "../_form/schema";
+import { GreTunnelForm } from "../_form/form";
+import { fetchGreTunnelById } from "@/lib/utils/fetch-requests/interfaces/fetch-gre-tunnel";
 
 type Props = Readonly<{
   params: {
@@ -14,23 +15,20 @@ export const metadata: Metadata = {
   // TODO: Add metadata [id]Page
 };
 
-export default async function BridgeIdPage({ params: { id } }: Props) {
-  const response = await fetchInterfaceById(id);
+export default async function GreTunnelUpdatePage({ params: { id } }: Props) {
+  const response = await fetchGreTunnelById(id);
   if (!response.status) {
     throw new Error(response.message);
   }
-  const data = bridgeFormSchema.parse({
-    ...response.data,
-    mtu: response.data.mtu === "auto" ? "" : response.data.mtu,
-  });
+  const { data } = response;
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bridge {id}</CardTitle>
+        <CardTitle>GRE Tunnel {id}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mx-auto w-[500px] max-w-full">
-          <BridgeForm type="update" id={id} formData={data} />
+          <GreTunnelForm type="update" id={id} formData={data} />
         </div>
       </CardContent>
     </Card>

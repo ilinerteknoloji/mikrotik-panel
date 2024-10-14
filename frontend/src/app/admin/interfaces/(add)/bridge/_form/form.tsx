@@ -113,8 +113,6 @@ export function BridgeForm({ type = "create", id, formData }: Props) {
         response = await updateBridge(id!, data);
         break;
     }
-    console.log("response.status: " + response.status);
-
     if (!response.status)
       return toast({
         title: "Error",

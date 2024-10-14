@@ -27,37 +27,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { addGreTunnel } from "./actions";
+import { addGreTunnel, updateGreTunnel } from "./actions";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AccordionContent } from "@radix-ui/react-accordion";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{}>;
+type Props = Readonly<
+  | {
+      type?: "create";
+      id?: string;
+      formData?: GreTunnelSchema;
+    }
+  | {
+      type: "update";
+      id: string;
+      formData: GreTunnelSchema;
+    }
+>;
 
-export function GreTunnelForm({}: Props) {
+export function GreTunnelForm({ type = "create", id, formData }: Props) {
   const { toast } = useToast();
   const form = useForm<GreTunnelSchema>({
     resolver: zodResolver(greTunnelFormSchema),
     defaultValues: {
-      clampTcpMss: true,
-      comment: "",
-      disabled: false,
-      dontFragment: dontFragmentValues[0],
-      dscp: "inherit",
-      ipsecSecret: "",
-      keepalive: "00:00:10,10",
-      localAddress: "",
-      mtu: 1476,
-      name: "",
-      remoteAddress: "",
+      clampTcpMss: formData?.clampTcpMss ?? true,
+      comment: formData?.comment ?? "",
+      disabled: formData?.disabled ?? false,
+      dontFragment: formData?.dontFragment ?? dontFragmentValues[0],
+      dscp: formData?.dscp ?? "inherit",
+      ipsecSecret: formData?.ipsecSecret ?? "",
+      keepalive: formData?.keepalive ?? "00:00:10,10",
+      localAddress: formData?.localAddress ?? "",
+      mtu: formData?.mtu ?? 1476,
+      name: formData?.name ?? "",
+      remoteAddress: formData?.remoteAddress ?? "",
     },
   });
 
   const onSubmit = async (data: GreTunnelSchema) => {
-    const response = await addGreTunnel(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await addGreTunnel(data);
+        break;
+      case "update":
+        response = await updateGreTunnel(id!, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",
