@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { EnvService } from "src/shared/env/env.service";
 import { CreateIpTunnelDto } from "./dto/create-ip-tunnel.dto";
+import { UpdateIpTunnelDto } from "./dto/update-ip-tunnel.dto";
 
 @Injectable()
 export class IpTunnelRepository {
@@ -23,9 +24,7 @@ export class IpTunnelRepository {
         Authorization: `Basic ${this.auth}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(
-        this.createIpTunnelToMikrotikJson(createIpTunnelDto),
-      ),
+      body: JSON.stringify(this.jsonToMikrotik(createIpTunnelDto)),
     });
     const createJson = await createResponse.json();
     if (!createResponse.ok)
@@ -36,7 +35,41 @@ export class IpTunnelRepository {
     return createJson;
   }
 
-  private createIpTunnelToMikrotikJson(createIpTunnelDto: CreateIpTunnelDto) {
+  public async findOne(id: string) {
+    const response = await fetch(`${this.host}/rest/interface/ipip/${id}`, {
+      headers: {
+        Authorization: `Basic ${this.auth}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return this.miktorikToJson(json);
+  }
+
+  public async update(id: string, dto: UpdateIpTunnelDto) {
+    const response = await fetch(`${this.host}/rest/interface/ipip/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Basic ${this.auth}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(this.jsonToMikrotik(dto)),
+    });
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return json;
+  }
+
+  private jsonToMikrotik(createIpTunnelDto: UpdateIpTunnelDto) {
     return {
       "clamp-tcp-mss": createIpTunnelDto.clampTcpMss,
       comment: createIpTunnelDto.comment,
@@ -49,6 +82,22 @@ export class IpTunnelRepository {
       keepalive: createIpTunnelDto.keepalive,
       name: createIpTunnelDto.name,
       "remote-address": createIpTunnelDto.remoteAddress,
+    };
+  }
+
+  private miktorikToJson(json: any) {
+    return {
+      clampTcpMss: json["clamp-tcp-mss"],
+      comment: json.comment,
+      disabled: json.disabled,
+      dontFragment: json["dont-fragment"],
+      dscp: json.dscp,
+      ipsecSecret: json["ipsec-secret"],
+      localAddress: json["local-address"],
+      mtu: json.mtu,
+      keepalive: json.keepalive,
+      name: json.name,
+      remoteAddress: json["remote-address"],
     };
   }
 }

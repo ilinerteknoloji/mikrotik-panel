@@ -21,17 +21,20 @@ export class IpTunnelService {
     return `This action returns all ipTunnel`;
   }
 
-  public async findOne(id: number) {
-    return `This action returns a #${id} ipTunnel`;
+  public async findOne(id: string) {
+    return await this.ipTunnelRepository.findOne(id);
   }
 
-  public async update(id: number, updateIpTunnelDto: UpdateIpTunnelDto) {
-    console.log(updateIpTunnelDto);
-
-    return `This action updates a #${id} ipTunnel`;
+  public async update(id: string, updateIpTunnelDto: UpdateIpTunnelDto) {
+    const response = await this.ipTunnelRepository.update(
+      id,
+      updateIpTunnelDto,
+    );
+    const ipTunnel = await this.interfaceRepository.fetchById(response[".id"]);
+    return ipTunnel;
   }
 
-  public async remove(id: number) {
+  public async remove(id: string) {
     return `This action removes a #${id} ipTunnel`;
   }
 }

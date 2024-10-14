@@ -33,31 +33,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { addIpIpTunnel } from "./actions";
+import { addIpIpTunnel, updateIpIpTunnel } from "./actions";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{}>;
+type Props = Readonly<
+  | {
+      type?: "create";
+      id?: string;
+      formData?: IpIpTunnelFormSchema;
+    }
+  | {
+      type: "update";
+      id: string;
+      formData: IpIpTunnelFormSchema;
+    }
+>;
 
-export function IpUpTunnelForm({}: Props) {
+export function IpUpTunnelForm({ type = "create", id, formData }: Props) {
   const { toast } = useToast();
   const form = useForm<IpIpTunnelFormSchema>({
     resolver: zodResolver(ipIpTunnelFormSchema),
     defaultValues: {
-      clampTcpMss: true,
-      comment: "",
-      disabled: false,
-      dontFragment: dontFragmentValues[0],
-      dscp: "inherit",
-      ipsecSecret: "",
-      keepalive: "00:00:10,10",
-      localAddress: "",
-      mtu: 1476,
-      name: "",
-      remoteAddress: "",
+      clampTcpMss: formData?.clampTcpMss ?? true,
+      comment: formData?.comment ?? "",
+      disabled: formData?.disabled ?? false,
+      dontFragment: formData?.dontFragment ?? dontFragmentValues[0],
+      dscp: formData?.dscp ?? "inherit",
+      ipsecSecret: formData?.ipsecSecret ?? "",
+      keepalive: formData?.keepalive ?? "00:00:10,10",
+      localAddress: formData?.localAddress ?? "",
+      mtu: formData?.mtu ?? 1476,
+      name: formData?.name ?? "",
+      remoteAddress: formData?.remoteAddress ?? "",
     },
   });
 
   const onSubmit = async (data: IpIpTunnelFormSchema) => {
-    const response = await addIpIpTunnel(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await addIpIpTunnel(data);
+        break;
+      case "update":
+        response = await updateIpIpTunnel(id!, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",

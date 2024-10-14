@@ -4,9 +4,9 @@ import { z } from "zod";
 export const dontFragmentValues = ["no", "inherit"] as const;
 
 export const ipIpTunnelFormSchema = z.object({
-  clampTcpMss: z.boolean().optional(),
+  clampTcpMss: z.coerce.boolean().optional(),
   comment: z.string().optional(),
-  disabled: z.boolean().optional(),
+  disabled: z.coerce.boolean().optional(),
   dontFragment: z.enum(dontFragmentValues).optional(),
   dscp: z
     .string()
