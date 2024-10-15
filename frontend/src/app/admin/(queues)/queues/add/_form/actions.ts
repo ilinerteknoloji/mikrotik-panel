@@ -28,3 +28,27 @@ export async function addQueue(
     };
   }
 }
+
+export async function updateQueue(
+  id: string,
+  values: QueueFormSchema,
+): Promise<FormAction<string>> {
+  try {
+    const response = await fetchBackEnd(`queues/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(values),
+    });
+    if (!response.status) return response;
+    const parsedData = queueItemResponseSchema.parse(response.data);
+    if (!parsedData.status) throw new Error(parsedData.error);
+    return {
+      status: true,
+      data: `${parsedData.response.name} updated successfully.`,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: error instanceof Error ? error.message : "An error occurred.",
+    };
+  }
+}

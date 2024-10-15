@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common";
 import { CreateQueueDto } from "./dto/create-queue.dto";
 import { QueuesService } from "./queues.service";
+import { UpdateQueueDto } from "./dto/update-queue.dto";
 
 @Controller("queues")
 export class QueuesController {
@@ -22,14 +23,14 @@ export class QueuesController {
     return this.queuesService.findOne(id);
   }
 
-  // @Patch(":id")
-  // public update(
-  //   @Param("id") id: string,
-  //   @Body() updateQueueDto: UpdateQueueDto,
-  // ) {
-  //   if (!id.startsWith("*")) id = `*${id}`;
-  //   return this.queuesService.update(id, updateQueueDto);
-  // }
+  @Patch(":id")
+  public update(
+    @Param("id") id: string,
+    @Body() updateQueueDto: UpdateQueueDto,
+  ) {
+    if (!id.startsWith("*")) id = `*${id}`;
+    return this.queuesService.update(id, updateQueueDto);
+  }
 
   // @Delete(":id")
   // public remove(@Param("id") id: string) {

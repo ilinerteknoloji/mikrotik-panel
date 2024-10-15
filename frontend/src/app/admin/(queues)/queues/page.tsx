@@ -29,7 +29,8 @@ export default async function QueuesPage({}: Props) {
         <CardHeader>
           <CardTitle>Queues</CardTitle>
           <CardDescription>
-            Queue is a tool used to limit, prioritize, and manage data traffic.
+            Queue veri trafiğini sınırlamak, önceliklendirmek ve yönetmek için
+            kullanılan bir araçtır.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { EnvService } from "src/shared/env/env.service";
 import { CreateQueueDto } from "./dto/create-queue.dto";
+import { UpdateQueueDto } from "./dto/update-queue.dto";
 
 @Injectable()
 export class QueuesRepository {
@@ -23,7 +24,7 @@ export class QueuesRepository {
         Authorization: `Basic ${this.auth}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(this.createQueueToMikrotikJson(createQueueDto)),
+      body: JSON.stringify(this.jsonToMikrotik(createQueueDto)),
     });
     const json = await response.json();
     if (!response.ok)
@@ -32,16 +33,6 @@ export class QueuesRepository {
         response.status,
       );
     return json;
-  }
-
-  private createQueueToMikrotikJson(createQueueDto: CreateQueueDto) {
-    return {
-      name: createQueueDto.name,
-      target: createQueueDto.target,
-      "max-limit": createQueueDto.maxLimit,
-      "limit-at": createQueueDto.limitAt,
-      priority: createQueueDto.priority,
-    };
   }
 
   public async findAll() {
@@ -72,5 +63,33 @@ export class QueuesRepository {
         response.status,
       );
     return json;
+  }
+
+  public async update(id: string, updateQueueDto: UpdateQueueDto) {
+    const response = await fetch(`${this.host}/rest/queue/simple/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Basic ${this.auth}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(this.jsonToMikrotik(updateQueueDto)),
+    });
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return json;
+  }
+
+  private jsonToMikrotik(dto: UpdateQueueDto) {
+    return {
+      name: dto.name,
+      target: dto.target,
+      "max-limit": dto.maxLimit,
+      "limit-at": dto.limitAt,
+      priority: dto.priority,
+    };
   }
 }

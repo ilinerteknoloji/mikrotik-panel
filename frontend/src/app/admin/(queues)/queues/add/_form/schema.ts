@@ -5,7 +5,7 @@ export const queueFormSchema = z.object({
   target: z.string(),
   maxLimit: z
     .string()
-    .regex(/^(0|[1-9]\d*([KMGT]?)\/(0|[1-9]\d*([KMGT]?)))$/, {
+    .regex(/^(0|[1-9]\d*([KMGT]?)\/(0|[1-9]\d*([KMGT]?)))/, {
       message: "Invalid max limit format",
     })
     .optional(),
@@ -15,7 +15,7 @@ export const queueFormSchema = z.object({
       message: "Invalid limit at format",
     })
     .optional(),
-  priority: z.number().int().min(1).max(8),
+  priority: z.coerce.number().int().min(1).max(8),
 });
 
 export type QueueFormSchema = z.infer<typeof queueFormSchema>;

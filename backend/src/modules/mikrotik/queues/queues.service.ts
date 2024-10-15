@@ -22,8 +22,9 @@ export class QueuesService {
   }
 
   public async update(id: string, updateQueueDto: UpdateQueueDto) {
-    console.log(updateQueueDto);
-    return `This action updates a #${id} queue`;
+    const response = await this.queuesRepository.update(id, updateQueueDto);
+    const data = await this.queuesRepository.findById(response[".id"]);
+    return data;
   }
 
   public async remove(id: string) {

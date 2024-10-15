@@ -1,5 +1,4 @@
 import {
-  IsIP,
   IsNumber,
   IsOptional,
   IsString,
@@ -13,15 +12,17 @@ export class CreateQueueDto {
   @IsString()
   name: string;
 
-  @IsIP()
+  @Matches(/^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$/, {
+    message: "target must be a valid CIDR notation",
+  })
   target: string;
 
   @IsOptional()
-  @Matches(/^(0|[1-9]\d*([KMGT]?)\/(0|[1-9]\d*([KMGT]?)))$/)
+  @Matches(/^(0|[1-9]\d*([KMGT]?)\/(0|[1-9]\d*([KMGT]?)))/)
   maxLimit: string;
 
   @IsOptional()
-  @Matches(/^(0|[1-9]\d*([KMGT]?)\/(0|[1-9]\d*([KMGT]?)))$/)
+  @Matches(/^(0|[1-9]\d*([KMGT]?)\/(0|[1-9]\d*([KMGT]?)))/)
   limitAt: string;
 
   @IsOptional()

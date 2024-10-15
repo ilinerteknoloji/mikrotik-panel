@@ -14,25 +14,37 @@ import { useForm } from "react-hook-form";
 import { queueFormSchema, QueueFormSchema } from "./schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { addQueue } from "./actions";
+import { addQueue, updateQueue } from "./actions";
 import { toast } from "@/components/ui/use-toast";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{}>;
+type Props = Readonly<
+  | { type?: "create"; id?: string; formData?: QueueFormSchema }
+  | { type?: "update"; id: string; formData: QueueFormSchema }
+>;
 
-export function QueueForm({}: Props) {
+export function QueueForm({ type = "create", id, formData }: Props) {
   const form = useForm<QueueFormSchema>({
     resolver: zodResolver(queueFormSchema),
     defaultValues: {
-      name: "",
-      target: "",
-      maxLimit: "",
-      limitAt: "",
-      priority: 8,
+      name: formData?.name ?? "",
+      target: formData?.target ?? "",
+      maxLimit: formData?.maxLimit ?? "",
+      limitAt: formData?.limitAt ?? "",
+      priority: formData?.priority ?? 8,
     },
   });
 
   const onSubmit = async (data: QueueFormSchema) => {
-    const response = await addQueue(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await addQueue(data);
+        break;
+      case "update":
+        response = await updateQueue(id!, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",
@@ -168,7 +180,7 @@ export function QueueForm({}: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Submit
+          {type === "create" ? "Ekle" : "Güncelle"}
         </Button>
       </form>
     </Form>
