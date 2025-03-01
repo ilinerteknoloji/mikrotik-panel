@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { CreateAddressDto } from "./dto/create-address.dto";
-import { UpdateAddressDto } from "./dto/update-address.dto";
-import { AddressesRepository } from "./addresses.repository";
+import {Injectable} from "@nestjs/common";
+import {CreateAddressDto} from "./dto/create-address.dto";
+import {UpdateAddressDto} from "./dto/update-address.dto";
+import {AddressesRepository} from "./addresses.repository";
 
 @Injectable()
 export class AddressesService {
@@ -21,10 +21,10 @@ export class AddressesService {
     return this.addressesRepository.findOne(id);
   }
 
-  update(id: string, updateAddressDto: UpdateAddressDto) {
-    console.log(updateAddressDto);
-
-    return `This action updates a #${id} address`;
+  async update(id: string, updateAddressDto: UpdateAddressDto) {
+    await this.addressesRepository.update(id, updateAddressDto);
+    const data = await this.addressesRepository.findOne(id);
+    return data;
   }
 
   remove(id: string) {

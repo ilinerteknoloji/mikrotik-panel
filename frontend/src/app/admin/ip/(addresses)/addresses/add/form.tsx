@@ -22,30 +22,57 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ipAddressesAddAction } from "./actions";
+import { ipAddressesAddAction, ipAddressesUpdateAction } from "./actions";
 import { ipAddressesFormSchema, IpAddressesFormSchema } from "./schema";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{
-  interfaceNames: string[];
-}>;
+type Props = Readonly<
+  {
+    interfaceNames: string[];
+  } & (
+    | {
+        type?: "create";
+        id?: string;
+        formData?: IpAddressesFormSchema;
+      }
+    | {
+        type?: "update";
+        id: string;
+        formData: IpAddressesFormSchema;
+      }
+  )
+>;
 
-export function IpAddressesForm({ interfaceNames }: Props) {
+export function IpAddressesForm({
+  interfaceNames,
+  type = "create",
+  id,
+  formData,
+}: Props) {
   const { toast } = useToast();
   const form = useForm<IpAddressesFormSchema>({
     resolver: zodResolver(ipAddressesFormSchema),
     defaultValues: {
-      address: "",
+      address: formData?.address ?? "",
       //   advertise: false,
-      comment: "",
-      disabled: false,
+      comment: formData?.comment ?? "",
+      disabled: formData?.disabled ?? false,
       //   eui64: false,
       //   fromPool: "",
       //   noDad: false,
-      interface: "",
+      interface: formData?.interface ?? "",
     },
   });
   const onSubmit = async (data: IpAddressesFormSchema) => {
-    const response = await ipAddressesAddAction(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await ipAddressesAddAction(data);
+        break;
+      case "update":
+        response = await ipAddressesUpdateAction(id!, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",
@@ -278,7 +305,7 @@ export function IpAddressesForm({ interfaceNames }: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Submit
+          {type === "create" ? "Ekle" : "Güncelle"}
         </Button>
       </form>
     </Form>

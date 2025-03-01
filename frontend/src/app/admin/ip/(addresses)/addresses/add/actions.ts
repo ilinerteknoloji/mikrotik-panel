@@ -28,3 +28,27 @@ export async function ipAddressesAddAction(
     };
   }
 }
+
+export async function ipAddressesUpdateAction(
+  id: string,
+  values: IpAddressesFormSchema,
+): Promise<FormAction<string>> {
+  try {
+    const response = await fetchBackEnd(`ip/addresses/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(values),
+    });
+    if (!response.status) throw new Error(response.message);
+    const parsedData = ipAddressResponseSchema.parse(response.data);
+    if (!parsedData.status) throw new Error(parsedData.error);
+    return {
+      status: true,
+      data: `${parsedData.response.address} updated successfully.`,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: error instanceof Error ? error.message : "An error occurred.",
+    };
+  }
+}

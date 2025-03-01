@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { EnvService } from "src/shared/env/env.service";
 import { CreateAddressDto } from "./dto/create-address.dto";
+import { UpdateAddressDto } from "./dto/update-address.dto";
 
 @Injectable()
 export class AddressesRepository {
@@ -68,7 +69,25 @@ export class AddressesRepository {
     return json;
   }
 
-  private dtoToMikrotik(dto: CreateAddressDto) {
+  public async update(id: string, dto: UpdateAddressDto) {
+    const response = await fetch(`${this.host}/rest/ip/address/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Basic ${this.auth}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(this.dtoToMikrotik(dto)),
+    });
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return json;
+  }
+
+  private dtoToMikrotik(dto: UpdateAddressDto) {
     return {
       address: dto.address,
       //   advertise: dto.advertise,
