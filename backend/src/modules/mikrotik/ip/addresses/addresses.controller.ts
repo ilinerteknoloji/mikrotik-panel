@@ -7,13 +7,13 @@ import {
   Post,
   UseGuards,
 } from "@nestjs/common";
-import { UseRoles } from "src/lib/decorators/roles.decorator";
-import { UserRole } from "src/lib/enums/user-role.enum";
-import { AuthGuard } from "src/modules/auth/guards/auth.guard";
-import { RolesGuard } from "src/modules/auth/guards/roles.guard";
-import { AddressesService } from "./addresses.service";
-import { CreateAddressDto } from "./dto/create-address.dto";
-import { UpdateAddressDto } from "./dto/update-address.dto";
+import {UseRoles} from "src/lib/decorators/roles.decorator";
+import {UserRole} from "src/lib/enums/user-role.enum";
+import {AuthGuard} from "src/modules/auth/guards/auth.guard";
+import {RolesGuard} from "src/modules/auth/guards/roles.guard";
+import {AddressesService} from "./addresses.service";
+import {CreateAddressDto} from "./dto/create-address.dto";
+import {UpdateAddressDto} from "./dto/update-address.dto";
 
 @Controller("ip/addresses")
 @UseGuards(AuthGuard, RolesGuard)

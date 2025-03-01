@@ -4,7 +4,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { arpFormSchema, ArpFormSchema } from "./schema";
-import { arpAddAction } from "./actions";
+import { arpAddAction, arpUpdateAction } from "./actions";
 import {
   Form,
   FormControl,
@@ -24,23 +24,42 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{ interfaceNames: string[] }>;
+type Props = Readonly<
+  { interfaceNames: string[] } & (
+    | { type?: "create"; id?: string; formData?: ArpFormSchema }
+    | { type?: "update"; id: string; formData: ArpFormSchema }
+  )
+>;
 
-export function ARPForm({ interfaceNames }: Props) {
+export function ARPForm({
+  interfaceNames,
+  type = "create",
+  id,
+  formData,
+}: Props) {
   const { toast } = useToast();
   const form = useForm<ArpFormSchema>({
     resolver: zodResolver(arpFormSchema),
     defaultValues: {
-      comment: "",
-      address: "",
-      interface: "",
-      macAddress: "00:00:00:00:00:00",
-      published: false,
+      comment: formData?.comment ?? "",
+      address: formData?.address ?? "",
+      interface: formData?.interface ?? "",
+      macAddress: formData?.macAddress ?? "00:00:00:00:00:00",
+      published: formData?.published ?? false,
     },
   });
   const onSubmit = async (data: ArpFormSchema) => {
-    const response = await arpAddAction(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await arpAddAction(data);
+        break;
+      case "update":
+        response = await arpUpdateAction(id!, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",
@@ -188,7 +207,7 @@ export function ARPForm({ interfaceNames }: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Submit
+          {type === "create" ? "Ekle" : "Güncelle"}
         </Button>
       </form>
     </Form>

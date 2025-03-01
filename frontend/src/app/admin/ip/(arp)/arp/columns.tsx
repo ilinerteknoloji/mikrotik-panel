@@ -135,8 +135,8 @@ export const arpColumns: ColumnDef<ArpSchema>[] = [
     header: "Open",
     cell: ({ row }) => (
       <Link
-        href="/admin/ip/arp/[id]"
-        as={`/admin/ip/arp/${row.original[".id"].slice(1)}`}
+        href="/admin/ip/arp/update/[id]"
+        as={`/admin/ip/arp/update/${row.original[".id"].slice(1)}`}
       >
         <ExternalLink />
       </Link>

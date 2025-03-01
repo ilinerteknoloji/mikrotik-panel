@@ -1,7 +1,7 @@
-import { HttpException, Injectable } from "@nestjs/common";
-import { EnvService } from "src/shared/env/env.service";
-import { CreateAddressDto } from "./dto/create-address.dto";
-import { UpdateAddressDto } from "./dto/update-address.dto";
+import {HttpException, Injectable} from "@nestjs/common";
+import {EnvService} from "src/shared/env/env.service";
+import {CreateAddressDto} from "./dto/create-address.dto";
+import {UpdateAddressDto} from "./dto/update-address.dto";
 
 @Injectable()
 export class AddressesRepository {

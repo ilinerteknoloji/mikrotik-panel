@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { CreateArpDto } from "./dto/create-arp.dto";
-import { UpdateArpDto } from "./dto/update-arp.dto";
-import { ArpRepository } from "./arp.repository";
+import {Injectable} from "@nestjs/common";
+import {CreateArpDto} from "./dto/create-arp.dto";
+import {UpdateArpDto} from "./dto/update-arp.dto";
+import {ArpRepository} from "./arp.repository";
 
 @Injectable()
 export class ArpService {
@@ -21,10 +21,11 @@ export class ArpService {
     return this.arpRepository.findOne(id);
   }
 
-  update(id: string, updateArpDto: UpdateArpDto) {
-    console.log(updateArpDto);
+  async update(id: string, updateArpDto: UpdateArpDto) {
+    await this.arpRepository.update(id, updateArpDto);
+    const data = await this.arpRepository.findOne(id);
 
-    return `This action updates a #${id} arp`;
+    return data;
   }
 
   remove(id: string) {

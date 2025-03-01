@@ -52,8 +52,8 @@ export const ipAddressesColumns: ColumnDef<IpAddressSchema>[] = [
     header: "Open",
     cell: ({ row }) => (
       <Link
-        href="/admin/ip/addresses/[id]"
-        as={`/admin/ip/addresses/${row.original[".id"].slice(1)}`}
+        href="/admin/ip/addresses/update/[id]"
+        as={`/admin/ip/addresses/update/${row.original[".id"].slice(1)}`}
       >
         <ExternalLink />
       </Link>

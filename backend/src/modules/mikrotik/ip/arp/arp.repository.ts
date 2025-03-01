@@ -1,6 +1,7 @@
-import { HttpException, Injectable } from "@nestjs/common";
-import { EnvService } from "src/shared/env/env.service";
-import { CreateArpDto } from "./dto/create-arp.dto";
+import {HttpException, Injectable} from "@nestjs/common";
+import {EnvService} from "src/shared/env/env.service";
+import {CreateArpDto} from "./dto/create-arp.dto";
+import {UpdateArpDto} from "./dto/update-arp.dto";
 
 @Injectable()
 export class ArpRepository {
@@ -64,7 +65,25 @@ export class ArpRepository {
     return json;
   }
 
-  private dtoToMikrotik(createArpDto: CreateArpDto) {
+  public async update(id: string, updateArpDto: UpdateArpDto) {
+    const response = await fetch(`${this.host}/rest/ip/arp/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Basic ${this.auth}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(this.dtoToMikrotik(updateArpDto)),
+    });
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return json;
+  }
+
+  private dtoToMikrotik(createArpDto: UpdateArpDto) {
     return {
       comment: createArpDto.comment,
       address: createArpDto.address,

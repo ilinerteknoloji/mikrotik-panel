@@ -1,12 +1,10 @@
-import type { Metadata } from "next";
+type Props = Readonly<{ children: React.ReactNode; sheet: React.ReactNode }>;
 
-export const metadata: Metadata = {
-  title: "",
-  description: "",
-};
-
-type Props = Readonly<{ children: React.ReactNode }>;
-
-export default function ArpLayout({ children }: Props) {
-  return <>{children}</>;
+export default function ArpLayout({ children, sheet }: Props) {
+  return (
+    <>
+      {sheet}
+      {children}
+    </>
+  );
 }
