@@ -1,7 +1,7 @@
-import { HttpException, Injectable } from "@nestjs/common";
-import { EnvService } from "src/shared/env/env.service";
-import { CreateBgpConnectionDto } from "./dto/create-bgp-connection.dto";
-import { UpdateBgpConnectionDto } from "./dto/update-bgp-connection.dto";
+import {HttpException, Injectable} from "@nestjs/common";
+import {EnvService} from "src/shared/env/env.service";
+import {CreateBgpConnectionDto} from "./dto/create-bgp-connection.dto";
+import {UpdateBgpConnectionDto} from "./dto/update-bgp-connection.dto";
 
 @Injectable()
 export class BgpConnectionRepository {
@@ -60,6 +60,27 @@ export class BgpConnectionRepository {
         headers: {
           Authorization: `Basic ${this.auth}`,
         },
+      },
+    );
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+    return json;
+  }
+
+  public async update(id: string, updateBgpDto: UpdateBgpConnectionDto) {
+    const response = await fetch(
+      `${this.host}/rest/routing/bgp/connection/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Basic ${this.auth}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.dtoToMikrotikKeys(updateBgpDto)),
       },
     );
     const json = await response.json();

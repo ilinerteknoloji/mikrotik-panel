@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { addRoutingBgpConnection } from "./actions";
+import { addRoutingBgpConnection, updateRoutingBgpConnection } from "./actions";
 import {
   Select,
   SelectContent,
@@ -34,34 +34,61 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{
-  templates: string[];
-}>;
+type Props = Readonly<
+  {
+    templates: string[];
+  } & (
+    | {
+        type?: "create";
+        id?: string;
+        formData?: CreateBgpConnectionFormSchema;
+      }
+    | {
+        type?: "update";
+        id: string;
+        formData: CreateBgpConnectionFormSchema;
+      }
+  )
+>;
 
-export function RoutingBGPConnectionAddForm({ templates }: Props) {
+export function RoutingBGPConnectionAddForm({
+  templates,
+  type = "create",
+  formData,
+  id,
+}: Props) {
   const { toast } = useToast();
   const form = useForm<CreateBgpConnectionFormSchema>({
     resolver: zodResolver(createBgpConnectionFormSchema),
     defaultValues: {
-      name: "",
-      connect: true,
-      listen: true,
-      localAddress: "::",
-      localPort: 179,
-      localRole: undefined,
-      localTtl: undefined,
-      remoteAddress: "::",
-      remotePort: 179,
-      remoteAs: undefined,
-      allowedAs: undefined,
-      remoteTtl: undefined,
-      tcpMd5Key: undefined,
-      templates: "default",
+      name: formData?.name ?? "",
+      connect: formData?.connect ?? true,
+      listen: formData?.listen ?? true,
+      localAddress: formData?.localAddress ?? "::",
+      localPort: formData?.localPort ?? 179,
+      localRole: formData?.localRole ?? undefined,
+      localTtl: formData?.localTtl ?? undefined,
+      remoteAddress: formData?.remoteAddress ?? "::",
+      remotePort: formData?.remotePort ?? 179,
+      remoteAs: formData?.remoteAs ?? undefined,
+      allowedAs: formData?.allowedAs ?? undefined,
+      remoteTtl: formData?.remoteTtl ?? undefined,
+      tcpMd5Key: formData?.tcpMd5Key ?? undefined,
+      templates: formData?.templates ?? "default",
     },
   });
   const onSubmit = async (data: CreateBgpConnectionFormSchema) => {
-    const response = await addRoutingBgpConnection(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await addRoutingBgpConnection(data);
+        break;
+      case "update":
+        response = await updateRoutingBgpConnection(id!, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",
@@ -502,7 +529,7 @@ export function RoutingBGPConnectionAddForm({ templates }: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Submit
+          {type === "create" ? "Ekle" : "Güncelle"}
         </Button>
       </form>
     </Form>

@@ -30,3 +30,30 @@ export async function addRoutingBgpConnection(
     };
   }
 }
+
+export async function updateRoutingBgpConnection(
+  id: string,
+  values: CreateBgpConnectionFormSchema,
+): Promise<FormAction<string>> {
+  try {
+    const response = await fetchBackEnd(`routing/bgp/connection/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        ...values,
+        allowedAs: values?.allowedAs?.split(",").map((as) => +as.trim()),
+      }),
+    });
+    if (!response.status) throw new Error(response.message);
+    const parsedData = bgpConnectionResponseSchema.parse(response.data);
+    if (!parsedData.status) throw new Error(parsedData.error);
+    return {
+      status: true,
+      data: `${parsedData.response.name} updated successfully.`,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: error instanceof Error ? error.message : "An error occurred.",
+    };
+  }
+}

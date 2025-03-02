@@ -143,7 +143,7 @@ export const bgpConnectionsColumns: ColumnDef<BGPConnectionSchema>[] = [
     cell: ({ row }) => (
       <Link
         href="/admin/routing/bgp/[id]"
-        as={`/admin/routing/bgp/${row.original[".id"].slice(1)}`}
+        as={`/admin/routing/bgp/update/${row.original[".id"].slice(1)}`}
       >
         <ExternalLink />
       </Link>

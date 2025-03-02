@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { CreateBgpConnectionDto } from "./dto/create-bgp-connection.dto";
-import { UpdateBgpConnectionDto } from "./dto/update-bgp-connection.dto";
-import { BgpConnectionRepository } from "./bgp-connection.repository";
+import {Injectable} from "@nestjs/common";
+import {CreateBgpConnectionDto} from "./dto/create-bgp-connection.dto";
+import {UpdateBgpConnectionDto} from "./dto/update-bgp-connection.dto";
+import {BgpConnectionRepository} from "./bgp-connection.repository";
 
 @Injectable()
 export class BgpConnectionService {
@@ -25,10 +25,10 @@ export class BgpConnectionService {
     return this.bgpConnectionRepository.findOne(id);
   }
 
-  update(id: string, updateBgpConnectionDto: UpdateBgpConnectionDto) {
-    console.log(updateBgpConnectionDto);
-
-    return `This action updates a #${id} bgpConnection`;
+  async update(id: string, updateBgpConnectionDto: UpdateBgpConnectionDto) {
+    await this.bgpConnectionRepository.update(id, updateBgpConnectionDto);
+    const data = await this.bgpConnectionRepository.findOne(id);
+    return data;
   }
 
   remove(id: string) {
