@@ -1,14 +1,10 @@
-import { FormAction } from "@/lib/types";
-import { fetchBackEnd } from "../..";
-import {
-  bgpConnectionResponseSchema,
-  bgpConnectionSchema,
-  BGPConnectionSchema,
-} from "@/lib/schema/response/routing/bgp/connections";
 import {
   createBgpConnectionFormSchema,
   CreateBgpConnectionFormSchema,
 } from "@/app/admin/routing/(bgp)/bgp/add/schema";
+import { bgpConnectionResponseSchema } from "@/lib/schema/response/routing/bgp/connections";
+import { FormAction } from "@/lib/types";
+import { fetchBackEnd } from "../..";
 
 export async function fetchBGPById(
   id: string,

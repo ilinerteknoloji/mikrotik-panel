@@ -1,7 +1,7 @@
-import { HttpException, Injectable } from "@nestjs/common";
-import { EnvService } from "src/shared/env/env.service";
-import { CreateBgpTemplateDto } from "./dto/create-bgp-template.dto";
-import { UpdateBgpTemplateDto } from "./dto/update-bgp-template.dto";
+import {HttpException, Injectable} from "@nestjs/common";
+import {EnvService} from "src/shared/env/env.service";
+import {CreateBgpTemplateDto} from "./dto/create-bgp-template.dto";
+import {UpdateBgpTemplateDto} from "./dto/update-bgp-template.dto";
 
 @Injectable()
 export class BgpTemplatesRepository {
@@ -68,6 +68,29 @@ export class BgpTemplatesRepository {
         json?.detail ?? response.statusText,
         response.status,
       );
+    return json;
+  }
+
+  public async update(id: string, updateBgpTemplateDto: UpdateBgpTemplateDto) {
+    const response = await fetch(
+      `${this.host}/rest/routing/bgp/template/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Basic ${this.auth}`,
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(this.dtoToMikrotik(updateBgpTemplateDto)),
+      },
+    );
+    const json = await response.json();
+    if (!response.ok)
+      throw new HttpException(
+        json?.detail ?? response.statusText,
+        response.status,
+      );
+
     return json;
   }
 

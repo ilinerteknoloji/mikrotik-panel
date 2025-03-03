@@ -38,23 +38,39 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { addRoutingBgpTemplate } from "./actions";
+import { addRoutingBgpTemplate, updateRoutingBgpTemplate } from "./actions";
+import { BGPTemplateSchema } from "@/lib/schema/response/routing/bgp/templates";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{}>;
+type Props = Readonly<
+  | {
+      type?: "create";
+      id?: string;
+      formData?: RoutingBgpTemplatesAddFormSchema;
+    }
+  | {
+      type: "update";
+      id: string;
+      formData: BGPTemplateSchema;
+    }
+>;
 
-export function RoutingBGPTemplateAddForm({}: Props) {
+export function RoutingBGPTemplateAddForm({ type, id, formData }: Props) {
   const { toast } = useToast();
   const form = useForm<RoutingBgpTemplatesAddFormSchema>({
     resolver: zodResolver(routingBgpTemplatesAddFormSchema),
     defaultValues: {
       addPathOut: "none",
       addressFamilies: "ip",
-      as: undefined,
+      as:
+        type === "update" && typeof formData.as === "number"
+          ? formData.as
+          : undefined,
       asOverride: false,
       ciscoVplsNlriLenFmt: undefined,
       clusterId: "",
       disabled: false,
-      holdTime: "3m",
+      holdTime: type === "update" ? formData["hold-time"] : "3m",
       acceptCommunities: "",
       acceptExtCommunities: "",
       acceptLargeCommunities: "",
@@ -69,7 +85,7 @@ export function RoutingBGPTemplateAddForm({}: Props) {
       limitProcessRoutesIpv6: undefined,
       keepaliveTime: "3m",
       multihop: false,
-      name: "",
+      name: formData?.name ?? "",
       nexthopChoice: "default",
       outputAffinity: "",
       defaultOriginate: "never",
@@ -83,7 +99,7 @@ export function RoutingBGPTemplateAddForm({}: Props) {
       redistribute: "",
       removePrivateAs: false,
       routerId: "main",
-      routingTable: "",
+      routingTable: type === "update" ? formData["routing-table"] : "",
       saveTo: "",
       templates: "",
       useBfd: false,
@@ -92,7 +108,15 @@ export function RoutingBGPTemplateAddForm({}: Props) {
   });
 
   const onSubmit = async (data: RoutingBgpTemplatesAddFormSchema) => {
-    const response = await addRoutingBgpTemplate(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await addRoutingBgpTemplate(data);
+        break;
+      case "update":
+        response = await updateRoutingBgpTemplate(id, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",
@@ -1285,7 +1309,7 @@ export function RoutingBGPTemplateAddForm({}: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Submit
+          {type === "create" ? "Ekle" : "Güncelle"}
         </Button>
       </form>
     </Form>

@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { CreateBgpTemplateDto } from "./dto/create-bgp-template.dto";
-import { UpdateBgpTemplateDto } from "./dto/update-bgp-template.dto";
-import { BgpTemplatesRepository } from "./bgp-templates.repository";
+import {Injectable} from "@nestjs/common";
+import {CreateBgpTemplateDto} from "./dto/create-bgp-template.dto";
+import {UpdateBgpTemplateDto} from "./dto/update-bgp-template.dto";
+import {BgpTemplatesRepository} from "./bgp-templates.repository";
 
 @Injectable()
 export class BgpTemplatesService {
@@ -25,9 +25,8 @@ export class BgpTemplatesService {
   }
 
   async update(id: string, updateBgpTemplateDto: UpdateBgpTemplateDto) {
-    console.log(updateBgpTemplateDto);
-
-    return `This action updates a #${id} bgpTemplate`;
+    await this.bgpTemplatesRepository.update(id, updateBgpTemplateDto);
+    return this.bgpTemplatesRepository.findOne(id);
   }
 
   async remove(id: string) {

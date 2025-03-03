@@ -28,3 +28,28 @@ export async function addRoutingBgpTemplate(
     };
   }
 }
+
+export async function updateRoutingBgpTemplate(
+  id: string,
+  values: RoutingBgpTemplatesAddFormSchema,
+): Promise<FormAction<string>> {
+  try {
+    if (!values.disabled) delete values.disabled;
+    const response = await fetchBackEnd(`routing/bgp/templates/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(values),
+    });
+    if (!response.status) throw new Error(response.message);
+    const parsedData = bgpTemplateResponseSchema.parse(response.data);
+    if (!parsedData.status) throw new Error(parsedData.error);
+    return {
+      status: true,
+      data: `${parsedData.response.name} updated successfully.`,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: error instanceof Error ? error.message : "An error occurred.",
+    };
+  }
+}

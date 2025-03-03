@@ -1,6 +1,5 @@
 import { ServerAlerts } from "@/components/general/server-alerts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { fetchAllBGPConnections } from "@/lib/utils/fetch-requests/routing/bgp/fetch-all-bgp-connections";
 import { fetchBGPById } from "@/lib/utils/fetch-requests/routing/bgp/fetch-bgp-bg-id";
 import { fetchAllBGPTemplates } from "@/lib/utils/fetch-requests/routing/bgp/templates/fetch-all-bgp-templates";
 import type { Metadata } from "next";

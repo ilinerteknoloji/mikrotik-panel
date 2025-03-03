@@ -114,8 +114,8 @@ export const bgpTemplatesColumns: ColumnDef<BGPTemplateSchema>[] = [
     header: "Open",
     cell: ({ row }) => (
       <Link
-        href="/admin/routing/bgp/templates/[id]"
-        as={`/admin/routing/bgp/templates/${row.original[".id"].slice(1)}`}
+        href="/admin/routing/bgp/templates/update/[id]"
+        as={`/admin/routing/bgp/templates/update/${row.original[".id"].slice(1)}`}
       >
         <ExternalLink />
       </Link>
