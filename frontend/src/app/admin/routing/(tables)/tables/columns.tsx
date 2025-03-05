@@ -88,8 +88,8 @@ export const routingTablesColumns: ColumnDef<RoutingTableSchema>[] = [
     header: "Open",
     cell: ({ row }) => (
       <Link
-        href="/admin/routing/tables/[id]"
-        as={`/admin/routing/tables/${row.original[".id"].slice(1)}`}
+        href="/admin/routing/tables/update/[id]"
+        as={`/admin/routing/tables/update/${row.original[".id"].slice(1)}`}
       >
         <ExternalLink />
       </Link>

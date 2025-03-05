@@ -4,7 +4,7 @@ import { createResponseSchema } from "..";
 export const routingTableSchema = z.object({
   ".id": z.string(),
   comment: z.string().optional(),
-  disabled: z.string().optional(),
+  disabled: z.coerce.boolean().optional(),
   dynamic: z.string().optional(),
   fib: z.string().optional(),
   invalid: z.string().optional(),

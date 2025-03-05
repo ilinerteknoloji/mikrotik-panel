@@ -16,23 +16,43 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { addRoutingTable } from "./actions";
+import { addRoutingTable, updateRoutingTable } from "./actions";
+import { FormAction } from "@/lib/types";
 
-type Props = Readonly<{}>;
+type Props = Readonly<
+  | {
+      type?: "create";
+      id?: string;
+      formData?: RoutingTableFormSchema;
+    }
+  | {
+      type: "update";
+      id: string;
+      formData: RoutingTableFormSchema;
+    }
+>;
 
-export function RoutingTableForm({}: Props) {
+export function RoutingTableForm({ id, type, formData }: Props) {
   const { toast } = useToast();
   const form = useForm<RoutingTableFormSchema>({
     resolver: zodResolver(routingTableFormSchema),
     defaultValues: {
-      disabled: false,
-      name: "",
-      comment: "",
-      fib: false,
+      disabled: formData?.disabled ?? false,
+      name: formData?.name ?? "",
+      comment: formData?.comment ?? "",
+      fib: formData?.fib ?? false,
     },
   });
   const onSubmit = async (data: RoutingTableFormSchema) => {
-    const response = await addRoutingTable(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await addRoutingTable(data);
+        break;
+      case "update":
+        response = await updateRoutingTable(id, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",
@@ -153,7 +173,7 @@ export function RoutingTableForm({}: Props) {
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Submit
+          {type === "create" ? "Ekle" : "Güncelle"}
         </Button>
       </form>
     </Form>

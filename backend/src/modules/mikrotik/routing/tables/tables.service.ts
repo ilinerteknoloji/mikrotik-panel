@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { CreateTableDto } from "./dto/create-table.dto";
-import { UpdateTableDto } from "./dto/update-table.dto";
-import { TablesRepository } from "./tables.repository";
+import {Injectable} from "@nestjs/common";
+import {CreateTableDto} from "./dto/create-table.dto";
+import {UpdateTableDto} from "./dto/update-table.dto";
+import {TablesRepository} from "./tables.repository";
 
 @Injectable()
 export class TablesService {
@@ -21,10 +21,9 @@ export class TablesService {
     return this.tablesRepository.findOne(id);
   }
 
-  update(id: string, updateTableDto: UpdateTableDto) {
-    console.log(updateTableDto);
-
-    return `This action updates a #${id} table`;
+  async update(id: string, updateTableDto: UpdateTableDto) {
+    await this.tablesRepository.update(id, updateTableDto);
+    return this.tablesRepository.findOne(id);
   }
 
   remove(id: string) {
