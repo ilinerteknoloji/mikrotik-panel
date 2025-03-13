@@ -1,4 +1,4 @@
-export type TokenType = "access" | "refresh";
+export type TokenType = "access" | "refresh" | "cloudns";
 
 export type KeyType = "public" | "private";
 

@@ -1,9 +1,9 @@
 "use server";
 
-import { FormAction } from "@/lib/types";
-import { RDnsRecordSchema } from "./schema";
-import { fetchBackEnd } from "@/lib/utils/fetch-requests";
 import { RDnsRecord } from "@/lib/schema/response/rdns-hosts/rdns-records";
+import { FormAction } from "@/lib/types";
+import { fetchBackEnd } from "@/lib/utils/fetch-requests";
+import { RDnsRecordSchema } from "./schema";
 
 export async function updateRDnsRecord(
   record: RDnsRecord,
@@ -12,7 +12,9 @@ export async function updateRDnsRecord(
   try {
     const response = await fetchBackEnd(
       `/rdns-records/${record.id}?domainName=${record.domainName}&host=${record.host}&record=${values.record}`,
-      { method: "PATCH" },
+      {
+        method: "PATCH",
+      },
     );
     return {
       status: true,

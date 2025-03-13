@@ -4,6 +4,7 @@ import { authConfig } from "@/app/api/(auth)/auth/[...nextauth]/auth.config";
 import { env } from "@/lib/schema/env";
 import { FormAction } from "@/lib/types";
 import { getServerSession } from "next-auth";
+import { cookies } from "next/headers";
 
 export async function fetchBackEnd(
   path: string,
@@ -13,14 +14,19 @@ export async function fetchBackEnd(
     const session = await getServerSession(authConfig);
     if (!session) throw new Error("Session not found");
     const url = new URL(path, env.BACKEND_URL);
+    const cookieList = cookies().getAll();
     const response = await fetch(url, {
       ...request,
       headers: {
         ...request.headers,
         Authorization: `Bearer ${session?.accessToken}`,
         "Content-Type": "application/json",
+        Cookie: cookieList
+          .map((cookie) => `${cookie.name}=${cookie.value}`)
+          .join("; "),
       },
     });
+
     const json = await response.json();
     if (!response.ok) console.log(json);
     return { status: true, data: json };

@@ -19,6 +19,7 @@ import type { Metadata } from "next";
 import { DomainFilter } from "./_components/domain-filter";
 import { Prettify } from "@/lib/types/pretiffy.type";
 import { UpdateDialog } from "./_components/update-dialog";
+import { CloudnsLogin } from "../_components/cloudns-login";
 
 type Props = Readonly<{
   searchParams: Prettify<dataTableSearchParamType & { host?: string }>;
@@ -55,6 +56,7 @@ export default async function RDnsRecordsPage({ searchParams }: Props) {
             {/* <AddRdns /> */}
             <div></div>
             <div className="flex flex-col items-center justify-end gap-4 md:flex-row md:items-end">
+              <CloudnsLogin />
               <DataTableSearchFilter searchParams={searchParams} />
               <DomainFilter
                 searchParams={searchParams}

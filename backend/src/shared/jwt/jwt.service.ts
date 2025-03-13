@@ -1,9 +1,9 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import {Injectable, UnauthorizedException} from "@nestjs/common";
 import * as jwt from "jsonwebtoken";
 import ms from "ms";
-import { GenerateTokenType, PayloadType, TokenType } from "src/types";
-import { EnvService } from "../env/env.service";
-import { GenerateKeysService } from "../keys/generate-keys.service";
+import {GenerateTokenType, PayloadType, TokenType} from "src/types";
+import {EnvService} from "../env/env.service";
+import {GenerateKeysService} from "../keys/generate-keys.service";
 
 @Injectable()
 export class JwtService {
@@ -19,23 +19,23 @@ export class JwtService {
   public generateTokens(payload: PayloadType) {
     const accessToken = this.generateToken(payload, "access");
     const refreshToken = this.generateToken(payload, "refresh");
-    return { accessToken, refreshToken };
+    return {accessToken, refreshToken};
   }
 
   public generateToken(
     payload: PayloadType,
     tokenType: TokenType,
   ): GenerateTokenType {
-    const { id, role, username } = payload;
+    const {id, role, username} = payload;
     const token = tokenType === "access" ? "JWT_ACCESS" : "JWT_REFRESH";
     const tokenPrivateKey = this.key.readKey(`private_${tokenType}`);
     const expiresIn = this.config.get(`${token}_TOKEN_EXPIRATION`);
     const expiresAt: number = Date.now() + ms(expiresIn);
-    const generatedToken = jwt.sign({ id, role, username }, tokenPrivateKey, {
+    const generatedToken = jwt.sign({id, role, username}, tokenPrivateKey, {
       algorithm: this.algorithm,
       expiresIn,
     });
-    return { token: generatedToken, expiresAt };
+    return {token: generatedToken, expiresAt};
   }
 
   public verifyToken(jwtToken: string, tokenType: TokenType) {

@@ -1,11 +1,11 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
-import { User } from "src/lib/decorators/user.decorator";
-import { RequestUserType } from "src/types/request-user.types";
-import { CreateUserDto } from "../users/dto/create-user.dto";
-import { AuthService } from "./auth.service";
-import { SignInAuthDto } from "./dto/sign-in-auth.dto";
-import { AuthGuard } from "./guards/auth.guard";
-import { RefreshTokenGuard } from "./guards/refresh-token.guard";
+import {Body, Controller, Post, UseGuards} from "@nestjs/common";
+import {User} from "src/lib/decorators/user.decorator";
+import {RequestUserType} from "src/types/request-user.types";
+import {CreateUserDto} from "../users/dto/create-user.dto";
+import {AuthService} from "./auth.service";
+import {SignInAuthDto} from "./dto/sign-in-auth.dto";
+import {AuthGuard} from "./guards/auth.guard";
+import {RefreshTokenGuard} from "./guards/refresh-token.guard";
 
 @Controller("auth")
 export class AuthController {

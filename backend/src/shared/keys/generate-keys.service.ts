@@ -1,8 +1,8 @@
-import { Injectable, Logger } from "@nestjs/common";
+import {Injectable, Logger} from "@nestjs/common";
 import * as crypto from "crypto";
 import * as fs from "fs";
 import * as path from "path";
-import { TokenKeyType } from "src/types";
+import {TokenKeyType} from "src/types";
 
 @Injectable()
 export class GenerateKeysService {
@@ -24,6 +24,14 @@ export class GenerateKeysService {
     this.mainPath,
     "private_refresh.pem",
   );
+  private readonly publicCloudnsKeyPath: string = path.join(
+    this.mainPath,
+    "public_cloudns.pem",
+  );
+  private readonly privateCloudnsKeyPath: string = path.join(
+    this.mainPath,
+    "private_cloudns.pem",
+  );
   private readonly logger = new Logger(GenerateKeysService.name);
 
   public readKey(keyType: TokenKeyType): string {
@@ -36,7 +44,7 @@ export class GenerateKeysService {
 
   public async generateKeys(): Promise<void> {
     if (!fs.existsSync(this.mainPath)) {
-      fs.mkdirSync(this.mainPath, { recursive: true });
+      fs.mkdirSync(this.mainPath, {recursive: true});
     }
     if (
       !fs.existsSync(this.publicAccessKeyPath) ||
@@ -58,6 +66,18 @@ export class GenerateKeysService {
       this.logger.log("Refresh Keys generated successfully.");
     } else {
       this.logger.warn("Refresh Keys already exist.");
+    }
+    if (
+      !fs.existsSync(this.publicCloudnsKeyPath) ||
+      !fs.existsSync(this.privateCloudnsKeyPath)
+    ) {
+      this.generateKeyPair(
+        this.publicCloudnsKeyPath,
+        this.privateCloudnsKeyPath,
+      );
+      this.logger.log("Cloudns Keys generated successfully.");
+    } else {
+      this.logger.warn("Cloudns Keys already exist.");
     }
   }
 

@@ -1,9 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
-import { and, eq } from "drizzle-orm";
-import { DRIZZLE_PROVIDER } from "src/lib/constants";
-import { mikrotikUserIpsSchema } from "src/shared/drizzle/schemas";
-import { EnvService } from "src/shared/env/env.service";
-import { Drizzle, RequestUserType } from "src/types";
+import {Inject, Injectable, UnauthorizedException} from "@nestjs/common";
+import {and, eq} from "drizzle-orm";
+import {DRIZZLE_PROVIDER} from "src/lib/constants";
+import {mikrotikUserIpsSchema} from "src/shared/drizzle/schemas";
+import {EnvService} from "src/shared/env/env.service";
+import {Drizzle, RequestUserType} from "src/types";
 
 @Injectable()
 export class RdnsRecordsRepository {
@@ -12,20 +12,26 @@ export class RdnsRecordsRepository {
     private readonly env: EnvService,
   ) {}
 
-  public async findAll(page: number, limit: number, search: string) {
+  public async findAll(
+    page: number,
+    limit: number,
+    search: string,
+    id: string,
+    password: string,
+  ) {
     const allHosts = await this.drizzle.query.rdnsHostsSchema.findMany({
-      columns: { hostname: true },
-      where: (fields, { eq }) => eq(fields.status, true),
+      columns: {hostname: true},
+      where: (fields, {eq}) => eq(fields.status, true),
     });
     let url = "https://api.cloudns.net/dns/records.json?";
-    url += `auth-id=${this.env.get("CLOUDNS_AUTH_ID")}`;
-    url += `&auth-password=${this.env.get("CLOUDNS_AUTH_PASSWORD")}`;
+    url += `auth-id=${id}`;
+    url += `&auth-password=${password}`;
     url += `&page=${page}`;
     url += `&rows-per-page=${limit}`;
     if (search) url += `&host-like=${search}`;
     url += `&domain-name=`;
     const records = allHosts.map(
-      async ({ hostname }) => await this.getRecords(url, hostname),
+      async ({hostname}) => await this.getRecords(url, hostname),
     );
     const response = await Promise.all(records);
     return response.filter((item) => (item !== null ? item : undefined)).flat();
@@ -53,26 +59,32 @@ export class RdnsRecordsRepository {
     return response.filter((item) => (item !== null ? item : undefined)).flat();
   }
 
-  public async findUsersRecords(page: number, limit: number, userId: number) {
+  public async findUsersRecords(
+    page: number,
+    limit: number,
+    userId: number,
+    cid: string,
+    password: string,
+  ) {
     const allHosts = await this.drizzle.query.rdnsHostsSchema.findMany({
-      columns: { hostname: true, hostnameMain: true },
-      where: (fields, { eq }) => eq(fields.status, true),
+      columns: {hostname: true, hostnameMain: true},
+      where: (fields, {eq}) => eq(fields.status, true),
     });
     const userIps = await this.drizzle.query.mikrotikUserIpsSchema.findMany({
-      where: (fields, { eq }) => eq(fields.userId, userId),
+      where: (fields, {eq}) => eq(fields.userId, userId),
     });
     if (!userIps.length) return [];
     let url = "https://api.cloudns.net/dns/records.json?";
-    url += `auth-id=${this.env.get("CLOUDNS_AUTH_ID")}`;
-    url += `&auth-password=${this.env.get("CLOUDNS_AUTH_PASSWORD")}`;
+    url += `auth-id=${cid}`;
+    url += `&auth-password=${password}`;
     url += `&page=${page}`;
     url += `&rows-per-page=${limit}`;
     url += `&domain-name=`;
-    const records = allHosts.map(async ({ hostname, hostnameMain }) => {
-      const isExist = userIps.filter(({ ip }) => ip.includes(hostnameMain));
+    const records = allHosts.map(async ({hostname, hostnameMain}) => {
+      const isExist = userIps.filter(({ip}) => ip.includes(hostnameMain));
       if (isExist.length === 0) return;
       const records = isExist.map(
-        async ({ ip }) =>
+        async ({ip}) =>
           await this.getRecords(url, hostname, `&host=${ip.split(".").at(-1)}`),
       );
       const response = await Promise.all(records);
@@ -84,15 +96,20 @@ export class RdnsRecordsRepository {
     return response.filter((item) => (item !== null ? item : undefined)).flat();
   }
 
-  public async findOne(id: string, domainName: string) {
+  public async findOne(
+    id: string,
+    domainName: string,
+    cid: string,
+    password: string,
+  ) {
     let url = "https://api.cloudns.net/dns/get-record.json?";
-    url += `auth-id=${this.env.get("CLOUDNS_AUTH_ID")}`;
-    url += `&auth-password=${this.env.get("CLOUDNS_AUTH_PASSWORD")}`;
+    url += `auth-id=${cid}`;
+    url += `&auth-password=${password}`;
     url += `&domain-name=${domainName}`;
     url += `&record-id=${id}`;
     const record = await fetch(url);
     const json = await record.json();
-    return { ...json, domainName };
+    return {...json, domainName};
   }
 
   public async update(
@@ -100,10 +117,12 @@ export class RdnsRecordsRepository {
     domainName: string,
     host: string,
     record: string,
+    cid: string,
+    password: string,
   ) {
     let url = "https://api.cloudns.net/dns/mod-record.json?";
-    url += `auth-id=${this.env.get("CLOUDNS_AUTH_ID")}`;
-    url += `&auth-password=${this.env.get("CLOUDNS_AUTH_PASSWORD")}`;
+    url += `auth-id=${cid}`;
+    url += `&auth-password=${password}`;
     url += `&domain-name=${domainName}&record-id=${id}&host=${host}&record=${record}&ttl=3600`;
     const response = await fetch(url);
     const json = await response.json();
@@ -116,9 +135,11 @@ export class RdnsRecordsRepository {
     host: string,
     record: string,
     user: RequestUserType,
+    cid: string,
+    password: string,
   ) {
-    const data = await this.findOne(id, domainName);
-    const { host: hostName, domainName: domain } = data;
+    const data = await this.findOne(id, domainName, cid, password);
+    const {host: hostName, domainName: domain} = data;
     const [v3, v2, v1] = domain.split(".");
     const isExist = await this.drizzle
       .select()
@@ -134,7 +155,14 @@ export class RdnsRecordsRepository {
         "You are not allowed to update this record",
       );
 
-    const response = await this.update(id, domainName, host, record);
+    const response = await this.update(
+      id,
+      domainName,
+      host,
+      record,
+      cid,
+      password,
+    );
     return response;
   }
 }

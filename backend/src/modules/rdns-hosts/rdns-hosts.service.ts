@@ -1,9 +1,9 @@
 import {Injectable} from "@nestjs/common";
+import {RdnsHostsSchemaType} from "src/shared/drizzle/schemas";
+import {OrderByPipeType} from "src/types";
 import {CreateRdnsHostDto} from "./dto/create-rdns-host.dto";
 import {UpdateRdnsHostDto} from "./dto/update-rdns-host.dto";
 import {RdnsHostsRepository} from "./rdns-hosts.repository";
-import {RdnsHostsSchemaType} from "src/shared/drizzle/schemas";
-import {OrderByPipeType} from "src/types";
 
 @Injectable()
 export class RdnsHostsService {

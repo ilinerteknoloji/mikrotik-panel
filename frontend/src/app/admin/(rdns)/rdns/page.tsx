@@ -15,11 +15,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { fetchAllRDnsHosts } from "@/lib/utils/fetch-requests/rdns/all-hosts";
-import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AddRdns } from "./_components/add";
 import { UpdateRdns } from "./_components/update";
+import { CloudnsLogin } from "./_components/cloudns-login";
 
 type Props = Readonly<{
   searchParams: dataTableSearchParamType;
@@ -52,6 +51,7 @@ export default async function RDnsPage({ searchParams }: Props) {
           <div className="flex flex-col items-stretch justify-center gap-4 md:flex-row md:items-center md:justify-between">
             <AddRdns />
             <div className="flex flex-col items-center justify-end gap-4 md:flex-row md:items-end">
+              <CloudnsLogin />
               <DataTableSearchFilter searchParams={searchParams} />
               <StatusFilter searchParams={searchParams} />
               <ClearFilters href="/admin/rdns" />
