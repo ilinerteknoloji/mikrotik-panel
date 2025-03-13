@@ -8,20 +8,17 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { UseRoles } from "src/lib/decorators/roles.decorator";
-import { UserRole } from "src/lib/enums/user-role.enum";
-import { AuthGuard } from "../auth/guards/auth.guard";
-import { RolesGuard } from "../auth/guards/roles.guard";
-import { CreateRdnsHostDto } from "./dto/create-rdns-host.dto";
-import { UpdateRdnsHostDto } from "./dto/update-rdns-host.dto";
-import { RdnsHostsService } from "./rdns-hosts.service";
-import { LimitPipe, PagePipe, StatusPipe } from "src/lib/pipes";
-import { OrderByPipe } from "src/lib/pipes/order-by.pipe";
-import {
-  rdnsHostsSchema,
-  RdnsHostsSchemaType,
-} from "src/shared/drizzle/schemas";
-import { OrderByPipeType } from "src/types";
+import {UseRoles} from "src/lib/decorators/roles.decorator";
+import {UserRole} from "src/lib/enums/user-role.enum";
+import {AuthGuard} from "../auth/guards/auth.guard";
+import {RolesGuard} from "../auth/guards/roles.guard";
+import {CreateRdnsHostDto} from "./dto/create-rdns-host.dto";
+import {UpdateRdnsHostDto} from "./dto/update-rdns-host.dto";
+import {RdnsHostsService} from "./rdns-hosts.service";
+import {LimitPipe, PagePipe, StatusPipe} from "src/lib/pipes";
+import {OrderByPipe} from "src/lib/pipes/order-by.pipe";
+import {rdnsHostsSchema, RdnsHostsSchemaType} from "src/shared/drizzle/schemas";
+import {OrderByPipeType} from "src/types";
 
 @Controller("rdns-hosts")
 @UseGuards(AuthGuard, RolesGuard)
@@ -44,7 +41,7 @@ export class RdnsHostsController {
     @Query(
       "order-by",
       new OrderByPipe<RdnsHostsSchemaType>(
-        { key: "id", order: "asc" },
+        {key: "id", order: "asc"},
         rdnsHostsSchema,
       ),
     )

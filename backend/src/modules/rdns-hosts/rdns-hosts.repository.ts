@@ -1,23 +1,20 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { eq, like } from "drizzle-orm";
-import { DRIZZLE_PROVIDER } from "src/lib/constants";
-import {
-  rdnsHostsSchema,
-  RdnsHostsSchemaType,
-} from "src/shared/drizzle/schemas";
-import { Drizzle, OrderByPipeType } from "src/types";
-import { CreateRdnsHostDto } from "./dto/create-rdns-host.dto";
-import { UpdateRdnsHostDto } from "./dto/update-rdns-host.dto";
+import {Inject, Injectable} from "@nestjs/common";
+import {eq, like} from "drizzle-orm";
+import {DRIZZLE_PROVIDER} from "src/lib/constants";
+import {rdnsHostsSchema, RdnsHostsSchemaType} from "src/shared/drizzle/schemas";
+import {Drizzle, OrderByPipeType} from "src/types";
+import {CreateRdnsHostDto} from "./dto/create-rdns-host.dto";
+import {UpdateRdnsHostDto} from "./dto/update-rdns-host.dto";
 
 @Injectable()
 export class RdnsHostsRepository {
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly drizzle: Drizzle) {}
 
   public async create(createRdnsHostDto: CreateRdnsHostDto) {
-    const { host, hostnameMain } = createRdnsHostDto;
+    const {host, hostnameMain} = createRdnsHostDto;
     const response = await this.drizzle
       .insert(rdnsHostsSchema)
-      .values({ hostname: host, hostnameMain });
+      .values({hostname: host, hostnameMain});
     return this.findOne(response[0].insertId);
   }
 
@@ -35,7 +32,7 @@ export class RdnsHostsRepository {
     if (status !== undefined)
       conditions.push(eq(rdnsHostsSchema.status, status));
     return this.drizzle.query.rdnsHostsSchema.findMany({
-      where: (fields, { and }) => and(...conditions),
+      where: (fields, {and}) => and(...conditions),
       limit,
       offset,
       orderBy(fields, operators) {
@@ -52,12 +49,15 @@ export class RdnsHostsRepository {
   }
 
   public async update(id: number, updateRdnsHostDto: UpdateRdnsHostDto) {
-    return this.drizzle
+    await this.drizzle
       .update(rdnsHostsSchema)
       .set({
         hostname: updateRdnsHostDto.host,
+        hostnameMain: updateRdnsHostDto.hostnameMain,
         status: updateRdnsHostDto.status,
       })
       .where(eq(rdnsHostsSchema.id, id));
+
+    return this.findOne(id);
   }
 }

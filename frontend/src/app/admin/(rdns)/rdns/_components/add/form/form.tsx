@@ -15,21 +15,53 @@ import { rDnsHostForm, type RDnsHostForm } from "./schema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { addRdnsHost } from "./actions";
+import { addRdnsHost, updateRdnsHost } from "./actions";
+import { FormAction } from "@/lib/types";
+import { Switch } from "@/components/ui/switch";
 
-type Props = Readonly<{}>;
+type Props = Readonly<
+  | {
+      type?: "create";
+      id?: number;
+      hostname?: string;
+      hostnameMain?: string;
+      status?: boolean;
+    }
+  | {
+      type: "update";
+      id: number;
+      hostname: string;
+      hostnameMain: string;
+      status: boolean;
+    }
+>;
 
-export function RDnsHostForm({}: Props) {
+export function RDnsHostForm({
+  type = "create",
+  id,
+  hostname,
+  hostnameMain,
+  status,
+}: Props) {
   const { toast } = useToast();
   const form = useForm<RDnsHostForm>({
     resolver: zodResolver(rDnsHostForm),
     defaultValues: {
-      host: "",
-      hostnameMain: "",
+      host: hostname ?? "",
+      hostnameMain: hostnameMain ?? "",
+      status: status,
     },
   });
   const onSubmit = async (data: RDnsHostForm) => {
-    const response = await addRdnsHost(data);
+    let response: FormAction<string>;
+    switch (type) {
+      case "create":
+        response = await addRdnsHost(data);
+        break;
+      case "update":
+        response = await updateRdnsHost(id!, data);
+        break;
+    }
     if (!response.status)
       return toast({
         title: "Error",
@@ -87,12 +119,37 @@ export function RDnsHostForm({}: Props) {
           )}
         />
 
+        {type === "update" ? (
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                <div className="space-y-0.5">
+                  <FormLabel className="capitalize">
+                    {field.name.replace(/([A-Z])/g, " $1").trim()}
+                  </FormLabel>
+                  <FormDescription />
+                </div>
+                <FormControl>
+                  <Switch
+                    name={field.name}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : null}
+
         <Button
           type="submit"
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          Submit
+          {type === "create" ? "Ekle" : "Güncelle"}
         </Button>
       </form>
     </Form>

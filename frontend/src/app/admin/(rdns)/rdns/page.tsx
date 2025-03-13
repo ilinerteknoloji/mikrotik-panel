@@ -1,3 +1,6 @@
+import { ClearFilters } from "@/components/admin/data-table/filters/clear-filters";
+import { DataTableSearchFilter } from "@/components/admin/data-table/filters/search";
+import { StatusFilter } from "@/components/admin/data-table/filters/status-filter";
 import { DataTablePagination } from "@/components/admin/data-table/pagination";
 import { dataTableSearchParamType } from "@/components/admin/data-table/search-params.type";
 import { DataTable } from "@/components/admin/data-table/table";
@@ -16,10 +19,7 @@ import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AddRdns } from "./_components/add";
-import { DataTableSearchFilter } from "@/components/admin/data-table/filters/search";
-import { ClearFilters } from "@/components/admin/data-table/filters/clear-filters";
-import { PageItemCount } from "@/components/admin/data-table/filters/page-item-count";
-import { StatusFilter } from "@/components/admin/data-table/filters/status-filter";
+import { UpdateRdns } from "./_components/update";
 
 type Props = Readonly<{
   searchParams: dataTableSearchParamType;
@@ -97,9 +97,12 @@ export default async function RDnsPage({ searchParams }: Props) {
                 {
                   label: "Open",
                   data: (data) => (
-                    <Link href={`/admin/rdns/${data.hostname}`}>
-                      <ExternalLink />
-                    </Link>
+                    <UpdateRdns
+                      id={data.id}
+                      hostname={data.hostname}
+                      hostnameMain={data.hostnameMain}
+                      status={data.status}
+                    />
                   ),
                 },
               ]}

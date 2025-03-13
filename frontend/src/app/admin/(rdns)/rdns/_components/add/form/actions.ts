@@ -34,3 +34,35 @@ export async function addRdnsHost(
     };
   }
 }
+
+export async function updateRdnsHost(
+  id: number,
+  values: RDnsHostForm,
+): Promise<FormAction<string>> {
+  try {
+    if (!values.hostnameMain) {
+      const [v3, v2, v1] = values.host.split(".");
+      values.hostnameMain = `${v1}.${v2}.${v3}`;
+    }
+    const response = await fetchBackEnd(`/rdns-hosts/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        host: values.host,
+        hostnameMain: values.hostnameMain,
+        status: values.status,
+      }),
+    });
+    if (!response.status) return response;
+    const parsed = rDnsHostsResponseSchema.parse(response.data);
+    if (!parsed.status) throw new Error(parsed.error);
+    return {
+      status: true,
+      data: `${parsed.response[0].hostname} updated successfully`,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+}

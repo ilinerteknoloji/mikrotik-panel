@@ -1,19 +1,12 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Query,
-  UseGuards,
-} from "@nestjs/common";
-import { User } from "src/lib/decorators/user.decorator";
-import { LimitPipe, PagePipe } from "src/lib/pipes";
-import { RequestUserType } from "src/types";
-import { AuthGuard } from "../auth/guards/auth.guard";
-import { RdnsRecordsService } from "./rdns-records.service";
-import { RolesGuard } from "../auth/guards/roles.guard";
-import { UseRoles } from "src/lib/decorators/roles.decorator";
-import { UserRole } from "src/lib/enums/user-role.enum";
+import {Controller, Get, Param, Patch, Query, UseGuards} from "@nestjs/common";
+import {User} from "src/lib/decorators/user.decorator";
+import {LimitPipe, PagePipe} from "src/lib/pipes";
+import {RequestUserType} from "src/types";
+import {AuthGuard} from "../auth/guards/auth.guard";
+import {RdnsRecordsService} from "./rdns-records.service";
+import {RolesGuard} from "../auth/guards/roles.guard";
+import {UseRoles} from "src/lib/decorators/roles.decorator";
+import {UserRole} from "src/lib/enums/user-role.enum";
 
 @Controller("rdns-records")
 @UseGuards(AuthGuard, RolesGuard)
