@@ -108,13 +108,19 @@ export function RoutingBGPTemplateAddForm({ type, id, formData }: Props) {
   });
 
   const onSubmit = async (data: RoutingBgpTemplatesAddFormSchema) => {
-    let response: FormAction<string>;
+    let response: FormAction<string> | undefined;
     switch (type) {
       case "create":
         response = await addRoutingBgpTemplate(data);
         break;
       case "update":
         response = await updateRoutingBgpTemplate(id, data);
+        break;
+      default:
+        response = {
+          status: false,
+          message: "Invalid type",
+        };
         break;
     }
     if (!response.status)

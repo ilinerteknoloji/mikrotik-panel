@@ -1,10 +1,5 @@
-type Props = Readonly<{ children: React.ReactNode; sheet: React.ReactNode }>;
+type Props = Readonly<{ children: React.ReactNode }>;
 
-export default function IpAddressesLayout({ children, sheet }: Props) {
-  return (
-    <>
-      {sheet}
-      {children}
-    </>
-  );
+export default function IpAddressesLayout({ children }: Props) {
+  return <>{children}</>;
 }

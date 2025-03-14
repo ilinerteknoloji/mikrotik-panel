@@ -1,10 +1,5 @@
-type Props = Readonly<{ children: React.ReactNode; sheet: React.ReactNode }>;
+type Props = Readonly<{ children: React.ReactNode }>;
 
-export default function ArpLayout({ children, sheet }: Props) {
-  return (
-    <>
-      {sheet}
-      {children}
-    </>
-  );
+export default function ArpLayout({ children }: Props) {
+  return <>{children}</>;
 }

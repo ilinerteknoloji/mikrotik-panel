@@ -14,10 +14,12 @@ export async function fetchGreTunnelById(
     const response = await fetchBackEnd(`/interface/gre-tunnel/${id}`);
     if (!response.status) throw new Error(response.message);
     const parsed = greTunnelFormSchema.parse({
-      ...response.data.response,
+      ...(response.data as { response: any }).response,
       keepalive: "00:00:10, 10",
       mtu:
-        response.data.response.mtu === "auto" ? "" : response.data.response.mtu,
+        (response.data as { response: any }).response.mtu === "auto"
+          ? ""
+          : (response.data as { response: any }).response.mtu,
     });
     return { status: true, data: parsed };
   } catch (error) {

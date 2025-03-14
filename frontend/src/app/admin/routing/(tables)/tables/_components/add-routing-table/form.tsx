@@ -44,13 +44,19 @@ export function RoutingTableForm({ id, type, formData }: Props) {
     },
   });
   const onSubmit = async (data: RoutingTableFormSchema) => {
-    let response: FormAction<string>;
+    let response: FormAction<string> | undefined;
     switch (type) {
       case "create":
         response = await addRoutingTable(data);
         break;
       case "update":
         response = await updateRoutingTable(id, data);
+        break;
+      default:
+        response = {
+          status: false,
+          message: "Invalid type",
+        };
         break;
     }
     if (!response.status)
