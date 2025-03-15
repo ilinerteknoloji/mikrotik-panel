@@ -19,11 +19,8 @@ export class LoggingInterceptor implements NestInterceptor {
     logger.request({
       method,
       url,
-      headers: {
-        ...headers,
-        authorization: headers.authorization || undefined,
-      },
-      body,
+      headers,
+      // body,
       ip,
     });
 
