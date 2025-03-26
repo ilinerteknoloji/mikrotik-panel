@@ -5,9 +5,9 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/mysql-core";
-import { usersSchema } from "./users.schema";
-import { InferSelectModel, relations } from "drizzle-orm";
-import { firewallAddressListSchema } from "./firewall-address-list.schema";
+import {usersSchema} from "./users.schema";
+import {InferSelectModel, relations} from "drizzle-orm";
+import {firewallAddressListSchema} from "./firewall-address-list.schema";
 
 export const mikrotikUserIpsSchema = mysqlTable("mikrotik_user_ips", {
   id: int("id").primaryKey().autoincrement(),
@@ -22,7 +22,7 @@ export const mikrotikUserIpsSchema = mysqlTable("mikrotik_user_ips", {
 
 export const mikrotikUserIpsRelations = relations(
   mikrotikUserIpsSchema,
-  ({ one, many }) => ({
+  ({one, many}) => ({
     user: one(usersSchema, {
       fields: [mikrotikUserIpsSchema.userId],
       references: [usersSchema.id],

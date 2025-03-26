@@ -5,6 +5,7 @@ import {
   HttpException,
   InternalServerErrorException,
 } from "@nestjs/common";
+import {logger} from "src/shared/logger";
 
 @Catch(Error)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -16,6 +17,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception
         : new InternalServerErrorException(exception.message);
+    const {method, url, headers, ip} = request;
+    logger.error({method, url, headers, ip, error: JSON.stringify(myError)});
     response.status(myError.getStatus()).json({
       status: false,
       statusCode: myError.getStatus(),

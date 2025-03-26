@@ -6,7 +6,9 @@ import {
   InternalServerErrorException,
   NestInterceptor,
 } from "@nestjs/common";
-import { Observable, catchError, map } from "rxjs";
+import {Response} from "express";
+import {Observable, catchError, map} from "rxjs";
+import {logger} from "src/shared/logger";
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
@@ -21,7 +23,7 @@ export class ResponseInterceptor implements NestInterceptor {
 
   responseInterceptor(data: unknown, context: ExecutionContext) {
     const ctx = context.switchToHttp();
-    const response = ctx.getResponse();
+    const response: Response = ctx.getResponse();
     const request = ctx.getRequest();
 
     return {
@@ -43,6 +45,8 @@ export class ResponseInterceptor implements NestInterceptor {
       error instanceof HttpException
         ? error
         : new InternalServerErrorException(error.message);
+    const {method, url, headers, ip} = request;
+    logger.error({method, url, headers, ip, error: JSON.stringify(myError)});
     throw new HttpException(
       {
         status: false,
