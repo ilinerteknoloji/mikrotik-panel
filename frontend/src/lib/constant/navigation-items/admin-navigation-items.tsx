@@ -1,6 +1,7 @@
 import {
   FileSlidersIcon,
   HomeIcon,
+  List,
   ListCollapse,
   ListEnd,
   NotebookTabs,
@@ -24,6 +25,11 @@ export const navigationItemsAdmin: NavigationItem[] = [
     title: "Kullanıcılar",
     href: "/admin/users",
     icon: <Users />,
+  },
+  {
+    title: "Ip Kategorileri",
+    href: "/admin/categories",
+    icon: <List />,
   },
   {
     title: "Kullanıcı Ipleri",

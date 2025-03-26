@@ -10,6 +10,9 @@ export const ipCategorySchema = z.object({
   updatedAt: z.string(),
 });
 
+export type IpCategorySchema = z.infer<typeof ipCategorySchema>;
+export const ipCategoryResponseSchema = createResponseSchema(ipCategorySchema);
+
 export const ipCategoriesSchema = z.array(ipCategorySchema);
 
 export type IpCategoriesSchema = z.infer<typeof ipCategoriesSchema>;
