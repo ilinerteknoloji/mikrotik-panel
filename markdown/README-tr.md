@@ -2,8 +2,6 @@
 
 [English](/README.md)
 
-<!-- TODO: microMikroTiktik panelin url'sini ekle [MikroTik]() -->
-
 ## İçindekiler
 
 - [Açıklama](#açıklama)
@@ -25,7 +23,6 @@ MikroTik, MikroTik cihazlarını yönetmek için bir kontrol panelidir. Cihazlar
 ## Figma Tasarımı
 
 - [Figma URL](https://www.figma.com/community/file/1323695683687017923)
-- [Figma Dosyası](</backup/BankDash%20-%20Dashboard%20UI%20Kit%20-%20Admin%20Template%20Dashboard%20-%20Admin%20Dashboard%20(Community).fig>)
 
 ## Özellikler
 

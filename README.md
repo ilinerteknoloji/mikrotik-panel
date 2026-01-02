@@ -2,8 +2,6 @@
 
 [Türkçe](./markdown/README-tr.md)
 
-<!-- TODO: Add the url of the MikroTik panel [MikroTik]() -->
-
 ## Table of Contents
 
 - [Description](#description)
@@ -25,20 +23,10 @@ MikroTik is a dashboard for managing MikroTik devices. It is a dashboard that al
 ## Figma Design
 
 - [Figma URL](https://www.figma.com/community/file/1323695683687017923)
-- [Figma File](<backup/BankDash%20-%20Dashboard%20UI%20Kit%20-%20Admin%20Template%20Dashboard%20-%20Admin%20Dashboard%20(Community).fig>)
 
 ## Features
 
-- [ ] Dashboard
-- [ ] Devices
-- [ ] Users
-- [ ] Settings
-- [ ] Profile
-- [ ] Notifications
-- [ ] Dark Mode
-- [ ] Responsive Design
-- [ ] Multi-Language Support
-- [ ] Two-Factor Authentication
+<!-- TODO:  -->
 
 ## Screenshots
 
