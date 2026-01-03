@@ -1,6 +1,6 @@
 # MikroTik
 
-[English](/README-en.md)
+[English](./markdown/README-en.md)
 
 ## İçindekiler
 
@@ -24,6 +24,13 @@ MikroTik, MikroTik cihazlarını yönetmek için bir kontrol panelidir. Cihazlar
 ## Figma Tasarımı
 
 - [Figma URL](https://www.figma.com/community/file/1323695683687017923)
+
+## Ekran Görüntüleri
+
+![index](./markdown/assets/index.png)
+![sign-in](./markdown/assets/sign-in.png)
+![sign-up](./markdown/assets/sign-up.png)
+![ip-categories](./markdown/assets/ip-categories.png)
 
 ## Özellikler
 
@@ -66,6 +73,8 @@ MikroTik, MikroTik cihazlarını yönetmek için bir kontrol panelidir. Cihazlar
 
   - `/admin`
   - Admin yetkisine sahip kullanıcılar için ayrı yönetim paneli ve özet ekranı.
+    > Admin sayfasına erişmek için sağ üst köşedeki çarka tıklayınız
+    > ![index](./markdown/assets/index.png)
 
 - **Kullanıcı yönetimi (Admin)**
 

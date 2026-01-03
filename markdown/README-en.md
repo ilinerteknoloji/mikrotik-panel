@@ -25,6 +25,13 @@ MikroTik is a control panel for managing MikroTik devices. It allows you to mana
 
 - [Figma URL](https://www.figma.com/community/file/1323695683687017923)
 
+## ScreenShots
+
+![index](./assets/index.png)
+![sign-in](./assets/sign-in.png)
+![sign-up](./assets/sign-up.png)
+![ip-categories](./assets/ip-categories.png)
+
 ## Features
 
 - **User authentication**
@@ -65,7 +72,9 @@ MikroTik is a control panel for managing MikroTik devices. It allows you to mana
 - **Role & permission management (Admin access)**
 
   - `/admin`
-  - A separate admin panel and overview screen for users with admin privileges.
+  - A separate admin panel and summary dashboard for users with admin privileges.
+    > To access the admin page, click the gear icon in the top-right corner  
+    > ![index](./markdown/assets/index.png)
 
 - **User management (Admin)**
 
